@@ -52,12 +52,12 @@
 	<target name="clean">
 		<delete dir="bin" />
 		<delete dir="junit" />
-		<delete>
+		<delete includeemptydirs="true">
 			<fileset dir="scripts" includes="**/agentjlogs/**" />
-		</delete>
-		<delete>
 			<fileset dir="scripts" includes="**/hs_err_pid*.log" />
+			<fileset dir="scripts" includes="**/tmp/**" />
 		</delete>
+			
 	</target>
 
 	<target depends="clean" name="cleanall">
