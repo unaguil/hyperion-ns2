@@ -13,6 +13,7 @@ import peer.BasicPeer;
 import peer.Peer;
 import peer.PeerBehavior;
 import peer.messagecounter.TotalMessageCounter;
+import peer.peerid.PeerID;
 import proto.logging.api.Logger.LogLevel;
 import agentj.AgentJAgent;
 import agentj.dns.Addressing;
@@ -80,7 +81,7 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 		if (command.equals(COMMAND_INIT)) {
 			// Initialize the peer using the host name information from NS2
 			try {
-				peer.initPeer(this.getNs2Node().getHostName());
+				peer.initPeer(new PeerID(this.getNs2Node().getHostName()));
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
