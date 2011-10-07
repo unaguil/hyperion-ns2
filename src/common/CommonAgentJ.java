@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,26 +32,24 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 
 	// Used to set null output log for AgentJ library.
 	public static final PrintStream NULL_PRINT_STREAM = null;
-	
-	
-	 // Directory used to output information
+
+	// Directory used to output information
 	protected static final String TEMP_DIR = "tmp";
 
 	// local socket address
 	private java.net.InetSocketAddress socketAddress;
-	
-	//Basic peer
+
+	// Basic peer
 	protected final Peer peer;
 
 	private final Logger myLogger = Logger.getLogger(CommonAgentJ.class);
-	
-	
+
 	// The UDP socket used by the peer for communication.
 	private DatagramSocket socket;
 	private byte[] data;
 
 	private static final int SO_TIMEOUT = 5;
-	
+
 	// Default UDP port
 	private static final int DEFAULT_PORT = 5555;
 
@@ -58,7 +57,7 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 	private static final String COMMAND_PRINT_STATISTICS = "printStatistics";
 	private static final String COMMAND_STOP = "stop";
 	private static final String COMMAND_INIT = "init";
-	
+
 	private static final int RECV_BUFF = 65536; // TODO Check this value
 
 	/**
@@ -72,7 +71,7 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 	public CommonAgentJ() {
 		this.setNativeDebugLevel(AgentJDebugLevel.error);
 		this.setJavaDebugLevel(LogLevel.ERROR);
-		
+
 		peer = new BasicPeer(this);
 	}
 
@@ -104,32 +103,38 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void initCommunication() throws IOException {
 		this.socket = new DatagramSocket(DEFAULT_PORT);
 		this.data = new byte[RECV_BUFF];
-		
+
 		// Obtain the NS2 simulator broadcast address using the AgentJ API
 		final String broadcastAddress = AgentJNameService.getIPAddress(Addressing.getNsBroadcastAddress());
 		socketAddress = new java.net.InetSocketAddress(broadcastAddress, DEFAULT_PORT);
 	}
-	
+
 	@Override
 	public void broadcast(final byte[] data) throws IOException {
 		// Create a new datagram packet and send it using the socket
 		final DatagramPacket p = new DatagramPacket(data, data.length, socketAddress);
 		socket.send(p);
 	}
-	
+
 	@Override
-	public byte[] receiveData() throws IOException {
+	public byte[] receiveData() {
 		// Creates the reception buffer and packet
 		final DatagramPacket packet = new DatagramPacket(data, data.length);
 
-		socket.setSoTimeout(SO_TIMEOUT); // set a receiving timeout
-		socket.receive(packet); // Blocks during reception
-		
+		byte[] data = null;
+		try {
+			socket.setSoTimeout(SO_TIMEOUT);
+			socket.receive(packet);
+			data = packet.getData();
+		} catch (SocketException e) {
+		} catch (IOException e) {
+		}
+
 		return data;
 	}
 
