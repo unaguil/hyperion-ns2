@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 import peer.BasicPeer;
 import peer.Peer;
 import peer.PeerBehavior;
-import peer.messageCounter.TotalMessageCounter;
+import peer.messagecounter.TotalMessageCounter;
 import proto.logging.api.Logger.LogLevel;
 import agentj.AgentJAgent;
 import agentj.dns.Addressing;

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 
-import peer.PeerID;
+import peer.peerid.PeerID;
 import taxonomy.BasicTaxonomy;
 import taxonomy.Taxonomy;
 import testing.BasicTest;

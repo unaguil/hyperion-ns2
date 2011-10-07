@@ -9,11 +9,11 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import peer.CommunicationLayer;
-import peer.PeerID;
-import peer.PeerIDSet;
 import peer.RegisterCommunicationLayerException;
 import peer.message.BroadcastMessage;
 import peer.message.MessageString;
+import peer.peerid.PeerID;
+import peer.peerid.PeerIDSet;
 
 import common.CommonAgentJ;
 

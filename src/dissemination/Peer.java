@@ -8,9 +8,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import peer.PeerID;
-import peer.PeerIDSet;
 import peer.message.PayloadMessage;
+import peer.peerid.PeerID;
+import peer.peerid.PeerIDSet;
 import taxonomy.parameter.InvalidParameterIDException;
 import taxonomy.parameter.Parameter;
 import taxonomy.parameter.ParameterFactory;

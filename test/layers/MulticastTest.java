@@ -5,7 +5,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 
 import multicast.search.unicastTable.UnicastTable;
-import peer.PeerID;
+import peer.peerid.PeerID;
 import testing.BasicTest;
 import testing.MultipleTests;
 

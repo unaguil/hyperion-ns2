@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 
-import peer.PeerIDSet;
+import peer.peerid.PeerIDSet;
 import testing.BasicTest;
 import testing.MultipleTests;
 

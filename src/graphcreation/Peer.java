@@ -14,8 +14,8 @@ import multicast.MulticastMessageListener;
 
 import org.apache.log4j.Logger;
 
-import peer.PeerID;
 import peer.message.PayloadMessage;
+import peer.peerid.PeerID;
 
 import common.CommonAgentJ;
 
