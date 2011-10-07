@@ -13,6 +13,7 @@
 		<pathelement location="${AGENTJ_CORE}/target/agentj-core-1.0.jar" />
 		<pathelement location="${AGENTJ_CORE}/lib/proto-logging-0.1.jar" />
 		<pathelement location="${Hyperion.location}/lib/log4j-1.2.16.jar" />
+		<pathelement location="${Hyperion.location}/lib/junit-4.8.2.jar" />
 		<pathelement location="${Hyperion.location}/dist/hyperion.jar" />
 	</path>
 
