@@ -7,5 +7,5 @@ export TCL_LIBRARY=$TCL_LIBRARY:$NS_DIR/tcl8.4.18/library
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$AGENTJ/core/lib/:$JAVA_HOME/jre/lib/amd64/server
 
-export AGENTJ_CLASSPATH=$HYPERION_PATH/bin:$HYPERION_PATH/lib/log4j-1.2.16.jar:${PWD}/bin:${PWD}/lib/jgrapht-jdk1.6.jar:
+export AGENTJ_CLASSPATH=$HYPERION_PATH/dist/hyperion.jar:$HYPERION_PATH/lib/log4j-1.2.16.jar:$HYPERION_PATH/lib/jgrapht-jdk1.6.jar:${PWD}/bin
 
