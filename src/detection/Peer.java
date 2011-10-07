@@ -48,8 +48,6 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 	 * Constructs the detection layer peer.
 	 */
 	public Peer() {
-		peer.getDetector().addNeighborListener(this);
-
 		final Set<Class<? extends BroadcastMessage>> messageClasses = new HashSet<Class<? extends BroadcastMessage>>();
 		messageClasses.add(MessageString.class);
 		try {
@@ -57,6 +55,13 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 		} catch (final RegisterCommunicationLayerException e) {
 			myLogger.error("Peer " + peer.getPeerID() + " had problem registering communication layer: " + e.getMessage());
 		}
+	}
+	
+	@Override
+	public void init() throws IOException {
+		super.init();
+		
+		peer.getDetector().addNeighborListener(this);
 	}
 
 	@Override

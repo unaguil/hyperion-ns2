@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import peer.BasicPeer;
 import peer.Peer;
 import peer.PeerBehavior;
-import peer.messagecounter.TotalMessageCounter;
 import peer.peerid.PeerID;
 import proto.logging.api.Logger.LogLevel;
 import agentj.AgentJAgent;
@@ -54,7 +53,7 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 	private static final int DEFAULT_PORT = 5555;
 
 	// PeerAgentJ commands
-	private static final String COMMAND_PRINT_STATISTICS = "printStatistics";
+	private static final String COMMAND_PRINT_OUTPUTS = "printStatistics";
 	private static final String COMMAND_STOP = "stop";
 	private static final String COMMAND_INIT = "init";
 
@@ -88,12 +87,11 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 			return true;
 		} else if (command.equals(COMMAND_STOP)) {
 			// Stop peer
-			peer.stopPeer(); // Calls the delegated method
-			return true;
-		} else if (command.equals(COMMAND_PRINT_STATISTICS)) {
-			// Output statistical information
-			TotalMessageCounter.logStatistics();
 			printOutputs();
+			peer.stopPeer();
+			return true;
+		} else if (command.equals(COMMAND_PRINT_OUTPUTS)) {
+			peer.printStatistics();
 			return true;
 		}
 		// If passed command is not one of the above, delegate processing
@@ -105,13 +103,15 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 	}
 
 	@Override
-	public void initCommunication() throws IOException {
+	public void init() throws IOException {		
 		this.socket = new DatagramSocket(DEFAULT_PORT);
 		this.data = new byte[RECV_BUFF];
 
 		// Obtain the NS2 simulator broadcast address using the AgentJ API
 		final String broadcastAddress = AgentJNameService.getIPAddress(Addressing.getNsBroadcastAddress());
 		socketAddress = new java.net.InetSocketAddress(broadcastAddress, DEFAULT_PORT);
+		
+		loadData();
 	}
 
 	@Override
@@ -144,8 +144,10 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 			list.add(s);
 		return list.toString();
 	}
-
-	protected abstract boolean peerCommands(String command, String[] args);
-
+	
 	protected abstract void printOutputs();
+	
+	protected abstract boolean peerCommands(String command, String[] args);
+	
+	protected abstract void loadData();
 }
