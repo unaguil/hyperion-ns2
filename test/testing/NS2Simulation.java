@@ -178,14 +178,12 @@ public class NS2Simulation {
 					if (writer != null)
 						writer.close();
 				} catch (final IOException e) {
-					e.printStackTrace();
 				}
 			}
 
 			try {
 				br.close();
 			} catch (final IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}
