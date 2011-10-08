@@ -8,7 +8,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import util.logger.Logger;
 
 import peer.BasicPeer;
 import peer.Peer;
