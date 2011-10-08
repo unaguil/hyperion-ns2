@@ -58,8 +58,8 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 	}
 	
 	@Override
-	public void init() throws IOException {
-		super.init();
+	public void initComm() throws IOException {
+		super.initComm();
 		
 		peer.getDetector().addNeighborListener(this);
 	}

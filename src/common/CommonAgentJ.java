@@ -4,17 +4,16 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.logger.Logger;
-
 import peer.BasicPeer;
 import peer.Peer;
-import peer.PeerBehavior;
+import peer.CommProvider;
+import peer.message.BroadcastMessage;
 import peer.peerid.PeerID;
 import proto.logging.api.Logger.LogLevel;
+import util.logger.Logger;
 import agentj.AgentJAgent;
 import agentj.dns.Addressing;
 import agentj.dns.AgentJNameService;
@@ -27,7 +26,7 @@ import agentj.dns.AgentJNameService;
  * @author Unai Aguilera (unai.aguilera@gmail.com)
  * 
  */
-public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
+public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 
 	// Used to set null output log for AgentJ library.
 	public static final PrintStream NULL_PRINT_STREAM = null;
@@ -103,7 +102,7 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 	}
 
 	@Override
-	public void init() throws IOException {		
+	public void initComm() throws IOException {		
 		this.socket = new DatagramSocket(DEFAULT_PORT);
 		this.data = new byte[RECV_BUFF];
 
@@ -120,22 +119,25 @@ public abstract class CommonAgentJ extends AgentJAgent implements PeerBehavior {
 		final DatagramPacket p = new DatagramPacket(data, data.length, socketAddress);
 		socket.send(p);
 	}
+	
+	@Override
+	public boolean isValid(BroadcastMessage message) {
+		return true;
+	}
 
 	@Override
-	public byte[] receiveData() {
+	public byte[] receiveData() throws IOException {
 		// Creates the reception buffer and packet
 		final DatagramPacket packet = new DatagramPacket(data, data.length);
 
-		byte[] data = null;
-		try {
-			socket.setSoTimeout(SO_TIMEOUT);
-			socket.receive(packet);
-			data = packet.getData();
-		} catch (SocketException e) {
-		} catch (IOException e) {
-		}
-
-		return data;
+		socket.setSoTimeout(SO_TIMEOUT);
+		socket.receive(packet);
+		return packet.getData();
+	}
+	
+	@Override
+	public void stopComm() throws IOException {
+		socket.close();
 	}
 
 	private String toString(final String[] strArray) {
