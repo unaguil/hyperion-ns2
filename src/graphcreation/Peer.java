@@ -81,7 +81,7 @@ public class Peer extends CommonAgentJ implements MulticastMessageListener, Grap
 			graphCreation.manageLocalServices(addedServices, new ServiceList());
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			myLogger.error("Peer " + peer.getPeerID() + " error loading data." + e.getMessage());
 		}
 	}
 
@@ -101,7 +101,7 @@ public class Peer extends CommonAgentJ implements MulticastMessageListener, Grap
 			graphCreation.getSDG().saveToXML(f);
 			f.close();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			myLogger.error("Peer " + peer.getPeerID() + " error writting output data." + e.getMessage());
 		}
 	}
 

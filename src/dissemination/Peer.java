@@ -103,7 +103,7 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 			pDisseminator.commit();
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			myLogger.error("Peer " + peer.getPeerID() + " error loading data." + e.getMessage());
 		}
 	}
 
@@ -122,7 +122,7 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 			pDisseminator.saveToXML(f);
 			f.close();
 		} catch (final IOException ioe) {
-			ioe.printStackTrace();
+			myLogger.error("Peer " + peer.getPeerID() + " error writting output data." + ioe.getMessage());
 		}
 	}
 

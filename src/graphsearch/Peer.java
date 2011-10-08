@@ -114,7 +114,7 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 			compositionSearch.manageLocalServices(sList, new ServiceList());
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			myLogger.error("Peer " + peer.getPeerID() + " error loading data." + e.getMessage());
 		}
 	}
 
@@ -143,7 +143,7 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 					finalComposition.saveToXML(f);
 					f.close();
 				} catch (final Exception e) {
-					e.printStackTrace();
+					myLogger.error("Peer " + peer.getPeerID() + " error writting output data." + e.getMessage());
 				}
 			}
 		}

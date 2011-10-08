@@ -81,7 +81,7 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 			try {
 				peer.initPeer(new PeerID(this.getNs2Node().getHostName()));
 			} catch (IOException e) {
-				e.printStackTrace();
+				myLogger.error("Peer " + peer.getPeerID() + " error initializing." + e.getMessage());
 				return false;
 			}
 			return true;
