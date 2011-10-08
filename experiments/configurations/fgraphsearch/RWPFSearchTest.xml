@@ -7,7 +7,7 @@
 		<entry key="gridW">70</entry>
 		<entry key="gridH">70</entry>
 		<entry key="discardTime">0</entry>
-		<entry key="javaAgent">graphsearch.peer.ForwardPeer</entry>
+		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
 
 		<!-- Random waypoint configuration -->
 		<entry key="mobilityModel">RandomWaypoint</entry>

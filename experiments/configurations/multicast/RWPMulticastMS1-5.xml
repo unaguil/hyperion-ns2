@@ -7,7 +7,7 @@
 		<entry key="gridW">265</entry>
 		<entry key="gridH">1058</entry>
 		<entry key="discardTime">0</entry>
-		<entry key="javaAgent">multicast.peer.Peer</entry>
+		<entry key="javaAgent">multicast.Peer</entry>
 		
 		<entry key="mobilityModel">LoadMobilityModel</entry>
 		<entry key="minSpeed">0.001</entry>

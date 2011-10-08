@@ -7,7 +7,7 @@
 		<entry key="gridW">100</entry>
 		<entry key="gridH">100</entry>
 		<entry key="discardTime">0</entry>
-		<entry key="javaAgent">multicast.peer.Peer</entry>
+		<entry key="javaAgent">multicast.Peer</entry>
 		
 		<!-- Random waypoint configuration -->
 		<entry key="mobilityModel">RandomWaypoint</entry>-->

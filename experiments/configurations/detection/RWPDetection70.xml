@@ -7,7 +7,7 @@
 		<entry key="gridW">265</entry>
 		<entry key="gridH">1058</entry>
 		<entry key="discardTime">0</entry>
-		<entry key="javaAgent">detection.peer.Peer</entry>
+		<entry key="javaAgent">detection.Peer</entry>
 		<!-- Random waypoint configuration -->
 <!--		<entry key="mobilityModel">RandomWaypoint</entry>-->
 		<entry key="mobilityModel">LoadMobilityModel</entry>
