@@ -75,20 +75,12 @@
 
 	<target depends="init" name="build-project">
 		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac destdir="bin" source="${source}" target="${target}" includeAntRuntime="false">
+		<javac debug="true" destdir="bin" source="${source}" target="${target}" includeAntRuntime="false">
 			<src path="src" />
 			<classpath refid="Hyperion-NS2.classpath" />
 		</javac>
-		<javac destdir="bin" source="${source}" target="${target}" includeAntRuntime="false">
+		<javac debug="true" destdir="bin" source="${source}" target="${target}" includeAntRuntime="false">
 			<src path="test" />
-			<classpath refid="Hyperion-NS2.classpath" />
-		</javac>
-		<javac destdir="bin" source="${source}" target="${target}" includeAntRuntime="false">
-			<src path="files" />
-			<classpath refid="Hyperion-NS2.classpath" />
-		</javac>
-		<javac destdir="bin" source="${source}" target="${target}" includeAntRuntime="false">
-			<src path="scripts" />
 			<classpath refid="Hyperion-NS2.classpath" />
 		</javac>
 	</target>
