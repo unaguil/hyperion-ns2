@@ -170,9 +170,8 @@ public class NS2Simulation {
 				writer = new BufferedWriter(new FileWriter(filePath));
 				while (!isFinished() && (line = br.readLine()) != null)
 					writer.write(line + newLineSeparator);
-			} catch (final IOException e) {
-				e.printStackTrace();
-			} finally {
+			} catch (final IOException e) {} 
+			finally {
 
 				try {
 					if (writer != null)
