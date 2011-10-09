@@ -11,15 +11,14 @@ import graphsearch.util.Utility;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import util.logger.Logger;
+import java.util.concurrent.ConcurrentHashMap;
 
 import peer.peerid.PeerID;
+import util.logger.Logger;
 
 import common.CommonAgentJ;
 
@@ -31,7 +30,7 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 
 	private ServiceList findServices;
 
-	private final Map<SearchID, List<ExtendedServiceGraph>> receivedCompositions = new HashMap<SearchID, List<ExtendedServiceGraph>>();
+	private final Map<SearchID, List<ExtendedServiceGraph>> receivedCompositions = new ConcurrentHashMap<SearchID, List<ExtendedServiceGraph>>();
 
 	private final Logger myLogger = Logger.getLogger(Peer.class);
 
@@ -130,12 +129,13 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 	public void printOutputs() {
 		// merge all received compositions and obtain solution
 		if (!receivedCompositions.isEmpty()) {
-			final List<ExtendedServiceGraph> compositions = receivedCompositions.values().iterator().next();
-			if (!compositions.isEmpty()) {
-				final ExtendedServiceGraph finalComposition = new ExtendedServiceGraph(compositions.get(0).getTaxonomy());
-
-				for (final ExtendedServiceGraph composition : compositions)
-					finalComposition.merge(composition);
+			final List<ExtendedServiceGraph> partialCompositions = new ArrayList<ExtendedServiceGraph>();
+			synchronized (receivedCompositions) {
+				partialCompositions.addAll(receivedCompositions.values().iterator().next());
+			}
+			
+			if (!partialCompositions.isEmpty()) {
+				final ExtendedServiceGraph finalComposition = mergePartialCompositions(partialCompositions);
 
 				final String xmlPath = getCompositionFilePath(peer.getPeerID());
 				try {
@@ -147,6 +147,13 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 				}
 			}
 		}
+	}
+
+	private ExtendedServiceGraph mergePartialCompositions(final List<ExtendedServiceGraph> compositions) {
+		final ExtendedServiceGraph finalComposition = new ExtendedServiceGraph(compositions.get(0).getTaxonomy());
+		for (final ExtendedServiceGraph composition : compositions)
+			finalComposition.merge(composition);
+		return finalComposition;
 	}
 
 	@Override
