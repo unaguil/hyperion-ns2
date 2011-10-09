@@ -57,7 +57,7 @@ public class Peer extends CommonAgentJ implements MulticastMessageListener, Grap
 			if (args.length > 0) {
 				final ServiceList services = new ServiceList();
 				for (final String arg : args) {
-					final Service service = graphCreation.getSDG().getService(arg + ":" + peer.getPeerID());
+					final Service service = graphCreation.getService(arg + ":" + peer.getPeerID());
 					if (service != null)
 						services.addService(service);
 					else
@@ -98,7 +98,7 @@ public class Peer extends CommonAgentJ implements MulticastMessageListener, Grap
 		final String xmlPath = getGraphFilePath(peer.getPeerID());
 		try {
 			final FileOutputStream f = new FileOutputStream(xmlPath);
-			graphCreation.getSDG().saveToXML(f);
+			graphCreation.saveToXML(f);
 			f.close();
 		} catch (final Exception e) {
 			myLogger.error("Peer " + peer.getPeerID() + " error writting output data." + e.getMessage());
