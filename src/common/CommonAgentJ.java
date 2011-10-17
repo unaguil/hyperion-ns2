@@ -56,7 +56,7 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 	private static final String COMMAND_STOP = "stop";
 	private static final String COMMAND_INIT = "init";
 
-	private static final int RECV_BUFF = 20480; //This value
+	private static final int RECV_BUFF = 65536; // TODO Check this value
 
 	/**
 	 * Constructor of the PeerAgentJ class. This constructor is intended to be
