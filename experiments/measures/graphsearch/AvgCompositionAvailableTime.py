@@ -11,8 +11,8 @@ class AvgCompositionAvailableTime:
 	def __init__(self, period, simulationTime):		
 		self.__periodicAvgValues = PeriodicAvgValues(period, simulationTime)
 		
-		self.__foundPattern = re.compile('DEBUG graphsearch.peer.Peer  - Peer [0-9]+ received composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
-		self.__lostPattern = re.compile('DEBUG graphsearch.peer.Peer  - Peer [0-9]+ received invalid composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
+		self.__foundPattern = re.compile('DEBUG graphsearch.Peer  - Peer [0-9]+ received composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
+		self.__lostPattern = re.compile('DEBUG graphsearch.Peer  - Peer [0-9]+ received invalid composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
 		
 		self.__searches = {}
 		
