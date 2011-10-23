@@ -24,7 +24,7 @@
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">0.00</entry>
+		<entry key="searchFreq">0.1</entry>
 		<entry key="timeRange">(3.0, 'END')</entry>
 
 		<!-- Peer configuration variables -->
@@ -46,5 +46,12 @@
 		<measure type="generic.DeliveredMessages" period="5.0" />
 		<measure type="generic.ExpiredMessages" period="5.0" />
 		<measure type="generic.DeliveredRatio" period="5.0" />
+		<measure type="graphsearch.StartedCompositions" period="5.0" />
+		<measure type="graphsearch.AvgFoundCompositions" period="5.0" />
+		<measure type="graphsearch.AvgCompositionSearchTime" period="5.0" />
+		<measure type="graphsearch.AvgCompositionAvailableTime" period="5.0" />
+		<measure type="graphsearch.SentCompositionModificationMessages" period="5.0" />
+		<measure type="graphsearch.SentFCompositionMessages" period="5.0" />
+		<measure type="graphsearch.SentInvalidCompositionsMessages" period="5.0" />
 	</measures>
 </experiment>
