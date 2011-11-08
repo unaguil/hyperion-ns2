@@ -44,6 +44,10 @@ class ScriptGenerator:
 		footprint = (nCoverage / simulationArea) * 100.0
 		if footprint > 100.0:
 			footprint = 100.0
+
+		coveredRatio = footprint * self.getNNodes()
+		if coveredRatio > 100.0:
+			coveredRatio = 100.0
 		 
 		maximumPath = math.sqrt(self.getGridW()**2 + self.getGridH()**2)
 		networkDiameter = maximumPath / self.getTransmissionRange()
@@ -60,6 +64,7 @@ class ScriptGenerator:
 		print '* Transmission range: %.2f m' % self.getTransmissionRange() 
 		print '* Node coverage: %.2f m^2' % nCoverage
 		print '* Footprint: %.2f %%' % footprint
+		print '* Covered ratio: %.2f %%' % coveredRatio
 		print '* Maximum path: %.2f m' % maximumPath
 		print '* Network diameter: %.2f hops' % networkDiameter
 		print '* Neighbor count: %.2f neighbors/node' % neighborCount
