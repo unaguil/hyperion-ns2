@@ -108,7 +108,7 @@ class CompositionsPopulator:
                     nodes[node] = []
                 nodes[node].append(service)
                 
-            subsetSize = len(shuffledNodes)
+            subsetSize = len(shuffledNodes) 
                 
         print '* Nodes with services: %d' % subsetSize
         
