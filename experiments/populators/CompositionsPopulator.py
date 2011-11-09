@@ -24,8 +24,8 @@ class CompositionsPopulator:
                 self.__nCompositions = int(value)
             if key == "compositionIO":
                 self.__compositionIO = eval(value)
-            #if key == "sDistribution":
-            #    self.__sDistribution = float(value)
+            if key == "nDistribution":
+                self.__nDistribution = float(value)
             #all compositions are valid
             self.__sDistribution = 1.0
             if key == "dDistribution":
@@ -88,18 +88,31 @@ class CompositionsPopulator:
             self.__compositions.append(composition)
             services += compositionServices
 
-	print '* Generated services: %d' % len(services)
+        print '* Generated services: %d' % len(services)
         
-        #distribute services among nodes
-        nodes = {}
-        for service in services:
-            node = random.randrange(self.__nNodes)
-            if not node in nodes:
-                nodes[node] = []
-            nodes[node].append(service)
+        subsetSize = 0
+        nodes = {}  
+        if self.__nDistribution > 0.0:
+            subsetSize = int(round(self.__nNodes * self.__nDistribution))
+            if subsetSize < 1:
+                subSetSize = 1
+                
+            shuffledNodes = random.shuffle(range(self.__nNodes))
+            shuffledNodes = shuffledNodes[:subsetSize]
+        
+            #distribute services among nodes
+            for service in services:
+                index = random.randrange(subsetSize)
+                node = shuffledNodes[index]
+                if not node in nodes:
+                    nodes[node] = []
+                nodes[node].append(service)
+                
+            subsetSize = len(shuffledNodes)
+                
+        print '* Nodes with services: %d' % subsetSize
         
         taxonomy = Taxonomy('TaxonomyRootElement')
-        
         self.__generateXMLNodeConfigurations(self.__compositions, nodes, taxonomy)
         
     def getCompositions(self):
