@@ -95,9 +95,10 @@ class CompositionsPopulator:
         if self.__nDistribution > 0.0:
             subsetSize = int(round(self.__nNodes * self.__nDistribution))
             if subsetSize < 1:
-                subSetSize = 1
+                subsetSize = 1
                 
-            shuffledNodes = random.shuffle(range(self.__nNodes))
+            shuffledNodes = range(self.__nNodes)
+            random.shuffle(shuffledNodes)
             shuffledNodes = shuffledNodes[:subsetSize]
         
             #distribute services among nodes
