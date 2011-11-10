@@ -169,13 +169,15 @@ class Graph:
 				else:
 					relStdValues.append(100 * result.getStdTotal() / result.getMeanTotal())
 			
-			data = dict(zip(x,y))
+			data = dict(zip(x,zip(y, stdValues)))
 			x = sorted(x)
-			y = [data[i] for i in x]
-	
-			#print 'Plotting %s measure type' % measureType
-			#print "X: ", x
-			#print "Y: ", y
+			y = [data[i][0] for i in x]
+			yerrors = [data[i][1] for i in x]
+
+			print 'Plotting %s measure type' % measureType
+			print "X: ", x
+			print "Y: ", y
+			print "YErrors: ", yerrors
 			
 			if not xLabel is None:
 				plt.xlabel(xLabel)
@@ -186,7 +188,7 @@ class Graph:
 		
 			self.__printTotalInfo(y, stdValues, relStdValues, label, '')
 		
-			line = plt.plot(x, y, 'o--', label=label)
+			line = plt.errorbar(x, y, yerrors, label=label, fmt='o--')
 	
 			lines.append(line)
 			labels.append(label)
@@ -196,7 +198,7 @@ class Graph:
 		else:
 			plt.ylabel(units)
 
-		#plt.xticks(x)
+		plt.xticks(x)
 
 		self.__setAxis(plt, xmin, xmax, ymin, ymax) 
 
@@ -292,7 +294,7 @@ class Graph:
 			
 			for tag in sorted(tagValues.keys()):
 				result = tagValues[tag]
-				print ' *%s: %s mean: %.2f std: %2.f' % (name, tag, result.getMeanTotal(), result.getStdTotal())
+				print ' *%s: %s mean: %.2f std: %.2f' % (name, tag, result.getMeanTotal(), result.getStdTotal())
 				
 	def plotAll(self, format, onePDF):
 		if onePDF:
