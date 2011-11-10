@@ -13,7 +13,7 @@ mkdir $2/$testname
 
 for FILE in $(ls $1)
 do
-	command="python Experiment.py -c $1 -f $FILE -o $2/$testname/output-$FILE.txt"
+	command="python Experiment.py -c $1 -f $FILE -o $2/$testname/output-$FILE"
 	echo "Running $command"
 	$command
 done
