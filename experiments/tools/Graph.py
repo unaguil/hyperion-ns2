@@ -168,7 +168,11 @@ class Graph:
 					relStdValues.append(0)
 				else:
 					relStdValues.append(100 * result.getStdTotal() / result.getMeanTotal())
-				
+			
+			data = dict(zip(x,y))
+			x = sorted(x)
+			y = [data[i] for i in x]
+	
 			#print 'Plotting %s measure type' % measureType
 			#print "X: ", x
 			#print "Y: ", y
@@ -182,7 +186,7 @@ class Graph:
 		
 			self.__printTotalInfo(y, stdValues, relStdValues, label, '')
 		
-			line = plt.plot(x, y, label=label)
+			line = plt.plot(x, y, 'o-', label=label)
 			
 			lines.append(line)
 			labels.append(label)
@@ -213,6 +217,10 @@ class Graph:
 		
 	def __setAxis(self, plt, xmin, xmax, ymin, ymax):
 		axis = list(plt.axis())
+
+		axis[2] = 0
+		axis[3] = axis[3] * 1.10
+
 		if xmin is not None and xmax is not None:
 			axis[0] = float(xmin)
 			axis[1] = float(xmax)
