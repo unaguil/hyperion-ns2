@@ -186,8 +186,8 @@ class Graph:
 		
 			self.__printTotalInfo(y, stdValues, relStdValues, label, '')
 		
-			line = plt.plot(x, y, 'o-', label=label)
-			
+			line = plt.plot(x, y, 'o--', label=label)
+	
 			lines.append(line)
 			labels.append(label)
 		
@@ -195,9 +195,11 @@ class Graph:
 			plt.ylabel(yLabel)
 		else:
 			plt.ylabel(units)
-		
+
+		#plt.xticks(x)
+
 		self.__setAxis(plt, xmin, xmax, ymin, ymax) 
-		
+
 		plt.figlegend(lines, labels, 'upper right')
 		
 	def finishPlotting(self, plt, fName, format='DISPLAY'):
@@ -228,6 +230,8 @@ class Graph:
 		if ymin is not None and ymax is not None:
 			axis[2] = float(ymin)
 			axis[3] = float(ymax)
+
+		plt.grid(True)
 			
 		plt.axis(axis)
 		
