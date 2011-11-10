@@ -296,7 +296,7 @@ class Graph:
 				result = tagValues[tag]
 				print ' *%s: %s mean: %.2f std: %.2f' % (name, tag, result.getMeanTotal(), result.getStdTotal())
 				
-	def plotAll(self, format, onePDF):
+	def plotAll(self, format, onePDF, periodic=False):
 		if onePDF:
 			rowsPerPage = 1
 			columnsPerPage = 1
@@ -311,7 +311,10 @@ class Graph:
 					plt.figure(index / plotsPerPage + 1)
 					 
 				plt.subplot(rowsPerPage, columnsPerPage, plotNumber + 1)
-				self.plotPeriodic([measure])
+				if not periodic:
+					self.plotTotal([measure])
+				else:
+					self.plotPeriodic([measure])
 				
 				if plotNumber + 1 == plotsPerPage:
 					plt.savefig(pp, format='pdf')
@@ -321,7 +324,10 @@ class Graph:
 			for measure in sorted(self.__measures):
 				fName = measure + '.' + format
 				plt.clf()
-				self.plotPeriodic([measure])
+				if not periodic:
+					self.plotTotal([measure])
+				else:
+					self.plotPeriodic([measure])
 				self.finishPlotting(plt, fName, format) 
 				
 	def __printPeriodicInfo(self, data, times, stdValues, relStdValues, label, units):
@@ -386,7 +392,7 @@ def main():
 		graph = Graph(files)
 		
 		if options.all: 
-			graph.plotAll(options.format, options.onePDF)
+			graph.plotAll(options.format, options.onePDF, options.periodic)
 			sys.exit()
 			
 		if options.summary:
