@@ -70,7 +70,7 @@ public class NS2Simulation {
 
 				final Timer timer = new Timer(true);
 				try {
-					final InterruptTimerTask interrupter = new InterruptTimerTask(Thread.currentThread(), action);
+					final InterruptTimerTask interrupter = new InterruptTimerTask(Thread.currentThread(), action, workingDir + File.pathSeparatorChar + script);
 					timer.schedule(interrupter, ABORT_TIME);
 					finished = (p.waitFor() == 0);
 				} catch (final InterruptedException e) {
@@ -127,21 +127,25 @@ public class NS2Simulation {
 
 		private final Thread thread;
 		private final InterruptionAction action;
+		private final String interruptedScript;
 
-		public InterruptTimerTask(final Thread t, final InterruptionAction action) {
+		public InterruptTimerTask(final Thread t, final InterruptionAction action, final String interruptedScript) {
 			this.thread = t;
 			this.action = action;
+			this.interruptedScript = interruptedScript;
 		}
 
 		@Override
 		public void run() {
+			System.out.println("Interrupting execution of " + interruptedScript);
+			
 			try {
 				action.perform(); 
 			}
 			catch (Exception e) {
 				System.out.println("Cannot perform interruption action. " + e.getMessage());
 			}
-			
+
 			thread.interrupt();
 		}
 
