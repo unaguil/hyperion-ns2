@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<experiment tag="0.5" type="% nodes with parameters">
+<experiment tag="0.6" type="% nodes with services">
 	<staticConfig>
 		<!-- Script configuration variables -->
                 <entry key="nNodes">20</entry>
