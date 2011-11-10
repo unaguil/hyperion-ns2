@@ -3,6 +3,8 @@ package testing;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+
 public class BasicTest {
 
 	private static final String OUTPUT_DIR = "tmp";
@@ -58,7 +60,27 @@ public class BasicTest {
 			System.out.println("Could not create directory " + tmp.getAbsolutePath());
 
 		final NS2Simulation ns2Simulation = new NS2Simulation();
-		return ns2Simulation.runScript(workingDir, script, outputDir);
+		return ns2Simulation.runScript(workingDir, script, outputDir, new SaveOutputDirAction(outputDir));
+	}
+	
+	class SaveOutputDirAction implements InterruptionAction {
+		
+		private final String outputDir;
+		
+		public SaveOutputDirAction(final String outputDir) {
+			this.outputDir = outputDir;
+		}
+
+		@Override
+		public void perform() throws Exception {
+			File wDir = new File(workingDir);
+			File tempDir = new File(System.getProperty("java.io.tmpdir") + File.pathSeparatorChar + wDir.getName() + "-" + System.currentTimeMillis());
+			tempDir.mkdir();
+			
+			File oDir = new File(outputDir);
+			FileUtils.copyDirectory(oDir, tempDir);
+		}
+		
 	}
 
 	public void finish() {

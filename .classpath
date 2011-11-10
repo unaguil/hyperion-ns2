@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Hyperion"/>
 	<classpathentry kind="var" path="AGENTJ_CORE/target/agentj-core-1.1.jar"/>
 	<classpathentry kind="var" path="AGENTJ_CORE/lib/proto-logging-0.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

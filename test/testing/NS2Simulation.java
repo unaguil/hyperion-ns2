@@ -17,7 +17,7 @@ public class NS2Simulation {
 
 	private static final int ABORT_TIME = 120 * 1000;
 
-	public boolean runScript(final String workingDir, final String script, final String outputDir) {
+	public boolean runScript(final String workingDir, final String script, final String outputDir, final InterruptionAction action) {
 		final String outputFilePath = outputDir + File.separatorChar + "output.log";
 		final String errorFilePath = outputDir + File.separatorChar + "error.log";
 
@@ -70,7 +70,7 @@ public class NS2Simulation {
 
 				final Timer timer = new Timer(true);
 				try {
-					final InterruptTimerTask interrupter = new InterruptTimerTask(Thread.currentThread());
+					final InterruptTimerTask interrupter = new InterruptTimerTask(Thread.currentThread(), action);
 					timer.schedule(interrupter, ABORT_TIME);
 					finished = (p.waitFor() == 0);
 				} catch (final InterruptedException e) {
@@ -126,13 +126,22 @@ public class NS2Simulation {
 	private static class InterruptTimerTask extends TimerTask {
 
 		private final Thread thread;
+		private final InterruptionAction action;
 
-		public InterruptTimerTask(final Thread t) {
+		public InterruptTimerTask(final Thread t, final InterruptionAction action) {
 			this.thread = t;
+			this.action = action;
 		}
 
 		@Override
 		public void run() {
+			try {
+				action.perform(); 
+			}
+			catch (Exception e) {
+				System.out.println("Cannot perform interruption action. " + e.getMessage());
+			}
+			
 			thread.interrupt();
 		}
 
