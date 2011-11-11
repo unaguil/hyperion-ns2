@@ -1,15 +1,14 @@
 import re
 import numpy
 
-from measures.periodicValues.PeriodicAvgValues import PeriodicAvgValues
-
 import measures.generic.Units as Units
+from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
 class AvgFoundParameters:
 	"""Average found parameters. Currently taxonomy is not supported"""
 	
 	def __init__(self, period, simulationTime):		
-		self.__periodicAvgValues = PeriodicAvgValues(period, simulationTime)
+		GenericAvgMeasure.__init__(period, simulationTime, Units.PARAMETERS)
 		
 		self.__searchPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) started search for parameters (\[.*?\]).*?([0-9]+\,[0-9]+).*?')
 		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) found parameters (\[.*?\]) in node [0-9]+.*?([0-9]+\,[0-9]+).*?')
@@ -21,18 +20,6 @@ class AvgFoundParameters:
 		self.__currentParameters = {}
 		
 		self.__currentSearches = {}
-		
-	def getType(self):
-		return self.__class__.__name__
-	
-	def getPeriod(self):
-		return self.__periodicAvgValues.getPeriod()
-	
-	def getSimulationTime(self):
-		return self.__periodicAvgValues.getSimulationTime()
-	
-	def getTotalValue(self):
-		return self.__periodicAvgValues.getAvgTotal()
 	
 	def __getParameters(self, str):
 		return [str.strip() for str in str[1:-1].split(',')]
@@ -47,7 +34,7 @@ class AvgFoundParameters:
 				self.__checkParameter(parameter, self.__currentParameters)
 				self.__currentParameters[parameter] += 1
 						
-			self.__periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
+			self.periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
 						
 			return 
 		
@@ -60,7 +47,7 @@ class AvgFoundParameters:
 				self.__checkParameter(parameter, self.__currentParameters)
 				self.__currentParameters[parameter].remove(parameter)
 				
-			self.__periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
+			self.periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
 				
 			return
 		
@@ -77,7 +64,7 @@ class AvgFoundParameters:
 				if not parameter in self.__currentSearches[peer]:
 					self.__currentSearches[peer][parameter] = 0
 			
-			self.__periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
+			self.periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
 				
 			return
 		
@@ -90,7 +77,7 @@ class AvgFoundParameters:
 			for parameter in parameters:
 				self.__currentSearches[peer][parameter] += 1
 								
-			self.__periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
+			self.periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
 			
 			return 
 		
@@ -103,7 +90,7 @@ class AvgFoundParameters:
 			for parameter in parameters:
 				self.__currentSearches[peer][parameter] -= 1
 				
-			self.__periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
+			self.periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
 			
 			return 
 		
@@ -142,8 +129,3 @@ class AvgFoundParameters:
 		if not parameter in list:
 			list[parameter] = 0 
 	
-	def getValues(self): 
-		return self.__periodicAvgValues.getPeriodicValues() 
-	
-	def getUnits(self):
-		return Units.PARAMETERS

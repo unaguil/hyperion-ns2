@@ -1,33 +1,20 @@
 import re
 import numpy
 
-from measures.periodicValues.PeriodicAvgValues import PeriodicAvgValues
-
 import measures.generic.Units as Units
+from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
-class AvgCompositionSearchTime:
+class AvgCompositionSearchTime(GenericAvgMeasure):
 	"""Average found composition time"""
 	
 	def __init__(self, period, simulationTime):		
-		self.__periodicAvgValues = PeriodicAvgValues(period, simulationTime)
+		GenericAvgMeasure.__init__(self, period, simulationTime, Units.SECONDS)
 		
 		self.__searchPattern = re.compile('DEBUG graphsearch.Peer  - Peer [0-9]+ started composition search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
 		self.__foundPattern = re.compile('DEBUG graphsearch.Peer  - Peer [0-9]+ received composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
 		
 		self.__searches = {}
 		
-	def getType(self):
-		return self.__class__.__name__
-	
-	def getPeriod(self):
-		return self.__periodicAvgValues.getPeriod()
-	
-	def getSimulationTime(self):
-		return self.__periodicAvgValues.getSimulationTime()
-	
-	def getTotalValue(self):
-		return self.__periodicAvgValues.getAvgTotal()
-	
 	def parseLine(self, line):
 		m = self.__searchPattern.match(line)
 		if m is not None:
@@ -46,13 +33,8 @@ class AvgCompositionSearchTime:
 			if searchID in self.__searches:
 				searchTime = self.__searches[searchID]
 				elapsedTime = time - searchTime
-				self.__periodicAvgValues.addValue(elapsedTime, searchTime) 
+				self.periodicAvgValues.addValue(elapsedTime, searchTime) 
 				del self.__searches[searchID]
 				
 			return
-		
-	def getValues(self): 
-		return self.__periodicAvgValues.getPeriodicValues() 
 	
-	def getUnits(self):
-		return Units.SECONDS

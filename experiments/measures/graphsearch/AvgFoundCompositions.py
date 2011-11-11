@@ -1,33 +1,22 @@
 import re
 import numpy
 
-from measures.periodicValues.PeriodicAvgValues import PeriodicAvgValues
+import measures.generic.Units as Units
+from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
 import measures.generic.Units as Units
 
-class AvgFoundCompositions:
+class AvgFoundCompositions(GenericAvgMeasure):
 	"""Average found compositions"""
 	
 	def __init__(self, period, simulationTime):		
-		self.__periodicAvgValues = PeriodicAvgValues(period, simulationTime)
+		GenericAvgMeasure.__init__(self, period, simulationTime, Units.COMPOSITIONS)
 		
 		self.__searchPattern = re.compile('DEBUG graphsearch.Peer  - Peer [0-9]+ started composition search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
 		self.__foundPattern = re.compile('DEBUG graphsearch.Peer  - Peer [0-9]+ received composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
 		
 		self.__searches = {}
 		
-	def getType(self):
-		return self.__class__.__name__
-	
-	def getPeriod(self):
-		return self.__periodicAvgValues.getPeriod()
-	
-	def getSimulationTime(self):
-		return self.__periodicAvgValues.getSimulationTime()
-	
-	def getTotalValue(self):
-		return self.__periodicAvgValues.getAvgTotal()
-
 	def parseLine(self, line):
 		m = self.__searchPattern.match(line)
 		if m is not None:
@@ -36,7 +25,7 @@ class AvgFoundCompositions:
 			
 			self.__searches[searchID] = False
 			
-			self.__periodicAvgValues.addValue(self.__calculateAvgFoundCompositions(), time)
+			self.periodicAvgValues.addValue(self.__calculateAvgFoundCompositions(), time)
 				
 			return
 		
@@ -47,7 +36,7 @@ class AvgFoundCompositions:
 			
 			self.__searches[searchID] = True
 								
-			self.__periodicAvgValues.addValue(self.__calculateAvgFoundCompositions(), time)
+			self.periodicAvgValues.addValue(self.__calculateAvgFoundCompositions(), time)
 			
 			return 
 				
@@ -63,8 +52,3 @@ class AvgFoundCompositions:
 				
 		return found / len(self.__searches)		
 	
-	def getValues(self): 
-		return self.__periodicAvgValues.getPeriodicValues() 
-	
-	def getUnits(self):
-		return Units.COMPOSITIONS

@@ -1,15 +1,14 @@
 import re
 import numpy
 
-from measures.periodicValues.PeriodicAvgValues import PeriodicAvgValues
-
 import measures.generic.Units as Units
+from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
 class AvgSearchTime:
 	"""Average found parameters. Currently taxonomy is not supported"""
 	
 	def __init__(self, period, simulationTime):		
-		self.__periodicAvgValues = PeriodicAvgValues(period, simulationTime)
+		GenericAvgMeasure.__init__(period, simulationTime, Units.MILLIS)
 		
 		self.__searchPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) started search for parameters (\[.*?\]) searchID \((S:[0-9]+ ID:[0-9]+)\) ([0-9]+\,[0-9]+).*?')
 		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) found parameters (\[.*?\]) in node [0-9]+ searchID \((S:[0-9]+ ID:[0-9]+)\) ([0-9]+\,[0-9]+).*?')
@@ -23,18 +22,6 @@ class AvgSearchTime:
 		
 		self.__expectedRatio = 1.0
 		
-	def getType(self):
-		return self.__class__.__name__
-	
-	def getPeriod(self):
-		return self.__periodicAvgValues.getPeriod()
-	
-	def getSimulationTime(self):
-		return self.__periodicAvgValues.getSimulationTime()
-	
-	def getTotalValue(self):
-		return self.__periodicAvgValues.getAvgTotal(False)
-	
 	def __getParameters(self, str):
 		return [str.strip() for str in str[1:-1].split(',')]
 
@@ -83,7 +70,7 @@ class AvgSearchTime:
 				if foundRatio >= self.__expectedRatio:
 					searchTime = self.__currentSearches[peer][searchID][0]
 					elapsedTime = (time - searchTime) * 1000
-					self.__periodicAvgValues.addValue(elapsedTime, searchTime) 
+					self.periodicAvgValues.addValue(elapsedTime, searchTime) 
 					del self.__currentSearches[peer][searchID]
 				
 			return
@@ -123,10 +110,4 @@ class AvgSearchTime:
 			
 	def __checkParameter(self, parameter, list):
 		if not parameter in list:
-			list[parameter] = 0 
-	
-	def getValues(self): 
-		return self.__periodicAvgValues.getPeriodicValues(False) 
-	
-	def getUnits(self):
-		return Units.MILLIS
+			list[parameter] = 0  

@@ -1,15 +1,14 @@
 import re
 import numpy
 
-from measures.periodicValues.PeriodicAvgValues import PeriodicAvgValues
-
 import measures.generic.Units as Units
+from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
-class AvgAvailableTime:
+class AvgAvailableTime(GenericAvgMeasure):
 	"""Average time parameters are available. Currently taxonomy is not supported"""
 	
 	def __init__(self, period, simulationTime):		
-		self.__periodicAvgValues = PeriodicAvgValues(period, simulationTime)
+		GenericAvgMeasure.__init__(period, simulationTime, Units.MILLIS)
 		
 		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) found parameters (\[.*?\]) in node ([0-9]+) searchID \((S:[0-9]+ ID:[0-9]+)\) ([0-9]+\,[0-9]+).*?')
 		self.__lostPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) lost parameters {(.*?)} in node [0-9]+ ([0-9]+\,[0-9]+).*?')
@@ -17,19 +16,10 @@ class AvgAvailableTime:
 		self.__foundParameters = {}
 		
 		self.__defaultValuesAdded = False;
-		
-	def getType(self):
-		return self.__class__.__name__
-	
-	def getPeriod(self):
-		return self.__periodicAvgValues.getPeriod()
-	
-	def getSimulationTime(self):	
-		return self.__periodicAvgValues.getSimulationTime()
 	
 	def getTotalValue(self):
 		self.__addDefaultValues()
-		return self.__periodicAvgValues.getAvgTotal(False)
+		return self.periodicAvgValues.getAvgTotal(False)
 	
 	def __getParameters(self, str):
 		return [str.strip() for str in str[1:-1].split(',')]
@@ -68,7 +58,7 @@ class AvgAvailableTime:
 			for searchID, parameters in lostParameters:
 				foundTime = self.__foundParameters[peer][searchID][remotePeer][parameter]
 				elapsedTime = time - foundTime
-				self.__periodicAvgValues.addValue(elapsedTime, foundTime) 
+				self.periodicAvgValues.addValue(elapsedTime, foundTime) 
 				del self.__foundParameters[peer][searchID][remotePeer][parameter]
 			
 			return
@@ -103,13 +93,10 @@ class AvgAvailableTime:
 						for parameter in self.__foundParameters[peer][searchID][remotePeer]:
 							foundTime = self.__foundParameters[peer][searchID][remotePeer][parameter]
 							elapsedTime = self.getSimulationTime() - foundTime
-							self.__periodicAvgValues.addValue(elapsedTime, foundTime)
+							self.periodicAvgValues.addValue(elapsedTime, foundTime)
 							
 			self.__defaultValuesAdded = True
 				
 	def getValues(self): 
 		self.__addDefaultValues()
-		return self.__periodicAvgValues.getPeriodicValues(False) 
-	
-	def getUnits(self):
-		return Units.MILLIS
+		return self.periodicAvgValues.getPeriodicValues(False) 

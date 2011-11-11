@@ -1,31 +1,18 @@
 import re
 
-from measures.periodicValues.PeriodicAvgValues import PeriodicAvgValues
-
 import measures.generic.Units as Units
+from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
-class AvgNeighbors:
+class AvgNeighbors(GenericAvgMeasure):
 	"""Average neighbors for a node"""
 	
-	def __init__(self, period, simulationTime):		
-		self.__periodicAvgValues = PeriodicAvgValues(period, simulationTime)
+	def __init__(self, period, simulationTime):
+		GenericAvgMeasure.__init__(self, period, simulationTime, Units.NEIGHBORS)
 		
 		self.__appearPattern = re.compile('DEBUG detection.beaconDetector.BeaconDetector  - Peer ([0-9]+) has new neighbors: (\[.*?\]) ([0-9]+\,[0-9]+).*?')
 		self.__disappearPattern = re.compile('DEBUG detection.beaconDetector.BeaconDetector  - Peer ([0-9]+) has lost neighbors: (\[.*?\]) ([0-9]+\,[0-9]+).*?')
 		
 		self.__currentNeighbors = {}
-		
-	def getType(self):
-		return self.__class__.__name__
-	
-	def getPeriod(self):
-		return self.__periodicAvgValues.getPeriod()
-	
-	def getSimulationTime(self):
-		return self.__periodicAvgValues.getSimulationTime()
-	
-	def getTotalValue(self):
-		return self.__periodicAvgValues.getAvgTotal()
 
 	def parseLine(self, line):
 		m = self.__appearPattern.match(line)
@@ -38,7 +25,7 @@ class AvgNeighbors:
 			
 			self.__currentNeighbors[peer] += neighbors
 			
-			self.__periodicAvgValues.addValue(len(self.__currentNeighbors[peer]), time)
+			self.periodicAvgValues.addValue(len(self.__currentNeighbors[peer]), time)
 						
 			return 
 		
@@ -53,14 +40,8 @@ class AvgNeighbors:
 			for neighbor in neighbors:
 				self.__currentNeighbors[peer].remove(neighbor)
 				
-			self.__periodicAvgValues.addValue(len(self.__currentNeighbors[peer]), time)
+			self.periodicAvgValues.addValue(len(self.__currentNeighbors[peer]), time)
 			
 	def __checkPeer(self, peer):
 		if not peer in self.__currentNeighbors:
-			self.__currentNeighbors[peer] = []
-	
-	def getValues(self): 
-		return self.__periodicAvgValues.getPeriodicValues() 
-	
-	def getUnits(self):
-		return Units.NEIGHBORS
+			self.__currentNeighbors[peer] = [] 
