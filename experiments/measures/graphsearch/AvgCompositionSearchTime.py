@@ -26,7 +26,7 @@ class AvgCompositionSearchTime:
 		return self.__periodicAvgValues.getSimulationTime()
 	
 	def getTotalValue(self):
-		return self.__periodicAvgValues.getAvgTotal(False)
+		return self.__periodicAvgValues.getAvgTotal()
 	
 	def parseLine(self, line):
 		m = self.__searchPattern.match(line)
@@ -52,7 +52,7 @@ class AvgCompositionSearchTime:
 			return
 		
 	def getValues(self): 
-		return self.__periodicAvgValues.getPeriodicValues(False) 
+		return self.__periodicAvgValues.getPeriodicValues() 
 	
 	def getUnits(self):
 		return Units.SECONDS

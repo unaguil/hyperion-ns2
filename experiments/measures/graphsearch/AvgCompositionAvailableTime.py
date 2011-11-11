@@ -16,8 +16,6 @@ class AvgCompositionAvailableTime:
 		
 		self.__searches = {}
 		
-		self.__defaultValuesAdded = False
-		
 	def getType(self):
 		return self.__class__.__name__
 	
@@ -28,8 +26,7 @@ class AvgCompositionAvailableTime:
 		return self.__periodicAvgValues.getSimulationTime()
 	
 	def getTotalValue(self):
-		self.__addDefaultValues()
-		return self.__periodicAvgValues.getAvgTotal(False)
+		return self.__periodicAvgValues.getAvgTotal()
 	
 	def parseLine(self, line):
 		m = self.__foundPattern.match(line)
@@ -55,18 +52,8 @@ class AvgCompositionAvailableTime:
 			
 			return
 		
-	def __addDefaultValues(self):
-		if not self.__defaultValuesAdded:
-			for searchID in self.__searches.keys():
-				foundTime = self.__searches[searchID]
-				elapsedTime = self.getSimulationTime() - foundTime
-				self.__periodicAvgValues.addValue(elapsedTime, foundTime)
-							
-			self.__defaultValuesAdded = True
-				
 	def getValues(self): 
-		self.__addDefaultValues()
-		return self.__periodicAvgValues.getPeriodicValues(False) 
+		return self.__periodicAvgValues.getPeriodicValues() 
 	
 	def getUnits(self):
 		return Units.SECONDS
