@@ -5,7 +5,7 @@ class StartedCompositions(GenericMeasure):
 	"""Total number of started searches"""
 	
 	def __init__(self, period, simulationTime):
-		GenericMeasure.__init__(self, r'DEBUG graphsearch.Peer  - Peer [0-9]+ started composition search \(.*?\).*?([0-9]+\,[0-9]+).*?', period, simulationTime, Units.COMPOSITIONS)
+		GenericMeasure.__init__(self, r'DEBUG .*?  - Peer [0-9]+ started composition search \(.*?\).*?([0-9]+\,[0-9]+).*?', period, simulationTime, Units.COMPOSITIONS)
 			
 	def parseLine(self, line):
 		self.parseInc(line)

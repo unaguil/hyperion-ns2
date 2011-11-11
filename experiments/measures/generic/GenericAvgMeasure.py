@@ -23,3 +23,6 @@ class GenericAvgMeasure:
     
     def getUnits(self):
         return self.__units
+    
+    def finish(self):
+        pass

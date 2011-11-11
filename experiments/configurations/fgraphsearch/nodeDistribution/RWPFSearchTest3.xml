@@ -49,7 +49,7 @@
 		<measure type="generic.DeliveredRatio" period="0.25" />
  		<measure type="generic.DeliveringTime" period="0.25" />
 		<measure type="graphsearch.StartedCompositions" period="0.25" />
-		<measure type="graphsearch.AvgFoundCompositions" period="0.25" />
+		<measure type="graphsearch.FoundCompositionsRatio" period="0.25" />
 		<measure type="graphsearch.AvgCompositionSearchTime" period="0.25" />
 		<measure type="graphsearch.AvgCompositionAvailableTime" period="0.25" />
 		<measure type="graphsearch.SentCompositionModificationMessages" period="0.25" />

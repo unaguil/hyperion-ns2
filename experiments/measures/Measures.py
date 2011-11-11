@@ -133,6 +133,7 @@ class Measures:
 	def endRepeat(self):
 		#Obtain the value of this repeat and store it
 		for measure in self.currentMeasures:
+			measure.finish()
 			self.measures[measure.getType()].append((measure.getValues(), measure.getTotalValue()))
 			
 		self.currentConfigurationStatus.append(self.__simulationFinished)

@@ -65,7 +65,6 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 				final Service searchedService = findServices.getService(index);
 				final SearchID searchID = compositionSearch.startComposition(searchedService);
 				receivedCompositions.put(searchID, new ArrayList<ExtendedServiceGraph>());
-				myLogger.debug("Peer " + peer.getPeerID() + " started composition search " + searchID);
 				return true;
 			}
 			myLogger.error("Peer " + peer.getPeerID() + " " + COMPOSE_SERVICE + " must have one argument");
@@ -158,14 +157,11 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 
 	@Override
 	public void compositionFound(final ExtendedServiceGraph composition, final SearchID searchID) {
-		myLogger.debug("Peer " + peer.getPeerID() + " received composition for search " + searchID);
 		receivedCompositions.get(searchID).add(composition);
 	}
 
 	@Override
 	public void compositionsLost(final SearchID searchID, final ExtendedServiceGraph invalidComposition) {
-		myLogger.debug("Peer " + peer.getPeerID() + " received invalid composition for search " + searchID);
-
 		// remove invalid composition from received ones
 		for (final Iterator<ExtendedServiceGraph> it = receivedCompositions.get(searchID).iterator(); it.hasNext();) {
 			final ExtendedServiceGraph composition = it.next();
@@ -186,7 +182,6 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 
 	@Override
 	public void compositionModified(final SearchID searchID, final Set<Service> removedServices) {
-		myLogger.info("Peer " + peer.getPeerID() + " received modification for composition " + searchID + " removed services: " + removedServices);
 		for (final ExtendedServiceGraph composition : receivedCompositions.get(searchID))
 			for (final Service service : removedServices)
 				composition.removeService(service);

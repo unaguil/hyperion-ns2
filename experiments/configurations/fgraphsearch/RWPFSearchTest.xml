@@ -17,7 +17,7 @@
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
-		<entry key="nCompositions">10</entry>
+		<entry key="nCompositions">1</entry>
 		<entry key="compositionIO">(1, 5)</entry>
 		<entry key="dDistribution">((0.3, 5), (0.4, 4), (0.3, 2))</entry>
 		<entry key="nDistribution">1.0</entry>
@@ -49,7 +49,7 @@
 		<measure type="generic.DeliveredRatio" period="5.0" />
 		<measure type="generic.DeliveringTime" period="5.0" />
 		<measure type="graphsearch.StartedCompositions" period="5.0" />
-		<measure type="graphsearch.AvgFoundCompositions" period="5.0" />
+		<measure type="graphsearch.FoundCompositionsRatio" period="5.0" />
 		<measure type="graphsearch.AvgCompositionSearchTime" period="5.0" />
 		<measure type="graphsearch.AvgCompositionAvailableTime" period="5.0" />
 		<measure type="graphsearch.SentCompositionModificationMessages" period="5.0" />

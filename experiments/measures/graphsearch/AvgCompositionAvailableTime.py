@@ -10,8 +10,8 @@ class AvgCompositionAvailableTime(GenericAvgMeasure):
 	def __init__(self, period, simulationTime):		
 		GenericAvgMeasure.__init__(self, period, simulationTime, Units.SECONDS)
 		
-		self.__foundPattern = re.compile('DEBUG graphsearch.Peer  - Peer [0-9]+ received composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
-		self.__lostPattern = re.compile('DEBUG graphsearch.Peer  - Peer [0-9]+ received invalid composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
+		self.__foundPattern = re.compile('DEBUG .*?  - Peer [0-9]+ received composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
+		self.__lostPattern = re.compile('DEBUG .*?  - Peer [0-9]+ received invalid composition for search (\(.*?\)).*?([0-9]+\,[0-9]+).*?')
 		
 		self.__searches = {}
 	
@@ -29,13 +29,17 @@ class AvgCompositionAvailableTime(GenericAvgMeasure):
 		m = self.__lostPattern.match(line)
 		if m is not None:
 			searchID = m.group(1)
-			time = float(m.group(2).replace(',','.'))			
+			invalidTime = float(m.group(2).replace(',','.'))			
 			
 			if searchID in self.__searches:
 				foundTime = self.__searches[searchID]
-				elapsedTime = time - foundTime
+				elapsedTime = invalidTime - foundTime
 				self.periodicAvgValues.addValue(elapsedTime, foundTime) 
 				del self.__searches[searchID]
 			
 			return
 		 
+	def finish(self):
+		for searchID, foundTime in self.__searches.items():
+			self.periodicAvgValues.addValue(self.getSimulationTime(), foundTime)
+			

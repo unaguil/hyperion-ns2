@@ -48,7 +48,7 @@
 		<measure type="generic.ExpiredMessages" period="1.0" />
 		<measure type="generic.DeliveredRatio" period="1.0" />
 		<measure type="graphsearch.StartedCompositions" period="1.0" />
-		<measure type="graphsearch.AvgFoundCompositions" period="1.0" />
+		<measure type="graphsearch.FoundCompositionsRatio" period="1.0" />
 		<measure type="graphsearch.AvgCompositionSearchTime" period="1.0" />
 		<measure type="graphsearch.AvgCompositionAvailableTime" period="1.0" />
 		<measure type="graphsearch.SentCompositionModificationMessages" period="1.0" />
