@@ -47,6 +47,7 @@
 		<measure type="generic.DeliveredMessages" period="5.0" />
 		<measure type="generic.ExpiredMessages" period="5.0" />
 		<measure type="generic.DeliveredRatio" period="5.0" />
+		<measure type="generic.DeliveringTime" period="5.0" />
 		<measure type="graphsearch.StartedCompositions" period="5.0" />
 		<measure type="graphsearch.AvgFoundCompositions" period="5.0" />
 		<measure type="graphsearch.AvgCompositionSearchTime" period="5.0" />
