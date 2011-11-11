@@ -29,6 +29,9 @@ class GenericMeasure:
         if m is not None:
             time  = float(m.group(1).replace(',','.'))
             self.incValue(time, self.getSimulationTime())
+            
+    def getProg(self):
+        return self.__prog 
     
     def getValues(self): 
         return self.__periodicValues
