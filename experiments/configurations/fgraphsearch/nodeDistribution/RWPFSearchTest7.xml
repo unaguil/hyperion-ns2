@@ -38,7 +38,7 @@
 		<entry key="graphsearch.searchExpiration">20000</entry>
 	</staticConfig>
 	<dynamicConfig />
-	<repeat number="4" />
+	<repeat number="20" />
 	<measures>
 		<measure type="generic.SentMessages" period="0.25" />
 		<measure type="generic.ReceivedMessages" period="0.25" />
