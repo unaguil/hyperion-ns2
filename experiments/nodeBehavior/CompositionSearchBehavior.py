@@ -11,12 +11,18 @@ class CompositionSearchBehavior(CommonSearchBehavior):
         
         self.__searchedParameters = {}
         
+        self.__availableCompositions = None
+        
     def perform(self, time, oFile):
         node = random.randrange(self.getNNodes())
         compositions = self.getElements()
-        if len(compositions) > 0:
-            compositionNum = random.randrange(len(compositions))
-            oFile.write('$ns_ at %f "$agents(%d) agentj composeService %d\"\n' % (time, node, compositionNum))
+        
+        if self.__availableCompositions is None:
+            self.__availableCompositions = zip(compositions, range(len(compositions)))
+        
+        index = random.randrange(len(self.__availableCompositions))
+        oFile.write('$ns_ at %f "$agents(%d) agentj composeService %d\"\n' % (time, node, self.__availableCompositions[index][1]))
+        del self.__availableCompositions[index] 
          
     def getElements(self):
         return self.getNodePopulator().getCompositions()
