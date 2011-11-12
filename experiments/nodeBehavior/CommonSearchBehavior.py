@@ -9,7 +9,9 @@ class CommonSearchBehavior:
         Defines the common behavior for periodic actions generation.
     """
     
-    def __init__(self, entries, nodePopulator, behaviorName):
+    def __init__(self, entries, nodePopulator, behaviorName, different=False):
+        self.__different = different
+        
         for entry in entries:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
@@ -55,15 +57,19 @@ class CommonSearchBehavior:
             
         return (init, end)
     
-    def generate(self, workingDir, oFile):             
-        
+    def generate(self, workingDir, oFile):              
         init, end = self.__getTimeRange()
+        
+        searches = math.ceil(self.__searchFreq * (self.__getTimeRange()[1] - self.__getTimeRange()[0]))
+        
+        if self.__different and searches > len(self.getElements()):
+            raise Exception('Cannot generated %d searches using %d elements' % (searches, len(self.getElements())))
         
         print ''   
         print '************* %s ****************' % self.__behaviorName
         print '* Nodes: %d' % self.__nNodes
         print '* Frequency: %.3f searches/s' % self.__searchFreq
-        print '* Generated: %d searches' % math.ceil(self.__searchFreq * (self.__getTimeRange()[1] - self.__getTimeRange()[0]))
+        print '* Generated: %d searches' % searches
         print '* Time range: [%s, %s] s' % (self.__getTimeRange()[0], self.__getTimeRange()[1])
         self.printInfo()
 
@@ -86,4 +92,7 @@ class CommonSearchBehavior:
         pass 
     
     def printInfo(self):
+        pass
+    
+    def getElements(self):
         pass

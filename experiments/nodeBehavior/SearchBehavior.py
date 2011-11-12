@@ -12,7 +12,7 @@ class SearchBehavior(CommonSearchBehavior):
         self.__searchedParameters = {}
         
     def perform(self, time, oFile):
-        if len(self.getNodePopulator().getParameters()) > 0 and self.getNNodes() > 0:
+        if len(self.getElements()) > 0 and self.getNNodes() > 0:
             node, parameter = self.__randomSelect()
             if not node in self.__searchedParameters:
                 self.__searchedParameters[node] = []
@@ -30,6 +30,9 @@ class SearchBehavior(CommonSearchBehavior):
         node = random.randrange(self.getNNodes())
         parameter = str(random.randrange(len(self.getNodePopulator().getParameters())))
         return node, parameter
+    
+    def getElements(self):
+        return self.getNodePopulator().getParameters()
     
     def printInfo(self):
         print '* %s: Using a total of %d different parameters' % (self.getBehaviorName(), len(self.getNodePopulator().getParameters()))        
