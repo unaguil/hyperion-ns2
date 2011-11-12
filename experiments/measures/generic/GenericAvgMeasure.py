@@ -1,8 +1,8 @@
 from measures.periodicValues.PeriodicAvgValues import PeriodicAvgValues
 
 class GenericAvgMeasure:
-    def __init__(self, period, simulationTime, units):
-        self.periodicAvgValues = PeriodicAvgValues(period, simulationTime)
+    def __init__(self, period, simulationTime, units, maintainLastValue=False):
+        self.periodicAvgValues = PeriodicAvgValues(period, simulationTime, maintainLastValue)
         
         self.__units = units
         

@@ -7,7 +7,7 @@ class AvgNeighbors(GenericAvgMeasure):
 	"""Average neighbors for a node"""
 	
 	def __init__(self, period, simulationTime):
-		GenericAvgMeasure.__init__(self, period, simulationTime, Units.NEIGHBORS)
+		GenericAvgMeasure.__init__(self, period, simulationTime, Units.NEIGHBORS, maintainLastValue=True)
 		
 		self.__appearPattern = re.compile('DEBUG detection.beaconDetector.BeaconDetector  - Peer ([0-9]+) has new neighbors: (\[.*?\]) ([0-9]+\,[0-9]+).*?')
 		self.__disappearPattern = re.compile('DEBUG detection.beaconDetector.BeaconDetector  - Peer ([0-9]+) has lost neighbors: (\[.*?\]) ([0-9]+\,[0-9]+).*?')

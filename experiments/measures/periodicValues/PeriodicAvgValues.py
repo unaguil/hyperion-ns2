@@ -6,7 +6,7 @@ from PeriodicValues import PeriodicValues
 import Util
 
 class PeriodicAvgValues:
-    def __init__(self, period, simulationTime):
+    def __init__(self, period, simulationTime, maintainLastValue):
         self.__period = period
         self.__simulationTime = simulationTime   
         
@@ -16,6 +16,8 @@ class PeriodicAvgValues:
         
         for index in xrange(periods):
             self.__values.append([])
+            
+        self.__maintainLastValue = maintainLastValue
         
     def __getAvgValue(self, index, initialValue, initialTime, finalTime): 
         if len(self.__values[index]) == 0:
@@ -39,7 +41,7 @@ class PeriodicAvgValues:
                                             
             return numpy.average(values, weights=weights), values[-1]
         
-    def getPeriodicValues(self, maintainLastValue=True):
+    def getPeriodicValues(self):
         periodicValues = PeriodicValues(0, self.getPeriod(), self.getSimulationTime())
                         
         initialValue = 0.0
@@ -51,7 +53,7 @@ class PeriodicAvgValues:
             if newInitialValue is not None:
                 initialValue = newInitialValue
                 
-            if not maintainLastValue:
+            if not self.__maintainLastValue:
                 initialValue = 0.0
                 
             periodicValues.setValue(index, avgValue)
@@ -66,9 +68,9 @@ class PeriodicAvgValues:
     def __len__(self):
         return len(self.__values) 
     
-    def getAvgTotal(self, maintainLastValue=True):
-        if not maintainLastValue:
-            values = [v for v in self.getPeriodicValues(maintainLastValue).getValues() if v > 0.0]
+    def getAvgTotal(self):
+        if not self.__maintainLastValue:
+            values = [v for v in self.getPeriodicValues().getValues() if v > 0.0]
         else:
             values = self.getPeriodicValues().getValues()
             
