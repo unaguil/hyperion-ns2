@@ -52,7 +52,7 @@ def __parseScenario(scenarioFilePath):
             nodeID = None
             x = y = z = None
         
-    return nodes, 290, 290
+    return nodes
 
 def __getDistance(nodeA, nodeB):
     x1, y1, z1 = nodeA.getPos()
@@ -78,8 +78,8 @@ def __getNeighbours(nodes):
                     
     return neighbourTable
 
-def __drawScenario(scenarioFilePath, outputFile):
-    nodes, xmax, ymax = __parseScenario(scenarioFilePath) 
+def __drawScenario(scenarioFilePath, outputFile, width, height):
+    nodes = __parseScenario(scenarioFilePath) 
     
     WIDTH, HEIGHT = 1000, 1000
     
@@ -98,13 +98,13 @@ def __drawScenario(scenarioFilePath, outputFile):
     neighbourTable = __getNeighbours(nodes)
     for node, neighbours in neighbourTable.items():
         x1, y1, z1 = node.getPos()
-        _x1 = x1/xmax
-        _y1 = y1/ymax
+        _x1 = x1/width
+        _y1 = y1/height
         
         for neighbour in neighbours:
             x2, y2, z2 = neighbour.getPos()
-            _x2 = x2/xmax
-            _y2 = y2/ymax
+            _x2 = x2/width
+            _y2 = y2/height
             #print 'Line from %s to %s' % (node.getID(), neighbour.getID())
             ctx.move_to(_x1, _y1)
             ctx.line_to(_x2, _y2)
@@ -112,8 +112,9 @@ def __drawScenario(scenarioFilePath, outputFile):
     
     for node in nodes:
         x, y, z = node.getPos()
-        _x = x/xmax
-        _y = y/ymax
+        _x = x/width
+        _y = y/height
+        
         #print '%s X: %f %f' %(node.getID(), _x, _y)
         ctx.set_source_rgb(0, 0, 0)
         ctx.set_line_width(0.002)   
@@ -123,8 +124,8 @@ def __drawScenario(scenarioFilePath, outputFile):
         #draw node id
         ctx.select_font_face("Georgia")
         ctx.set_font_size(.01)
-        x_bearing, y_bearing, width, height = ctx.text_extents(node.getID())[:4]
-        ctx.move_to(_x - width / 2 - x_bearing, _y - height / 2 - y_bearing)
+        x_bearing, y_bearing, _width, _height = ctx.text_extents(node.getID())[:4]
+        ctx.move_to(_x - _width / 2 - x_bearing, _y - _height / 2 - y_bearing)
         ctx.set_source_rgb(1, 1, 1)
         ctx.show_text(node.getID())
         ctx.stroke() 
@@ -135,13 +136,15 @@ def main():
     parser = OptionParser()
     parser.add_option("-i", "--input", dest="inputFile", help="experiment report used as input")
     parser.add_option("-o", "--output", dest="outputFile", help="Output file")
+    parser.add_option("-W", "--width", dest="width", help="Scenario width")
+    parser.add_option("-H", "--height", dest="height", help="Scenario height")
     
     (options, args) = parser.parse_args()
     
-    if options.inputFile is None or options.outputFile is None:
+    if options.inputFile is None or options.outputFile is None or options.width is None or options.height is None:
         parser.print_usage()
     else:
-        __drawScenario(options.inputFile, options.outputFile)
+        __drawScenario(options.inputFile, options.outputFile, float(options.width), float(options.height))
 
 if __name__ == '__main__':
      main()
