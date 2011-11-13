@@ -206,6 +206,9 @@ class Experiment:
 			sys.stdout.flush()
 			
 		experimentTime = time() - initTime
+		
+		partialFilePath = configurationDir + '/partialResults.txt'
+		measures.savePartialResults(partialFilePath) 
 			
 		if error:
 			results = measures.getXMLError(configGenerator.getTag(), configGenerator.getType())

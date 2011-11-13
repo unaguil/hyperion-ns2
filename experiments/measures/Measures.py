@@ -142,7 +142,20 @@ class Measures:
 		for measure in self.measures.keys():
 			values = self.measures[measure]
 			(meanValues, stdValues, meanTotal, stdTotal) = self.__calculateStatistics(values)
-			self.configurationMeasures[n][measure] = PeriodicEntry(meanValues, stdValues, self.__measureData[measure][1], meanTotal, stdTotal, len(values))		
+			self.configurationMeasures[n][measure] = PeriodicEntry(meanValues, stdValues, self.__measureData[measure][1], meanTotal, stdTotal, len(values))	
+			
+	def savePartialResults(self, filePath):
+		print '* Saving partial results to ' + filePath		
+		resultsFile = open(filePath, 'w')
+		for measure in self.measures.keys():
+			values = self.measures[measure]
+			resultsFile.write('Measure: %s\n' % measure)
+			for index, (periodicValues, total) in enumerate(values):
+				 resultsFile.write('\tRepeat: %d\n' % index)
+				 resultsFile.write('\t\tTotal: %s\n' % str(total))
+				 resultsFile.write('\t\tPeriodicValues: %s\n' % str(periodicValues.getValues()))
+				 resultsFile.write('\n')
+		resultsFile.close()		
 				
 	def __calculateStatistics(self, valuesArray):
 		meanValues = []
