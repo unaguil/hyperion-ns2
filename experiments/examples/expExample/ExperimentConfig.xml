@@ -20,7 +20,7 @@
 	<code codeFile="code.txt"/>
 	<repeat number="5"/>
 	<measures>
-		<measure type="generic.SentMessages"/>
+		<measure type="generic.BroadcastedMessages"/>
 		<measure type="generic.ReceivedMessages"/>
 		<measure type="generic.ReliableBroadcastedMessages"/>
 		<measure type="generic.DeliveredMessages"/>

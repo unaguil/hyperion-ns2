@@ -23,7 +23,7 @@
 	<dynamicConfig/>
 	<repeat number="1"/>
 	<measures>
-		<measure type="generic.SentMessages" period="5.0"/>
+		<measure type="generic.BroadcastedMessages" period="5.0"/>
 		<measure type="generic.ReceivedMessages" period="5.0"/>
 		<measure type="detection.NewNeighborsDetected" period="5.0"/>
 		<measure type="detection.LostNeighborsDetected" period="5.0"/>

@@ -1,8 +1,8 @@
-from measures.generic.ReceivedXXXMessages import ReceivedXXXMessages
+from measures.generic.ReceivedXXXPackets import ReceivedXXXPackets
 
-class ReceivedACKMessages(ReceivedXXXMessages):
+class ReceivedACKMessages(ReceivedXXXPackets):
 	"""Total number of received ACK messages"""
 	
 	def __init__(self, period, simulationTime):
-		ReceivedXXXMessages.__init__(self, 'peer.message.ACKMessage', period, simulationTime)
+		ReceivedXXXPackets.__init__(self, 'peer.message.ACKMessage', period, simulationTime)
 	

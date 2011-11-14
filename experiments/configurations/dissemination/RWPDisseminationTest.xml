@@ -30,7 +30,7 @@
 	<dynamicConfig/>
 	<repeat number="1"/>
 	<measures>
-		<measure type="generic.SentMessages" period="5.0"/>
+		<measure type="generic.BroadcastedMessages" period="5.0"/>
 		<measure type="generic.ReceivedMessages" period="5.0"/>
 		<measure type="generic.SentBundleMessages" period="5.0"/>
 		<measure type="generic.ReceivedBundleMessages" period="5.0"/>

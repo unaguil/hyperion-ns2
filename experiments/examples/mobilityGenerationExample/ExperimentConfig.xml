@@ -31,7 +31,7 @@
 	</dynamicConfig>
 	<code codeFile="code.txt"/>
 	<measures>
-		<measure type="generic.SentMessages"/>
+		<measure type="generic.BroadcastedMessages"/>
 		<measure type="generic.ReceivedMessages"/>
 		<measure type="generic.ReliableBroadcastedMessages"/>
 		<measure type="generic.DeliveredMessages"/>

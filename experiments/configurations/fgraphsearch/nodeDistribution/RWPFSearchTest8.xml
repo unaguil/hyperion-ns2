@@ -40,8 +40,8 @@
 	<dynamicConfig />
 	<repeat number="20" />
 	<measures>
-		<measure type="generic.SentMessages" period="0.25" />
-		<measure type="generic.ReceivedMessages" period="0.25" />
+		<measure type="generic.BroadcastedPackets" period="0.25" />
+		<measure type="generic.ReceivedPackets" period="0.25" />
 		<measure type="detection.AvgNeighbors" period="0.25" />
 		<measure type="generic.ReliableBroadcastedMessages" period="0.25" />
 		<measure type="generic.DeliveredMessages" period="0.25" />

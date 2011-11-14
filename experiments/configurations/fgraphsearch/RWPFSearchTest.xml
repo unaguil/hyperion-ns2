@@ -3,7 +3,7 @@
 	<staticConfig>
 		<!-- Script configuration variables -->
 		<entry key="nNodes">4</entry>
-		<entry key="finishTime">50.0</entry>
+		<entry key="finishTime">5.0</entry>
 		<entry key="gridW">70</entry>
 		<entry key="gridH">70</entry>
 		<entry key="discardTime">0</entry>
@@ -17,7 +17,7 @@
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
-		<entry key="nCompositions">10</entry>
+		<entry key="nCompositions">5</entry>
 		<entry key="compositionIO">(1, 5)</entry>
 		<entry key="dDistribution">((0.3, 5), (0.4, 4), (0.3, 2))</entry>
 		<entry key="nDistribution">1.0</entry>
@@ -40,10 +40,12 @@
 	<dynamicConfig />
 	<repeat number="1" />
 	<measures>
-		<measure type="generic.SentMessages" period="5.0" />
-		<measure type="generic.ReceivedMessages" period="5.0" />
+		<measure type="generic.BroadcastedPackets" period="5.0" />
+		<measure type="generic.ReceivedPackets" period="5.0" />
+				
 		<measure type="detection.AvgNeighbors" period="5.0" />
 		<measure type="generic.ReliableBroadcastedMessages" period="5.0" />
+		<measure type="generic.RebroadcastedMessages" period="5.0" />
 		<measure type="generic.DeliveredMessages" period="5.0" />
 		<measure type="generic.ExpiredMessages" period="5.0" />
 		<measure type="generic.DeliveredRatio" period="5.0" />
@@ -57,6 +59,8 @@
 		<measure type="graphsearch.SentInvalidCompositionsMessages" period="5.0" />
 		
 		<measure type="generic.SentACKMessages" period="5.0" />
+		<measure type="generic.ReceivedACKMessages" period="5.0" />
+		
 		<measure type="detection.SentBeaconMessages" period="5.0" />
 		<measure type="dissemination.SentTableMessages" period="5.0" />
 		
