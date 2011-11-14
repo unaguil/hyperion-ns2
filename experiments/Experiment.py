@@ -124,6 +124,7 @@ class Experiment:
 	def __init__(self, configDir, inputFile, outputFile, debug, workingDir, processing):
 		self.__configDir = configDir
 		self.__outputFile = outputFile
+		self.__inputFileName = inputFile
 		self.__inputFile = self.__configDir + '/' + inputFile
 		self.__debug = debug
 		self.__workingDir = workingDir
@@ -207,7 +208,7 @@ class Experiment:
 			
 		experimentTime = time() - initTime
 		
-		partialFilePath = configurationDir + '/partialResults.txt'
+		partialFilePath = '/tmp/partialResults-' + self.__inputFileName
 		measures.savePartialResults(partialFilePath) 
 			
 		if error:
