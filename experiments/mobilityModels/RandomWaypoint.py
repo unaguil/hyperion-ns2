@@ -27,7 +27,7 @@ class RandomWaypoint:
                 self.__pauseTime = value
         
     def generate(self, workingDir, file, repeat):
-        command = 'setdest'
+        command = 'tools/setdest'
         parameters = '-v 2 -n %s -s 1 -m %s -M %s -t %s -P 1 -p %s -x %s -y %s' % (self.__nNodes, self.__minSpeed, self.__maxSpeed, self.__simTime, self.__pauseTime, self.__maxX, self.__maxY)
         
         cmd = command + ' ' + parameters
