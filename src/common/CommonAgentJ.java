@@ -117,8 +117,13 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 	@Override
 	public void broadcast(final byte[] data) throws IOException {
 		// Create a new datagram packet and send it using the socket
-		final DatagramPacket p = new DatagramPacket(data, data.length, socketAddress);
-		socket.send(p);
+		try {
+			final DatagramPacket p = new DatagramPacket(data, data.length, socketAddress);
+			socket.send(p);
+		} catch (IllegalArgumentException e) {
+			System.err.println("Peer " + peer.getPeerID() + " socketAddress: " + socketAddress);
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
