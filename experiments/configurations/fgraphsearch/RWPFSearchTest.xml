@@ -3,7 +3,7 @@
 	<staticConfig>
 		<!-- Script configuration variables -->
 		<entry key="nNodes">4</entry>
-		<entry key="finishTime">5.0</entry>
+		<entry key="finishTime">50.0</entry>
 		<entry key="gridW">70</entry>
 		<entry key="gridH">70</entry>
 		<entry key="discardTime">0</entry>
