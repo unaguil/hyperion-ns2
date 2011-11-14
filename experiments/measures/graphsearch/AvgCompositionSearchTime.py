@@ -31,7 +31,7 @@ class AvgCompositionSearchTime(GenericAvgMeasure):
 			if searchID in self.__searches:
 				searchTime = self.__searches[searchID]
 				elapsedTime = time - searchTime
-				self.periodicAvgValues.addValue(elapsedTime, elapsedTime) 
+				self.periodicAvgValues.addValue(elapsedTime, searchTime) 
 				del self.__searches[searchID]
 				
 			return
