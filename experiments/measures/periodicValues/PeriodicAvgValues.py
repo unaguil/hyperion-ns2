@@ -74,7 +74,10 @@ class PeriodicAvgValues:
         else:
             values = self.getPeriodicValues().getValues()
             
-        return numpy.mean(values)
+        if len(values) > 0:
+            return numpy.mean(values)
+        else:
+            return 0.0
     
     def getPeriod(self):
         return self.__period
