@@ -2,18 +2,18 @@
 <experiment tag="0.7" type="% nodes with services">
 	<staticConfig>
 		<!-- Script configuration variables -->
-                <entry key="nNodes">20</entry>
-                <entry key="finishTime">50.0</entry>
-                <entry key="gridW">290</entry>
-                <entry key="gridH">290</entry>
-                <entry key="discardTime">0</entry>
-                <entry key="javaAgent">graphsearch.ForwardPeer</entry>
+        <entry key="nNodes">20</entry>
+        <entry key="finishTime">50.0</entry>
+        <entry key="gridW">290</entry>
+        <entry key="gridH">290</entry>
+        <entry key="discardTime">0</entry>
+        <entry key="javaAgent">graphsearch.ForwardPeer</entry>
 
-                <!-- Random waypoint configuration -->
-                <entry key="mobilityModel">RandomWaypoint</entry>
-                <entry key="minSpeed">0.00000000000000000001</entry>
-                <entry key="maxSpeed">0.00000000000000000001</entry>
-                <entry key="pauseTime">100.0</entry>
+        <!-- Random waypoint configuration -->
+        <entry key="mobilityModel">RandomWaypoint</entry>
+        <entry key="minSpeed">0.00000000000000000001</entry>
+        <entry key="maxSpeed">0.00000000000000000001</entry>
+        <entry key="pauseTime">100.0</entry>
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
@@ -29,9 +29,9 @@
 		<entry key="timeRange">(3.0, 'END')</entry>
 
 		<!-- Peer configuration variables -->
-		<entry key="messageProcessor.randomWait">200</entry>
+		<entry key="messageProcessor.randomWait">0</entry>
 		<entry key="beaconDetector.beaconTime">1000</entry>
-		<entry key="reliableBroadcast.maxTries">3</entry>
+		<entry key="reliableBroadcast.maxTries">10</entry>
 		<entry key="dissemination.maxDistance">5</entry>
 		<entry key="parameterSearch.searchMessageTTL">5</entry>
 		<entry key="graphsearch.maxTTL">10</entry>
@@ -44,6 +44,7 @@
 		<measure type="generic.ReceivedPackets" period="0.25" />
 		<measure type="detection.AvgNeighbors" period="0.25" />
 		<measure type="generic.ReliableBroadcastedMessages" period="0.25" />
+		<measure type="generic.RebroadcastedMessages" period="0.25" />
 		<measure type="generic.DeliveredMessages" period="0.25" />
 		<measure type="generic.ExpiredMessages" period="0.25" />
 		<measure type="generic.DeliveredRatio" period="0.25" />
