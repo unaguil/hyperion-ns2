@@ -1,22 +1,17 @@
 import re
 from measures.periodicValues.PeriodicValues import *
 
-class GenericMeasure:
-    def __init__(self, pattern, period, simulationTime, units):        
+from Measure import Measure
+
+class GenericMeasure(Measure):
+    def __init__(self, pattern, period, simulationTime, units):
+        Measure.__init__(self, period, simulationTime, units)
+                
         self.__periodicValues = PeriodicValues(0, period, simulationTime)
         
         self.__prog = re.compile(pattern)
         
         self.__units = units
-        
-    def getType(self):
-        return self.__class__.__name__
-    
-    def getPeriod(self):
-        return self.__periodicValues.getPeriod()
-    
-    def getSimulationTime(self):
-        return self.__periodicValues.getSimulationTime()
     
     def getTotalValue(self):
         return self.__periodicValues.getTotal()
@@ -35,9 +30,3 @@ class GenericMeasure:
     
     def getValues(self): 
         return self.__periodicValues
-    
-    def getUnits(self):
-        return self.__units
-    
-    def finish(self):
-        pass

@@ -15,8 +15,27 @@ from xml.dom.minidom import *
 
 from matplotlib.backends.backend_pdf import *
 
+from measures.generic.GenericAvgMeasure import GenericAvgMeasure
+
 def __relStd(mean, std):
 	return 100 * std / mean
+
+def get_class(clazz):
+	parts = clazz.split('.')
+	module = '.'.join(parts[:-1])
+	m = __import__(module)
+	for comp in parts[1:]:
+		m = getattr(m, comp)
+	return m
+
+def createMeasure(clazz, period):
+		className = clazz.split('.')[-1]
+		measureClass = get_class(clazz + '.' + className)
+		
+		return measureClass(period, 10.0)
+					
+		print 'Invalid measure type: ', value
+		return None
 
 class PeriodicResult:
 	def __init__(self, tag, period, values, meanTotal, stdTotal, sampleSize):
@@ -264,21 +283,36 @@ class Graph:
 					#print "X: ", x
 					#print "Y: ", y
 			
-					formattedType = self.__formatType(measureType)
+					measure = createMeasure('measures.' + measureType, 5.0)
+					measureName = measure.getName()
 			
-					label = '%s (%s = %d)' % (formattedType, name, result.getTag())
+					label = '%s (%d %s)' % (measureName, result.getTag(), name)
 					
 					self.__printPeriodicInfo(y, x, result.getStdValues(), relStdValues, label, '')
 			
 					line = plt.plot(x, y)
-					lines.append(line)
 					
+					lines.append(line)
 					labels.append(label)
+					
+					#draw average line
+					avgValues = [result.getMeanTotal() for e in x]
+					avgLine = plt.plot(x, avgValues)
+					
+					if isinstance(measure, GenericAvgMeasure):
+						avgLabel = 'Avg. of %s' % (measureName)
+					else:
+						avgLabel = 'Total of %s' % (measureName)
+						
+					lines.append(avgLine)
+					labels.append(avgLabel)
 		
 		if not yLabel is None:
 			plt.ylabel(yLabel)
 		else:
 			plt.ylabel(units)
+			
+		plt.xticks(x)
 			
 		self.__setAxis(plt, xmin, xmax, ymin, ymax)
 		

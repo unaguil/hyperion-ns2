@@ -47,19 +47,17 @@ class Measures:
 		self.__measureData = {}
 		
 		for measureNode in measureNodes:
-			clazz = measureNode.getAttribute('type')
+			clazz = 'measures.' + measureNode.getAttribute('type')
 			periodStr = measureNode.getAttribute('period');
 							
 			if periodStr is not '':
 				period = float(periodStr)
 			else:
 				period = DEFAULT_PERIOD
-							
-			name = clazz.split('.')[1]
 			
 			units = self.__getMeasureUnits(clazz, period)
 			
-			self.__measureData[name] = (clazz, period, units)
+			self.__measureData[clazz] = (clazz, period, units)
 		
 		self.configurationMeasures = {}
 		
@@ -72,7 +70,7 @@ class Measures:
 
 	def __createMeasure(self, clazz, period):
 		className = clazz.split('.')[-1]
-		measureClass = get_class('measures.' + clazz + '.' + className)
+		measureClass = get_class(clazz + '.' + className)
 		
 		return measureClass(period, self.__simulationTime)
 					
@@ -228,7 +226,7 @@ class Measures:
 			for measureName in sorted(self.__measureData.keys()):
 				measureNode = doc.createElement('measure')
 				measuresNode.appendChild(measureNode)
-				measureNode.setAttribute('type', measureName) 
+				measureNode.setAttribute('type', measureName[measureName.index('.') + 1:]) 
 				measureNode.setAttribute('period', str(self.__measureData[measureName][1]))
 				units = str(self.__measureData[measureName][2])
 				measureNode.setAttribute('units', units)

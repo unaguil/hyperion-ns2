@@ -1,4 +1,6 @@
 from GenericMeasure import GenericMeasure
+from GenericAvgMeasure import GenericAvgMeasure
+
 from measures.periodicValues.PeriodicValues import *
 
 import Units
@@ -37,11 +39,11 @@ class ReliableBroadcastedMessages(GenericMeasure):
 	def getBroadcastTable(self):
 		return self.__broadcastTable
 
-class DeliveredRatio(GenericMeasure):
+class DeliveredRatio(GenericAvgMeasure):
 	"""The ratio of messages which were correctly delivered calculated using the sum of delivered and expired messages as the total number of messages"""	
 	
 	def __init__(self, period, simulationTime):	
-		GenericMeasure.__init__(self, '', period, simulationTime, Units.RATIO)
+		GenericAvgMeasure.__init__(self, period, simulationTime, Units.RATIO)
 		
 		self.__period = period
 		self.__simulationTime = simulationTime
