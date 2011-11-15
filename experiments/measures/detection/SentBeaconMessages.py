@@ -1,7 +1,7 @@
-from measures.generic.SentXXXMessages import SentXXXMessages
+from measures.generic.BroadcastedXXXPackets import BroadcastedXXXPackets
 
-class SentBeaconMessages(SentXXXMessages):
+class SentBeaconMessages(BroadcastedXXXPackets):
 	"""Total number of sent beacon messages"""
 	
 	def __init__(self, period, simulationTime):
-		SentXXXMessages.__init__(self, 'detection.message.BeaconMessage', period, simulationTime)
+		BroadcastedXXXPackets.__init__(self, 'detection.message.BeaconMessage', period, simulationTime)
