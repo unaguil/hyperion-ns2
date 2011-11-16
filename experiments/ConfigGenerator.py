@@ -26,9 +26,9 @@ class ConfigGenerator:
 		for dynamicEntry in dynamicEntries:
 			key = dynamicEntry.getAttribute("key")
 			interpolator = dynamicEntry.getAttribute("interpolator")
-			start = int(dynamicEntry.getAttribute("start"))
-			end = int(dynamicEntry.getAttribute("end"))
-			step = int(dynamicEntry.getAttribute("step"))
+			start = float(dynamicEntry.getAttribute("start"))
+			end = float(dynamicEntry.getAttribute("end"))
+			step = float(dynamicEntry.getAttribute("step"))
 			text = dynamicEntry.getAttribute("text")
 			self.interpolatedEntries.append(InterpolatedEntry(key, interpolator, text, start, end, step))
 			

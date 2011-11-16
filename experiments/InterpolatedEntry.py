@@ -1,4 +1,4 @@
-import numpy as pn
+import numpy
 
 class InterpolatedEntry:
 	def __init__(self, key, interpolator, text, start, end, step):
@@ -12,7 +12,7 @@ class InterpolatedEntry:
 		if step == 0 or start == end:
 			self.values = [start]
 		else:
-			self.values = xrange(start, end + step, step) 
+			self.values = numpy.arange(start, end + step, step) 
 
 		self.current = 0
 		
