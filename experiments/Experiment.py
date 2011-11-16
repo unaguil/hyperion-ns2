@@ -243,8 +243,7 @@ class Experiment:
 			
 		experimentTime = time.time() - initTime
 		
-		partialFilePath = '/tmp/partialResults-' + self.__inputFileName
-		measures.savePartialResults(partialFilePath) 
+		measures.savePartialResults(configurationDir + '/partialResults.txt') 
 			
 		if error:
 			results = measures.getXMLError(configGenerator.getTag(), configGenerator.getType())
