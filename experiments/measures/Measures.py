@@ -36,7 +36,9 @@ class Measures:
 				
 		measureNodes = expConfig.getElementsByTagName('measure')
 		
-		for entry in expConfig.getElementsByTagName('entry'):
+		self.__entries = expConfig.getElementsByTagName('entry')
+		
+		for entry in self.__entries:
 			value = entry.firstChild.data
 			key = entry.getAttribute("key")
 			
@@ -212,6 +214,9 @@ class Measures:
 		configurationNode.setAttribute('creationDate', datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))
 		
 		configurationNode.setAttribute('number', str(n))
+		
+		for entry in self.__entries:
+			configurationNode.appendChild(entry)
 						
 		for measureName in sorted(self.__measureData.keys()):
 			measureNode = doc.createElement('measure')
