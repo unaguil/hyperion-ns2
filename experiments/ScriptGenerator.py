@@ -1,13 +1,13 @@
-from xml.dom.minidom import *
+import xml.dom.minidom as minidom
 import math
 
-from mobilityModels.MobilityModelGenerator import *
-from populators.PopulatorGenerator import *
-from nodeBehavior.NodeBehaviorGenerator import *
+from mobilityModels.MobilityModelGenerator import MobilityModelGenerator
+from populators.PopulatorGenerator import PopulatorGenerator
+from nodeBehavior.NodeBehaviorGenerator import NodeBehaviorGenerator
 
 class ScriptGenerator:
 	def __init__(self, config, expConfigFile):
-		scriptConfig = parseString(config)
+		scriptConfig = minidom.parseString(config)
 		self.__entries = scriptConfig.getElementsByTagName("entry")
 		
 		mobilityModel = None
@@ -70,7 +70,7 @@ class ScriptGenerator:
 		print '* Neighbor count: %.2f neighbors/node' % neighborCount
 		print '***********************************************************'
 		
-		expConfig = parse(expConfigFile)
+		expConfig = minidom.parse(expConfigFile)
 		codeTag = expConfig.getElementsByTagName("code")
 		if len(codeTag) > 0:
 			self.__codeFile = codeTag[0].getAttribute("codeFile")

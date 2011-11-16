@@ -1,9 +1,9 @@
-from xml.dom.minidom import *
-from InterpolatedEntry import *
+import xml.dom.minidom as minidom
+from InterpolatedEntry import InterpolatedEntry
 
 class ConfigGenerator:
 	def __init__(self, expConfigFile):
-		expConfig = parse(expConfigFile)
+		expConfig = minidom.parse(expConfigFile)
 		experiment = expConfig.documentElement
 		self.__tag = experiment.getAttribute('tag')
 		self.__type = experiment.getAttribute('type') 

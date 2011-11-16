@@ -11,9 +11,9 @@ import sys
 
 from optparse import OptionParser
 
-from xml.dom.minidom import *
+from xml.dom.minidom import minidom
 
-from matplotlib.backends.backend_pdf import *
+from matplotlib.backends.backend_pdf import pdfBackend
 
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
@@ -91,7 +91,7 @@ class Graph:
 		
 		for file in files:
 			try:
-				parser = parse(file)
+				parser = minidom.parse(file)
 				
 				measures = parser.documentElement
 				tag = measures.getAttribute('tag')
@@ -335,7 +335,7 @@ class Graph:
 			rowsPerPage = 1
 			columnsPerPage = 1
 			plotsPerPage = rowsPerPage * columnsPerPage
-			pp = PdfPages('allPlots.pdf')
+			pp = pdfBackend.PdfPages('allPlots.pdf')
 			
 			for index, measure in enumerate(sorted(self.__measures)):
 				

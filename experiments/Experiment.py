@@ -5,18 +5,48 @@ import os
 import shutil
 import subprocess
 import math
+import re
+import threading
+import time
+import datetime
 
 from optparse import OptionParser
 
-from time import time
-
-from ConfigGenerator import *
-from measures.Measures import *
-from ScriptGenerator import *
+from ConfigGenerator import ConfigGenerator
+from measures.Measures import Measures
+from ScriptGenerator import ScriptGenerator
 
 import util.TimeFormatter as TimeFormatter
 
 MAX_TRIES = 3
+
+JVM_DUMP_CHECK_TIME = 1.0
+
+class JVMCheckingTimer(threading.Thread):
+	def __init__(self, period, process, tempDir):
+		threading.Thread.__init__(self)
+		
+		self.__period = period
+		self.__process = process
+		self.__tempDir = tempDir
+		
+		self.__stop = False
+		
+	def run(self):
+		while not self.__stop:
+			try:
+				for file in os.listdir(self.__tempDir):
+					if re.match('hs_err_pid[0-9]+\.log', file) is not None:
+						print '* ERROR: JVM failed during simulation. Killing process. See ' + self.__tempDir + '/' + file
+						self.__process.kill()
+						return							
+			except OSError:
+				pass
+			
+			time.sleep(self.__period)
+		
+	def cancel(self):
+		self.__stop = True
 
 class RepeatRunner:
 	def __init__(self, tempDir, config, workingDir, scriptGenerator, repeat):
@@ -26,7 +56,7 @@ class RepeatRunner:
 		self.__scriptGenerator = scriptGenerator
 		self.__repeat = repeat
 		
-		self.__try = 1
+		self.__try = 1 
 		
 	def __execute(self):		
 		#Create temporal directory and prepare configuration files
@@ -45,7 +75,7 @@ class RepeatRunner:
 		self.__scriptGenerator.generate('Script.tcl', self.__tempDir, self.__repeat)
 		
 		#Run script
-		simStartTime = time()
+		simStartTime = time.time()
 		out = open(self.__tempDir + '/out', 'w')
 		err = open(self.__tempDir + '/err', 'w')
 		
@@ -54,16 +84,21 @@ class RepeatRunner:
 		sys.stdout.flush()
 		
 		p = subprocess.Popen(['ns', 'Script.tcl'], stdout=out, stderr=err, cwd=self.__tempDir)
+		
+		timer = JVMCheckingTimer(JVM_DUMP_CHECK_TIME, p, self.__tempDir) 
+		timer.start()
 		result = p.wait()
+		timer.cancel()
+		
 		out.close()
 		err.close()
 		
 		if result != 0:
-			print 'ERROR: There was a problem during simulation execution on directory %s' % self.__tempDir
+			print '* ERROR: There was a problem during simulation execution on directory %s' % self.__tempDir
 			sys.stdout.flush()
 			return False
 		
-		print '* NS-2 simulation on directory %s running time: %s' % (self.__tempDir, TimeFormatter.formatTime(time() - simStartTime))
+		print '* NS-2 simulation on directory %s running time: %s' % (self.__tempDir, TimeFormatter.formatTime(time.time() - simStartTime))
 		print ''
 		sys.stdout.flush()
 		
@@ -78,13 +113,13 @@ class RepeatRunner:
 			self.__try += 1
 			
 		if not success:
-			print 'ERROR: Max tries for simulation execution reached'
+			print '* ERROR: Max tries for simulation execution reached'
 			return False
 		else:
 			return True
 			
 	def __compressOutputLog(self):  
-		startTime = time()
+		startTime = time.time()
 		print '* Compressing output log file %s' % self.__getPlainLog()
 		p = subprocess.Popen(['gzip', self.__getPlainLog()])
 		result = p.wait()
@@ -94,7 +129,7 @@ class RepeatRunner:
 			sys.stdout.flush()
 			return False
 		
-		print '* Compressed log obtained in %s time: %s' % (self.getOutputLog(), TimeFormatter.formatTime(time() - startTime)) 
+		print '* Compressed log obtained in %s time: %s' % (self.getOutputLog(), TimeFormatter.formatTime(time.time() - startTime)) 
 		print ''
 		return True
 	
@@ -147,7 +182,7 @@ class Experiment:
 		
 		measures = Measures(self.__inputFile)
 		
-		initTime = time()
+		initTime = time.time()
 		
 		error = False
 
@@ -160,7 +195,7 @@ class Experiment:
 			
 			os.mkdir(configurationDir)
 			
-			startTime = time()
+			startTime = time.time()
 			
 			repeat = configGenerator.getRepeat()
 			
@@ -178,12 +213,12 @@ class Experiment:
 			
 			for counter in range(repeat):
 				
-				tempDir = configurationDir + '/repeat-' + str(counter)
+				repeatDir = configurationDir + '/repeat-' + str(counter)
 				
 				print ''
 				print '* Running repeat %d of %d' % (counter + 1, repeat)
 				sys.stdout.flush()
-				r = RepeatRunner(tempDir, config, self.__configDir, scriptGenerator, counter)
+				r = RepeatRunner(repeatDir, config, self.__configDir, scriptGenerator, counter)
 				repeatRunners.append(r)
 				if not r.run():
 					error = True
@@ -202,11 +237,11 @@ class Experiment:
 			
 			configurationCounter = configurationCounter + 1
 			
-			print '* Configuration execution time: %s' % TimeFormatter.formatTime(time() - startTime)
+			print '* Configuration execution time: %s' % TimeFormatter.formatTime(time.time() - startTime)
 			print ''
 			sys.stdout.flush()
 			
-		experimentTime = time() - initTime
+		experimentTime = time.time() - initTime
 		
 		partialFilePath = '/tmp/partialResults-' + self.__inputFileName
 		measures.savePartialResults(partialFilePath) 
@@ -234,12 +269,12 @@ class Experiment:
 			print 'Output log %s file size %s' % (outputLog, self.__sizeof_fmt(os.path.getsize(outputLog)))
 			sys.stdout.flush()
 			#Measure results
-			logProcessStartTime = time()
+			logProcessStartTime = time.time()
 			measures.startRepeat()
 			measures.parseLog(outputLog)
 			measures.endRepeat()
 							
-			print 'Output log %s parsing time: %s' % (outputLog, TimeFormatter.formatTime(time() - logProcessStartTime))
+			print 'Output log %s parsing time: %s' % (outputLog, TimeFormatter.formatTime(time.time() - logProcessStartTime))
 			print ''
 			sys.stdout.flush()
 		
@@ -254,13 +289,13 @@ class Experiment:
 		
 		measures = Measures(self.__inputFile)
 		
-		initTime = time()
+		initTime = time.time()
 
 		configurationCounter = 0		
 		while configGenerator.hasNext():
 			configurationDir = self.__workingDir + '/configuration-' + str(configurationCounter)
 			
-			startTime = time()
+			startTime = time.time()
 			
 			repeat = configGenerator.getRepeat()
 			
@@ -289,11 +324,11 @@ class Experiment:
 			
 			configurationCounter = configurationCounter + 1
 			
-			print '* Configuration processing time: %s' % TimeFormatter.formatTime(time() - startTime)
+			print '* Configuration processing time: %s' % TimeFormatter.formatTime(time.time() - startTime)
 			print ''
 			sys.stdout.flush()
 
-		experimentTime = time() - initTime
+		experimentTime = time.time() - initTime
 
 		print 'Experiment output processing finished. Total time: %s' % TimeFormatter.formatTime(experimentTime)
 		print '' 
