@@ -365,7 +365,7 @@ def main():
 	parser.add_option("-c", "--configDir", dest="configDir", help="experiment configuration directory")
 	parser.add_option("-f", "--file", dest="inputFile", help="experiment configuration file")
 	parser.add_option("-o", "--output", dest="outputFile", help="experiment report output file", default=sys.stdout)
-	parser.add_option("-w", "--workingDir", dest="workingDir", help="directory to store simulation results", default='/tmp/experiment')
+	parser.add_option("-w", "--workingDir", dest="workingDir", help="directory to store simulation results")
 	parser.add_option("-d", "--debug", dest="debug", help="debug mode", default=False)
 	parser.add_option("-p", "--processDir", dest="processDir", help="process output directory")
 	
@@ -388,9 +388,14 @@ def main():
 		else:
 			inputFilePath = options.configDir + '/' + options.inputFile
 			if inputFilePath is options.outputFile:
-				parser.error("ERROR: Input and output files cannot be the same") 
+				parser.error("ERROR: Input and output files cannot be the same")
+				
+			if options.workingDir is None:
+				workingDir = '/tmp/experiment-' + options.inputFile
+			else:
+				workingDir = options.workingDir
 			
-			__runExperiment(options.outputFile, options.configDir, options.inputFile, options.debug, options.workingDir, False)
+			__runExperiment(options.outputFile, options.configDir, options.inputFile, options.debug, workingDir, False)
 
 if __name__ == '__main__':
     main()
