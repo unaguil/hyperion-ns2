@@ -1,4 +1,4 @@
-from xml.dom.minidom import *
+import xml.dom.minidom as minidom
 import re
 import numpy
 import gzip
@@ -32,7 +32,7 @@ class PeriodicEntry:
 
 class Measures:
 	def __init__(self, expConfigFile):
-		expConfig = parse(expConfigFile)
+		expConfig = minidom.parse(expConfigFile)
 				
 		measureNodes = expConfig.getElementsByTagName('measure')
 		self.__entries = expConfig.getElementsByTagName('entry')
@@ -196,7 +196,7 @@ class Measures:
 		return True
 												
 	def getXMLResults(self, discardTime, experimentTime, tag, type):
-		doc = Document()
+		doc = minidom.Document()
 		
 		measuresNode = doc.createElement('measures')
 		doc.appendChild(measuresNode)

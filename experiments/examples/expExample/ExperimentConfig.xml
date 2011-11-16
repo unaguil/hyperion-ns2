@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <experiment>
 	<staticConfig>
-		<!-- Script configuration variables -->
 		<!-- <entry key="nNodes">2</entry> -->
 		<entry key="finishTime">15.0</entry>
 		<entry key="gridW">100</entry>
 		<entry key="gridH">100</entry>
 		<entry key="discardTime">5.0</entry>
-		<entry key="javaAgent">dissemination.peer.Peer</entry>
+		<entry key="javaAgent">dissemination.Peer</entry>
+		
 		<!-- Peer configuration variables -->
 		<entry key="reliableBroadcastPeer.maxTries">5</entry>
 		<entry key="reliableBroadcastPeer.randomWait">150</entry>
 		<entry key="beaconDetector.beaconTime">1000</entry>
 		<entry key="beaconDetector.randomTime">200</entry>
+		
+		<entry key="messageProcessor.randomWait">0</entry>
+		<entry key="beaconDetector.beaconTime">1000</entry>
+		<entry key="reliableBroadcast.maxTries">10</entry>
+		<entry key="dissemination.maxDistance">5</entry>
 	</staticConfig>
 	<dynamicConfig>
 		<dynamicEntry key="nNodes" interpolator="LinealInterpolator" start="2" end="10" step="2"/>
 	</dynamicConfig>
 	<code codeFile="code.txt"/>
-	<repeat number="5"/>
+	<repeat number="1"/>
 	<measures>
-		<measure type="generic.BroadcastedMessages"/>
-		<measure type="generic.ReceivedMessages"/>
-		<measure type="generic.ReliableBroadcastedMessages"/>
-		<measure type="generic.DeliveredMessages"/>
-		<measure type="generic.DeliveredRatio"/>
-		<measure type="detection.NewNeighborsDetected" period="3.0"/>
-		<measure type="detection.LostNeighborsDetected" period="3.0"/>
-		<measure type="detection.SentBeaconMessages" period="3.0"/>
-		<measure type="detection.ReceivedBeaconMessages" period="3.0"/>
+		<measure type="generic.BroadcastedPackets" period="0.25" />
+		<measure type="generic.ReceivedPackets" period="0.25" />
+		<measure type="detection.AvgNeighbors" period="0.25" />
+		<measure type="generic.ReliableBroadcastedMessages" period="0.25" />
+		<measure type="generic.RebroadcastedMessages" period="0.25" />
+		<measure type="generic.DeliveredMessages" period="0.25" />
+		<measure type="generic.ExpiredMessages" period="0.25" />
+		<measure type="generic.DeliveredRatio" period="0.25" />
+ 		<measure type="generic.DeliveringTime" period="0.25" />
+ 		<measure type="detection.SentBeaconMessages" period="0.25" />
+		<measure type="dissemination.SentTableMessages" period="0.25" />
 	</measures>
 </experiment>

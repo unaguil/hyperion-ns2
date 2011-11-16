@@ -18,6 +18,8 @@ from ScriptGenerator import ScriptGenerator
 
 import util.TimeFormatter as TimeFormatter
 
+import xml.dom.minidom as minidom
+
 MAX_TRIES = 3
 
 JVM_DUMP_CHECK_TIME = 1.0
@@ -206,6 +208,11 @@ class Experiment:
 			#Get current execution configuration
 			config = configGenerator.next()
 			measures.startConfiguration(configurationCounter, configGenerator.getType())
+			
+			#save current configuration
+			generatedConfigFile = open(configurationDir + '/GeneratedConfig.xml' , 'w')
+			generatedConfigFile.write(config)
+			generatedConfigFile.close()						
 			
 			scriptGenerator = ScriptGenerator(config, self.__inputFile)
 			
