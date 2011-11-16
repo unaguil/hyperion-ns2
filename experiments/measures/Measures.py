@@ -35,9 +35,8 @@ class Measures:
 		expConfig = minidom.parse(expConfigFile)
 				
 		measureNodes = expConfig.getElementsByTagName('measure')
-		self.__entries = expConfig.getElementsByTagName('entry')
 		
-		for entry in self.__entries:
+		for entry in expConfig.getElementsByTagName('entry'):
 			value = entry.firstChild.data
 			key = entry.getAttribute("key")
 			
@@ -58,8 +57,6 @@ class Measures:
 			units = self.__getMeasureUnits(clazz, period)
 			
 			self.__measureData[clazz] = (clazz, period, units)
-		
-		self.configurationMeasures = {}
 		
 		self.__compiledTimePattern = re.compile(r'.*? ([0-9]+\,[0-9]+) Thread-[0-9]+')
 		self.__compiledFinishedPattern = re.compile(r'INFO  peer.BasicPeer  - Simulation finished.*?')
@@ -108,45 +105,59 @@ class Measures:
 	def __checkFinished(self, line):
 		m = self.__compiledFinishedPattern.match(line)
 		if m is not None:
-			self.__simulationFinished = True
+			self.__repeatFinished = True
 
-	def startConfiguration(self, n, name):
-		#Create a table for measures values
-		self.measures = {}
-		self.configurationMeasures[n] = {}
-		self.finishedSimulations.append([])
-		self.currentConfigurationStatus = self.finishedSimulations[n]
-		for name in self.__measureData.keys():
-			self.measures[name] = [] 
+	def startConfiguration(self, n, tag, type, simulationTime, discardTime):
+		self.__currentConfiguration = (n, tag, type, simulationTime, discardTime)
+		self.__currentResults = {}
+		for measure in self.__measureData.keys():
+			self.__currentResults[measure] = []
 			
-	def startRepeat(self):
-		#Create the measure objects 
+		self.__repeatStatus = [] 
+			
+	def startRepeat(self): 		
 		self.currentMeasures = []
 		for clazz, period, units in self.__measureData.values():
 			measure = self.__createMeasure(clazz, period)
 			self.currentMeasures.append(measure)
 			
-		self.__simulationFinished = False
+		self.__repeatFinished = False
 		
 	def endRepeat(self):
 		#Obtain the value of this repeat and store it
 		for measure in self.currentMeasures:
 			measure.finish()
-			self.measures[measure.getType()].append((measure.getValues(), measure.getTotalValue()))
+			self.__currentResults[measure.getType()].append((measure.getValues(), measure.getTotalValue()))
 			
-		self.currentConfigurationStatus.append(self.__simulationFinished)
+		self.__repeatStatus.append(self.__repeatFinished)
+		
+	def __repeatsFinished(self):
+		for status in self.__repeatStatus:
+			if not status:
+				return False
+			
+		return True
 
-	def endConfiguration(self, n):
-		for measure in self.measures.keys():
-			values = self.measures[measure]
+	def endConfiguration(self):
+		configurationResults = {}
+				
+		for measure in self.__currentResults.keys():
+			values = self.__currentResults[measure]
 			(meanValues, stdValues, meanTotal, stdTotal) = self.__calculateStatistics(values)
-			self.configurationMeasures[n][measure] = PeriodicEntry(meanValues, stdValues, self.__measureData[measure][1], meanTotal, stdTotal, len(values))	
+			configurationResults[measure] = PeriodicEntry(meanValues, stdValues, self.__measureData[measure][1], meanTotal, stdTotal, len(values))
+			
+		n, tag, type, simulationTime, discardTime = self.__currentConfiguration
+		
+		if not self.__repeatsFinished():	
+			return self.__getXMLError(n, tag, type)
+		else:
+			return self.__getXMLConfigurationResults(configurationResults, n, tag, type, simulationTime, discardTime)	
 			
 	def savePartialResults(self, filePath):
 		print '* Saving partial results to ' + filePath		
 		resultsFile = open(filePath, 'w')
-		for measure in self.measures.keys():
-			values = self.measures[measure]
+		for measure in self.__currentResults.keys():
+			values = self.__currentResults[measure]
 			resultsFile.write('Measure: %s\n' % measure)
 			for index, (periodicValues, total) in enumerate(values):
 				 resultsFile.write('\tRepeat: %d\n' % index)
@@ -160,7 +171,6 @@ class Measures:
 		stdValues = []
 		
 		#get max size
-		
 		sizes = (len(periodicValues) for periodicValues, totalValues in valuesArray)
 		size = max(sizes)
 		
@@ -176,76 +186,56 @@ class Measures:
 				
 		return (meanValues, stdValues, numpy.mean(totals), numpy.std(totals))
 	
-	def getXMLError(self, tag, type):
-		doc = Document()
-		
-		measuresNode = doc.createElement('measures')
-		doc.appendChild(measuresNode)
-		
-		measuresNode.setAttribute('tag', tag)
-		measuresNode.setAttribute('type', type)
-		measuresNode.setAttribute('simulationFinished', 'no')
-		
-		return doc.toprettyxml()
-	
-	def __allSimulationsFinished(self):
-		for configurationStatus in self.finishedSimulations:
-			for repeatStatus in configurationStatus:
-				if not repeatStatus:
-					return False
-		return True
-												
-	def getXMLResults(self, discardTime, experimentTime, tag, type):
+	def __getXMLError(self, n, tag, type):
 		doc = minidom.Document()
 		
-		measuresNode = doc.createElement('measures')
-		doc.appendChild(measuresNode)
+		configurationNode = doc.createElement('configuration')
+		doc.appendChild(configurationNode)
 		
-		measuresNode.setAttribute('tag', tag)
-		measuresNode.setAttribute('type', type)
+		configurationNode.setAttribute('number', str(n))
+		configurationNode.setAttribute('tag', tag)
+		configurationNode.setAttribute('type', type)
+		configurationNode.setAttribute('simulationFinished', 'no')
 		
-		#Store date
-		measuresNode.setAttribute('creationDate', datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))
+		return doc.toprettyxml()
+												
+	def __getXMLConfigurationResults(self, configurationResults, n, tag, type, discardTime, experimentTime):
+		doc = minidom.Document()
 		
-		configuration = doc.createElement('configuration')
-		measuresNode.appendChild(configuration)		
-		for entry in self.__entries:
-			configuration.appendChild(entry)
-		
-		if not self.__allSimulationsFinished():
-			measuresNode.setAttribute('simulationFinished', 'no')
-			
-			for configuration, configurationStatus in enumerate(self.finishedSimulations):
-				for repeat, repeatStatus in enumerate(configurationStatus):
-					if not repeatStatus:
-						failedSimulation = doc.createElement('failedSimulation')
-						failedSimulation.setAttribute('configuration', str(configuration))
-						failedSimulation.setAttribute('repeat', str(repeat))
-						measuresNode.appendChild(failedSimulation)
-		else:
-			for measureName in sorted(self.__measureData.keys()):
-				measureNode = doc.createElement('measure')
-				measuresNode.appendChild(measureNode)
-				measureNode.setAttribute('type', measureName[measureName.index('.') + 1:]) 
-				measureNode.setAttribute('period', str(self.__measureData[measureName][1]))
-				units = str(self.__measureData[measureName][2])
-				measureNode.setAttribute('units', units)
-				for n in range(len(self.configurationMeasures)):
-					resultNode = doc.createElement('result')
-					entry = self.configurationMeasures[n][measureName]
-					resultNode.setAttribute('meanTotal', Units.str_formatter(units, entry.meanTotal))
-					resultNode.setAttribute('stdTotal', Units.str_formatter(units, entry.stdTotal))
-					resultNode.setAttribute('sampleSize', '%d' % entry.size)
-					#write periodic values
-					numPeriod = Util.getPeriod(discardTime, entry.period, self.__simulationTime)
-					for index, mean in enumerate(entry.meanValues):
-						if index >= numPeriod:
-							valueNode = doc.createElement('entry')
-							valueNode.setAttribute('mean', Units.str_formatter(units, mean))
-							valueNode.setAttribute('std', Units.str_formatter(units, entry.stdValues[index]))
-							time = (index + 1) * entry.period
-							valueNode.setAttribute('time', str(time))
-							resultNode.appendChild(valueNode) 
-					measureNode.appendChild(resultNode)
+		configurationNode = doc.createElement('configuration')
+		doc.appendChild(configurationNode)
 	
+		configurationNode.setAttribute('tag', tag)
+		configurationNode.setAttribute('type', type)
+	
+		#Store date
+		configurationNode.setAttribute('creationDate', datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))
+		
+		configurationNode.setAttribute('number', str(n))
+						
+		for measureName in sorted(self.__measureData.keys()):
+			measureNode = doc.createElement('measure')
+			configurationNode.appendChild(measureNode)
+			measureNode.setAttribute('type', measureName[measureName.index('.') + 1:]) 
+			measureNode.setAttribute('period', str(self.__measureData[measureName][1]))
+			units = str(self.__measureData[measureName][2])
+			measureNode.setAttribute('units', units)
+			resultNode = doc.createElement('result')
+			
+			entry = configurationResults[measureName]
+			resultNode.setAttribute('meanTotal', Units.str_formatter(units, entry.meanTotal))
+			resultNode.setAttribute('stdTotal', Units.str_formatter(units, entry.stdTotal))
+			resultNode.setAttribute('sampleSize', '%d' % entry.size)
+			
+			numPeriod = Util.getPeriod(discardTime, entry.period, self.__simulationTime)
+			for index, mean in enumerate(entry.meanValues):
+				if index >= numPeriod:
+					valueNode = doc.createElement('entry')
+					valueNode.setAttribute('mean', Units.str_formatter(units, mean))
+					valueNode.setAttribute('std', Units.str_formatter(units, entry.stdValues[index]))
+					time = (index + 1) * entry.period
+					valueNode.setAttribute('time', str(time))
+					resultNode.appendChild(valueNode) 
+			measureNode.appendChild(resultNode)
+					
 		return doc.toprettyxml()

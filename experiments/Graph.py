@@ -11,9 +11,9 @@ import sys
 
 from optparse import OptionParser
 
-from xml.dom.minidom import minidom
+import xml.dom.minidom as minidom
 
-from matplotlib.backends.backend_pdf import pdfBackend
+from matplotlib.backends.backend_pdf import PdfPages
 
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
@@ -312,8 +312,6 @@ class Graph:
 		else:
 			plt.ylabel(units)
 			
-		plt.xticks(x)
-			
 		self.__setAxis(plt, xmin, xmax, ymin, ymax)
 		
 		plt.figlegend(lines, labels, 'upper right')  
@@ -335,7 +333,7 @@ class Graph:
 			rowsPerPage = 1
 			columnsPerPage = 1
 			plotsPerPage = rowsPerPage * columnsPerPage
-			pp = pdfBackend.PdfPages('allPlots.pdf')
+			pp = PdfPages('allPlots.pdf')
 			
 			for index, measure in enumerate(sorted(self.__measures)):
 				

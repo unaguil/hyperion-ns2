@@ -20,10 +20,10 @@
 		<entry key="dissemination.maxDistance">5</entry>
 	</staticConfig>
 	<dynamicConfig>
-		<dynamicEntry key="nNodes" interpolator="LinealInterpolator" start="2" end="10" step="2"/>
+		<dynamicEntry key="nNodes" interpolator="LinealInterpolator" text="nodes" start="2" end="10" step="2"/>
 	</dynamicConfig>
 	<code codeFile="code.txt"/>
-	<repeat number="1"/>
+	<repeat number="2"/>
 	<measures>
 		<measure type="generic.BroadcastedPackets" period="0.25" />
 		<measure type="generic.ReceivedPackets" period="0.25" />

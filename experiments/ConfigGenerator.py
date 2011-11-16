@@ -29,9 +29,19 @@ class ConfigGenerator:
 			start = int(dynamicEntry.getAttribute("start"))
 			end = int(dynamicEntry.getAttribute("end"))
 			step = int(dynamicEntry.getAttribute("step"))
-			self.interpolatedEntries.append(InterpolatedEntry(key, interpolator, start, end, step))
+			text = dynamicEntry.getAttribute("text")
+			self.interpolatedEntries.append(InterpolatedEntry(key, interpolator, text, start, end, step))
 			
 		self.__measures = expConfig.getElementsByTagName("measure")
+		
+		self.__entries = expConfig.getElementsByTagName("entry")	
+		for entry in self.__entries:
+			value = entry.firstChild.data
+			key = entry.getAttribute("key")
+			if key == "finishTime":
+				self.__finishTime = float(value)
+			if key == "discardTime":
+				self.__discardTime = float(value)
 
 	def hasNext(self):
 		return self.interpolatedEntries[0].hasNext()		
@@ -48,6 +58,9 @@ class ConfigGenerator:
 		interpolatedEntry = self.interpolatedEntries[0]
 
 		value = interpolatedEntry.next()
+		
+		self.__tag = str(value)
+		self.__type = interpolatedEntry.getText()
 
 		dynamicEntry = "<entry key=\"" + interpolatedEntry.getKey() + "\">" + str(value) + "</entry>"
 
@@ -94,6 +107,12 @@ class ConfigGenerator:
 	
 	def getRepeat(self):
 		return self.__repeat
+	
+	def getSimulationTime(self):
+		return self.__finishTime
+	
+	def getDiscardTime(self):
+		return self.__discardTime
 	
 def main():
 	configGenerator = ConfigGenerator("ExpConfig.xml")

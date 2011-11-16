@@ -28,6 +28,8 @@ class JVMCheckingTimer(threading.Thread):
 	def __init__(self, period, process, tempDir):
 		threading.Thread.__init__(self)
 		
+		self.setDaemon(True)
+		
 		self.__period = period
 		self.__process = process
 		self.__tempDir = tempDir
@@ -51,11 +53,12 @@ class JVMCheckingTimer(threading.Thread):
 		self.__stop = True
 
 class RepeatRunner:
-	def __init__(self, tempDir, config, workingDir, scriptGenerator, repeat):
+	def __init__(self, tempDir, config, workingDir, scriptGenerator, configGenerator, repeat):
 		self.__tempDir = tempDir
 		self.__config = config
 		self.__configDir = workingDir
 		self.__scriptGenerator = scriptGenerator
+		self.__configGenerator = configGenerator
 		self.__repeat = repeat
 		
 		self.__try = 1 
@@ -70,8 +73,8 @@ class RepeatRunner:
 		self.__prepareSimulationFiles(self.__tempDir, self.__config, self.__configDir)	
 		
 		#Create script using ScriptGenerator
-		if self.__scriptGenerator.getDiscardTime() >= self.__scriptGenerator.getSimulationTime():
-			print 'Discard time %.2f should be smaller than simulation time %.2f ' % (self.__scriptGenerator.getDiscardTime(), self.__scriptGenerator.getSimulationTime())
+		if self.__configGenerator.getDiscardTime() >= self.__configGenerator.getSimulationTime():
+			print 'Discard time %.2f should be smaller than simulation time %.2f ' % (self.__configGenerator.getDiscardTime(), self.__configGenerator.getSimulationTime())
 			sys.exit()
 						
 		self.__scriptGenerator.generate('Script.tcl', self.__tempDir, self.__repeat)
@@ -158,9 +161,9 @@ class RepeatRunner:
 				shutil.copy2(srcPath, dstPath)
 
 class Experiment:
-	def __init__(self, configDir, inputFile, outputFile, debug, workingDir, processing):
+	def __init__(self, configDir, inputFile, outputDir, debug, workingDir, processing):
 		self.__configDir = configDir
-		self.__outputFile = outputFile
+		self.__outputDir = outputDir
 		self.__inputFileName = inputFile
 		self.__inputFile = self.__configDir + '/' + inputFile
 		self.__debug = debug
@@ -207,7 +210,7 @@ class Experiment:
 			sys.stdout.flush() 
 			#Get current execution configuration
 			config, generatedExpConfig = configGenerator.next()
-			measures.startConfiguration(configurationCounter, configGenerator.getType())
+			measures.startConfiguration(configurationCounter, configGenerator.getTag(), configGenerator.getType(), configGenerator.getSimulationTime(), configGenerator.getDiscardTime())
 			
 			#save current configuration
 			generatedConfigFile = open(configurationDir + '/GeneratedConfig.xml' , 'w')
@@ -218,14 +221,13 @@ class Experiment:
 			
 			repeatRunners = []
 			
-			for counter in range(repeat):
-				
+			for counter in range(repeat):		
 				repeatDir = configurationDir + '/repeat-' + str(counter)
 				
 				print ''
 				print '* Running repeat %d of %d' % (counter + 1, repeat)
 				sys.stdout.flush()
-				r = RepeatRunner(repeatDir, config, self.__configDir, scriptGenerator, counter)
+				r = RepeatRunner(repeatDir, config, self.__configDir, scriptGenerator, configGenerator, counter)
 				repeatRunners.append(r)
 				if not r.run():
 					error = True
@@ -240,31 +242,28 @@ class Experiment:
 			
 			self.__processRepeat(measures, outputLogs)
 
-			measures.endConfiguration(configurationCounter)
+			result = measures.endConfiguration()
 			
-			configurationCounter = configurationCounter + 1
+			outputFile = open(self.__outputDir + self.__inputFileName + '-config' + str(configurationCounter) + '.xml', 'w')
+			outputFile.write(result)
 			
+			measures.savePartialResults(configurationDir + '/partialResults.txt')
+				
 			print '* Configuration execution time: %s' % TimeFormatter.formatTime(time.time() - startTime)
 			print ''
 			sys.stdout.flush()
 			
-		experimentTime = time.time() - initTime
-		
-		measures.savePartialResults(configurationDir + '/partialResults.txt') 
+			configurationCounter = configurationCounter + 1
+			
+		experimentTime = time.time() - initTime 
 			
 		if error:
-			results = measures.getXMLError(configGenerator.getTag(), configGenerator.getType())
 			print 'Experiment finished with errors. Total time: %s' % TimeFormatter.formatTime(experimentTime)
-			print '' 
-			sys.stdout.flush()
 		else:
-			results =  measures.getXMLResults(scriptGenerator.getDiscardTime(), experimentTime, configGenerator.getTag(), configGenerator.getType())
 			print 'Experiment finished. Total time: %s' % TimeFormatter.formatTime(experimentTime)
-			print '' 
-			sys.stdout.flush()
-			
-		#Save to output file
-		self.__outputFile.write(results)
+						
+		print '' 
+		sys.stdout.flush()
 			
 		#Removing running directory if not must be maintained
 		if not self.__debug:
@@ -341,8 +340,10 @@ class Experiment:
 		
 		results =  measures.getXMLResults(scriptGenerator.getDiscardTime(), experimentTime, configGenerator.getTag(), configGenerator.getType())
 		
-		#Save to output file
-		self.__outputFile.write(results)
+		#Save results
+		for item in results.items():
+			
+			self.__outputDir.write(results)
 		
 	def perform(self, processing):
 		if not processing:
@@ -350,15 +351,9 @@ class Experiment:
 		else:
 			self.__processOutput()
 		
-def __runExperiment(outputFile, configDir, inputFile, debug, workingDir, processing): 
-	if outputFile is not sys.stdout:
-		oFile = open(outputFile, 'w');
-		e = Experiment(configDir, inputFile, oFile, debug, workingDir, processing)
-		e.perform(processing)
-		oFile.close()
-	else:
-		e = Experiment(configDir, inputFile, sys.stdout, debug, workingDir, processing)
-		e.perform(processing)
+def __runExperiment(outputDir, configDir, inputFile, debug, workingDir, processing): 
+	e = Experiment(configDir, inputFile, outputDir, debug, workingDir, processing)
+	e.perform(processing)
 		
 def main():
 	
@@ -370,7 +365,7 @@ def main():
 	parser = OptionParser()
 	parser.add_option("-c", "--configDir", dest="configDir", help="experiment configuration directory")
 	parser.add_option("-f", "--file", dest="inputFile", help="experiment configuration file")
-	parser.add_option("-o", "--output", dest="outputFile", help="experiment report output file", default=sys.stdout)
+	parser.add_option("-o", "--output", dest="outputDir", help="experiment results output directory", default='/tmp')
 	parser.add_option("-w", "--workingDir", dest="workingDir", help="directory to store simulation results")
 	parser.add_option("-d", "--debug", dest="debug", help="debug mode", default=False)
 	parser.add_option("-p", "--processDir", dest="processDir", help="process output directory")
@@ -387,21 +382,20 @@ def main():
 			print 'ERROR: Experiment config file not found in output directory'
 			sys.exit()
 			
-		__runExperiment(options.outputFile, options.processDir, inputFile, True, options.processDir, True)
+		__runExperiment(options.outputDir, options.processDir, inputFile, True, options.processDir, True)
 	else:
 		if options.configDir is None or options.inputFile and None:
 			parser.print_usage()
 		else:
-			inputFilePath = options.configDir + '/' + options.inputFile
-			if inputFilePath is options.outputFile:
-				parser.error("ERROR: Input and output files cannot be the same")
+			if options.configDir is options.outputDir:
+				parser.error("ERROR: Input and output directories cannot be the same")
 				
 			if options.workingDir is None:
 				workingDir = '/tmp/experiment-' + options.inputFile
 			else:
 				workingDir = options.workingDir
 			
-			__runExperiment(options.outputFile, options.configDir, options.inputFile, options.debug, workingDir, False)
+			__runExperiment(options.outputDir, options.configDir, options.inputFile, options.debug, workingDir, False)
 
 if __name__ == '__main__':
     main()

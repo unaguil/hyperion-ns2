@@ -1,12 +1,13 @@
 import numpy as pn
 
 class InterpolatedEntry:
-	def __init__(self, key, interpolator, start, end, step):
+	def __init__(self, key, interpolator, text, start, end, step):
 		self.key = key
 		self.interpolator = interpolator
 		self.start = start
 		self.end = end
 		self.step = step
+		self.text = text
 
 		if step == 0 or start == end:
 			self.values = [start]
@@ -30,6 +31,9 @@ class InterpolatedEntry:
 
 	def getKey(self):
 		return self.key
+	
+	def getText(self):
+		return self.text
 
 def main():
 	ie = InterpolatedEntry("test.test", "interpolator", 0, 10, 1)

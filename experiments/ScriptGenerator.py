@@ -56,8 +56,8 @@ class ScriptGenerator:
 			neighborCount = self.getNNodes() - 1;
 		
 		print '**************** Scenario parameters **********************'
-		print '* Simulation time: %.2f s' % self.getSimulationTime()
-		print '* Initial discarded time: %.2f s' % self.getDiscardTime()
+		print '* Simulation time: %.2f s' % self.__finishTime
+		print '* Initial discarded time: %.2f s' % self.__discardTime
 		print '* Simulation area: %.2f m x %.2f m = %.2f m^2' % (self.getGridW(), self.getGridH(), simulationArea)
 		print '* Number of nodes: %d' % self.getNNodes()
 		print '* Node density: %.5f nodes/m^2' % nDensity
@@ -146,8 +146,3 @@ class ScriptGenerator:
 	def getTransmissionRange(self):
 		return self.__transmissionRange
 	
-	def getSimulationTime(self):
-		return self.__finishTime
-	
-	def getDiscardTime(self):
-		return self.__discardTime
