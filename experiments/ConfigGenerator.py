@@ -1,5 +1,5 @@
 import xml.dom.minidom as minidom
-from InterpolatedEntry import InterpolatedEntry
+import interpolators.InterpolatorLoader as InterpolatorLoader
 
 class ConfigGenerator:
 	def __init__(self, expConfigFile):
@@ -21,16 +21,8 @@ class ConfigGenerator:
 		self.interpolatedEntries = []
 
 		dynamicEntries = expConfig.getElementsByTagName("dynamicEntry")
-		if not dynamicEntries:
-			self.interpolatedEntries.append(InterpolatedEntry('NONE', 'LinearInterpolator', 1, 1, 1))
 		for dynamicEntry in dynamicEntries:
-			key = dynamicEntry.getAttribute("key")
-			interpolator = dynamicEntry.getAttribute("interpolator")
-			start = float(dynamicEntry.getAttribute("start"))
-			end = float(dynamicEntry.getAttribute("end"))
-			step = float(dynamicEntry.getAttribute("step"))
-			text = dynamicEntry.getAttribute("text")
-			self.interpolatedEntries.append(InterpolatedEntry(key, interpolator, text, start, end, step))
+			self.interpolatedEntries.append(InterpolatorLoader.loadInterpolator(dynamicEntry))
 			
 		self.__measures = expConfig.getElementsByTagName("measure")
 		
@@ -44,7 +36,10 @@ class ConfigGenerator:
 				self.__discardTime = float(value)
 
 	def hasNext(self):
-		return self.interpolatedEntries[0].hasNext()		
+		if len(self.interpolatedEntries) > 0:
+			return self.interpolatedEntries[0].hasNext()
+		else:
+			return True		
 
 	def next(self):
 		start = """<?xml version="1.0" encoding="UTF-8"?>\n""" + """<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">\n""" + """<properties>\n"""
@@ -55,16 +50,16 @@ class ConfigGenerator:
 		for staticEntry in self.staticEntries:
 			configuration = configuration + staticEntry.toxml() + "\n"
 
-		interpolatedEntry = self.interpolatedEntries[0]
-
-		value = interpolatedEntry.next()
+		if len(self.interpolatedEntries) > 0:
+			interpolatedEntry = self.interpolatedEntries[0]
+			value = interpolatedEntry.next()
 		
-		self.__tag = str(value)
-		self.__type = interpolatedEntry.getText()
+			self.__tag = str(value)
+			self.__type = interpolatedEntry.getText()
 
-		dynamicEntry = "<entry key=\"" + interpolatedEntry.getKey() + "\">" + str(value) + "</entry>"
+			dynamicEntry = "<entry key=\"" + interpolatedEntry.getKey() + "\">" + str(value) + "</entry>"
 
-		configuration = configuration + dynamicEntry + "\n"
+			configuration = configuration + dynamicEntry + "\n"
 		
 		configuration = configuration + "<entry key=\"taxonomyFile\">taxonomy.xml</entry>\n"
 

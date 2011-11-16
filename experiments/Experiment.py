@@ -236,8 +236,10 @@ class Experiment:
 			if error:
 				break 
 
-			print '* Parsing output log files'
+			print '* Finalizing configuration. Parsing output log files'
+			print ''
 			sys.stdout.flush()
+			
 			outputLogs = [r.getOutputLog() for r in repeatRunners]
 			
 			self.__processRepeat(measures, outputLogs)

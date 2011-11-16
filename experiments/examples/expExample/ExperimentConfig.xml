@@ -20,7 +20,7 @@
 		<entry key="dissemination.maxDistance">5</entry>
 	</staticConfig>
 	<dynamicConfig>
-		<dynamicEntry key="nNodes" interpolator="LinealInterpolator" text="nodes" start="2" end="10" step="2"/>
+		<dynamicEntry key="nNodes" interpolator="IntegerInterpolator" text="nodes" start="2" end="10" step="2"/>
 	</dynamicConfig>
 	<code codeFile="code.txt"/>
 	<repeat number="2"/>
