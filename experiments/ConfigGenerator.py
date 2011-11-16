@@ -14,9 +14,9 @@ class ConfigGenerator:
 		#Obtain the number of repetitions for each configuration
 		repeatEntry = expConfig.getElementsByTagName("repeat")
 		if len(repeatEntry) == 0:
-			self.repeat = 3
+			self.__repeat = 3
 		else: 
-			self.repeat = int(repeatEntry[0].getAttribute("number"))
+			self.__repeat = int(repeatEntry[0].getAttribute("number"))
 	
 		self.interpolatedEntries = []
 
@@ -30,19 +30,20 @@ class ConfigGenerator:
 			end = int(dynamicEntry.getAttribute("end"))
 			step = int(dynamicEntry.getAttribute("step"))
 			self.interpolatedEntries.append(InterpolatedEntry(key, interpolator, start, end, step))
+			
+		self.__measures = expConfig.getElementsByTagName("measure")
 
 	def hasNext(self):
 		return self.interpolatedEntries[0].hasNext()		
 
 	def next(self):
-		start = """<?xml version="1.0" encoding="UTF-8"?>\n""" + """<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">\n""" + """<properties>"""
-		
+		start = """<?xml version="1.0" encoding="UTF-8"?>\n""" + """<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">\n""" + """<properties>\n"""
 		end = """</properties>"""
 
-		output = start
+		configuration = start
 
 		for staticEntry in self.staticEntries:
-			output = output + staticEntry.toxml() + "\n"
+			configuration = configuration + staticEntry.toxml() + "\n"
 
 		interpolatedEntry = self.interpolatedEntries[0]
 
@@ -50,13 +51,40 @@ class ConfigGenerator:
 
 		dynamicEntry = "<entry key=\"" + interpolatedEntry.getKey() + "\">" + str(value) + "</entry>"
 
-		output = output + dynamicEntry + "\n"
+		configuration = configuration + dynamicEntry + "\n"
 		
-		output = output + "<entry key=\"taxonomyFile\">taxonomy.xml</entry>"
+		configuration = configuration + "<entry key=\"taxonomyFile\">taxonomy.xml</entry>\n"
 
-		output = output + end
+		configuration = configuration + end + '\n'
+		
+		start = """<?xml version="1.0" encoding="UTF-8"?>\n""" + """<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">\n""" + """<experiment>\n"""
+		end = """</experiment>"""
 
-		return output
+		generatedExpConfig = start
+		
+		generatedExpConfig += "<staticConfig>\n"
+
+		for staticEntry in self.staticEntries:
+			generatedExpConfig = generatedExpConfig + staticEntry.toxml() + "\n"
+
+		dynamicEntry = "<entry key=\"" + interpolatedEntry.getKey() + "\">" + str(value) + "</entry>"
+
+		generatedExpConfig = generatedExpConfig + dynamicEntry + "\n"
+		
+		generatedExpConfig += "</staticConfig>\n"
+		
+		generatedExpConfig += "<repeat number=\"%s\"/>\n" % self.getRepeat()
+		
+		generatedExpConfig += "<measures>\n"
+		
+		for measure in self.__measures:
+			generatedExpConfig = generatedExpConfig + measure.toxml() + "\n"
+		
+		generatedExpConfig += "</measures>\n"
+
+		generatedExpConfig = generatedExpConfig + end + '\n'
+
+		return configuration, generatedExpConfig
 	
 	def getTag(self):
 		return self.__tag
@@ -65,7 +93,7 @@ class ConfigGenerator:
 		return self.__type
 	
 	def getRepeat(self):
-		return self.repeat
+		return self.__repeat
 	
 def main():
 	configGenerator = ConfigGenerator("ExpConfig.xml")

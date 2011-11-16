@@ -206,12 +206,12 @@ class Experiment:
 			print ''
 			sys.stdout.flush() 
 			#Get current execution configuration
-			config = configGenerator.next()
+			config, generatedExpConfig = configGenerator.next()
 			measures.startConfiguration(configurationCounter, configGenerator.getType())
 			
 			#save current configuration
 			generatedConfigFile = open(configurationDir + '/GeneratedConfig.xml' , 'w')
-			generatedConfigFile.write(config)
+			generatedConfigFile.write(generatedExpConfig)
 			generatedConfigFile.close()						
 			
 			scriptGenerator = ScriptGenerator(config, self.__inputFile)
@@ -272,7 +272,7 @@ class Experiment:
 		
 	def __processRepeat(self, measures, outputLogs):
 		for outputLog in outputLogs:
-			print 'Output log %s file size %s' % (outputLog, self.__sizeof_fmt(os.path.getsize(outputLog)))
+			print '* Output log %s file size %s' % (outputLog, self.__sizeof_fmt(os.path.getsize(outputLog)))
 			sys.stdout.flush()
 			#Measure results
 			logProcessStartTime = time.time()
@@ -280,7 +280,7 @@ class Experiment:
 			measures.parseLog(outputLog)
 			measures.endRepeat()
 							
-			print 'Output log %s parsing time: %s' % (outputLog, TimeFormatter.formatTime(time.time() - logProcessStartTime))
+			print '* Output log %s parsing time: %s' % (outputLog, TimeFormatter.formatTime(time.time() - logProcessStartTime))
 			print ''
 			sys.stdout.flush()
 		
