@@ -246,7 +246,7 @@ class Experiment:
 
 			result = measures.endConfiguration()
 			
-			outputFile = open(self.__outputDir + self.__inputFileName + '-config' + str(configurationCounter) + '.xml', 'w')
+			outputFile = open(self.__outputDir + self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml', 'w')
 			outputFile.write(result)
 			
 			measures.savePartialResults(configurationDir + '/partialResults.txt')
@@ -388,10 +388,7 @@ def main():
 	else:
 		if options.configDir is None or options.inputFile and None:
 			parser.print_usage()
-		else:
-			if options.configDir is options.outputDir:
-				parser.error("ERROR: Input and output directories cannot be the same")
-				
+		else:				
 			if options.workingDir is None:
 				workingDir = '/tmp/experiment-' + options.inputFile
 			else:
