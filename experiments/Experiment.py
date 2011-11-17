@@ -9,6 +9,7 @@ import re
 import threading
 import time
 import datetime
+import multiprocessing
 
 from optparse import OptionParser
 
@@ -53,17 +54,22 @@ class JVMCheckingTimer(threading.Thread):
 		self.__stop = True
 
 class RepeatRunner:
-	def __init__(self, tempDir, config, workingDir, scriptGenerator, configGenerator, repeat):
+	def __init__(self, tempDir, config, workingDir, scriptGenerator, configGenerator, repeat, repeatNumber):
 		self.__tempDir = tempDir
 		self.__config = config
 		self.__configDir = workingDir
 		self.__scriptGenerator = scriptGenerator
 		self.__configGenerator = configGenerator
 		self.__repeat = repeat
+		self.__repeatNumber = repeatNumber
 		
 		self.__try = 1 
 		
-	def __execute(self):		
+	def __execute(self):
+		print ''
+		print '* Running repeat %d of %d' % (self.__repeat + 1, self.__repeatNumber)
+		sys.stdout.flush()
+				
 		#Create temporal directory and prepare configuration files
 		if os.path.isdir(self.__tempDir):
 			shutil.rmtree(self.__tempDir)
@@ -74,7 +80,7 @@ class RepeatRunner:
 		
 		#Create script using ScriptGenerator
 		if self.__configGenerator.getDiscardTime() >= self.__configGenerator.getSimulationTime():
-			print 'Discard time %.2f should be smaller than simulation time %.2f ' % (self.__configGenerator.getDiscardTime(), self.__configGenerator.getSimulationTime())
+			print '* ERROR: Discard time %.2f should be smaller than simulation time %.2f ' % (self.__configGenerator.getDiscardTime(), self.__configGenerator.getSimulationTime())
 			sys.exit()
 						
 		self.__scriptGenerator.generate('Script.tcl', self.__tempDir, self.__repeat)
@@ -84,7 +90,6 @@ class RepeatRunner:
 		out = open(self.__tempDir + '/out', 'w')
 		err = open(self.__tempDir + '/err', 'w')
 		
-		print ''
 		print '* Launching simulation script on directory %s try %d' % (self.__tempDir, self.__try)
 		sys.stdout.flush()
 		
@@ -159,6 +164,12 @@ class RepeatRunner:
 			dstPath = tempDir + '/' + file
 			if not os.path.isdir(srcPath):
 				shutil.copy2(srcPath, dstPath)
+				
+def runRepeat(args):
+	repeatDir, config, configDir, scriptGenerator, configGenerator, counter, repeatNumber = args
+			
+	r = RepeatRunner(repeatDir, config, configDir, scriptGenerator, configGenerator, counter, repeatNumber)
+	return (not r.run(), r.getOutputLog())
 
 class Experiment:
 	def __init__(self, configDir, inputFile, outputDir, debug, workingDir, processing):
@@ -202,10 +213,10 @@ class Experiment:
 			
 			startTime = time.time()
 			
-			repeat = configGenerator.getRepeat()
+			repeatNumber = configGenerator.getRepeat()
 			
 			print ''
-			print "* Running experiment configuration %d with %d repetition(s)" % (configurationCounter + 1, repeat)
+			print "* Running experiment configuration %d with %d repetition(s)" % (configurationCounter + 1, repeatNumber)
 			print ''
 			sys.stdout.flush() 
 			#Get current execution configuration
@@ -219,28 +230,20 @@ class Experiment:
 			
 			scriptGenerator = ScriptGenerator(config, self.__inputFile)
 			
-			repeatRunners = []
+			data = []
 			
-			for counter in range(repeat):		
+			for counter in range(repeatNumber):		
 				repeatDir = configurationDir + '/repeat-' + str(counter)
+				data.append((repeatDir, config, self.__configDir, scriptGenerator, configGenerator, counter, repeatNumber))
 				
-				print ''
-				print '* Running repeat %d of %d' % (counter + 1, repeat)
-				sys.stdout.flush()
-				r = RepeatRunner(repeatDir, config, self.__configDir, scriptGenerator, configGenerator, counter)
-				repeatRunners.append(r)
-				if not r.run():
-					error = True
-					break
-				
-			if error:
-				break 
+			pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+			results = pool.map(runRepeat, data) 
 
 			print '* Finalizing configuration. Parsing output log files'
 			print ''
 			sys.stdout.flush()
 			
-			outputLogs = [r.getOutputLog() for r in repeatRunners]
+			outputLogs = [outputLog for error, outputLog in results]
 			
 			self.__processRepeat(measures, outputLogs)
 
@@ -304,11 +307,11 @@ class Experiment:
 			
 			startTime = time.time()
 			
-			repeat = configGenerator.getRepeat()
+			repeatNumber = configGenerator.getRepeat()
 			
 			print ''
 			print ''
-			print "* Processing experiment configuration %d output with %d repetition(s)" % (configurationCounter + 1, repeat)
+			print "* Processing experiment configuration %d output with %d repetition(s)" % (configurationCounter + 1, repeatNumber)
 			sys.stdout.flush() 
 			#Get current execution configuration
 			config = configGenerator.next()
@@ -321,7 +324,7 @@ class Experiment:
 			sys.stdout.flush()
 			outputLogs = []
 			
-			for i in range(repeat):
+			for i in range(repeatNumber):
 				outputLog = configurationDir + '/repeat-' + str(i) + '/output.log.gz'
 				outputLogs.append(outputLog)
 			
