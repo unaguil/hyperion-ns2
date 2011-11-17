@@ -11,6 +11,8 @@ import time
 import datetime
 import multiprocessing
 
+import util.StrBuffer as StrBuffer
+
 from optparse import OptionParser
 
 from ConfigGenerator import ConfigGenerator
@@ -66,9 +68,9 @@ class RepeatRunner:
 		self.__try = 1 
 		
 	def __execute(self):
-		print ''
-		print '* Running repeat %d of %d' % (self.__repeat + 1, self.__repeatNumber)
-		sys.stdout.flush()
+		strBuffer = StrBuffer.StrBuffer()
+		strBuffer.writeln('')
+		strBuffer.writeln('* Running repeat %d of %d' % (self.__repeat + 1, self.__repeatNumber))
 				
 		#Create temporal directory and prepare configuration files
 		if os.path.isdir(self.__tempDir):
@@ -80,18 +82,20 @@ class RepeatRunner:
 		
 		#Create script using ScriptGenerator
 		if self.__configGenerator.getDiscardTime() >= self.__configGenerator.getSimulationTime():
-			print '* ERROR: Discard time %.2f should be smaller than simulation time %.2f ' % (self.__configGenerator.getDiscardTime(), self.__configGenerator.getSimulationTime())
+			strBuffer.writeln('* ERROR: Discard time %.2f should be smaller than simulation time %.2f ' % (self.__configGenerator.getDiscardTime(), self.__configGenerator.getSimulationTime()))
+			print strBuffer.getvalue()
 			sys.exit()
 						
-		scriptGenerator = ScriptGenerator(self.__config, self.__inputFile)
-		scriptGenerator.generate('Script.tcl', self.__tempDir, self.__repeat)
+		scriptGenerator = ScriptGenerator(self.__config, self.__inputFile, strBuffer)
+		scriptGenerator.generate('Script.tcl', self.__tempDir, self.__repeat, strBuffer)
 		
 		#Run script
 		simStartTime = time.time()
 		out = open(self.__tempDir + '/out', 'w')
 		err = open(self.__tempDir + '/err', 'w')
 		
-		print '* Launching simulation script on directory %s try %d' % (self.__tempDir, self.__try)
+		strBuffer.writeln('* Launching simulation script on directory %s try %d' % (self.__tempDir, self.__try))
+		print strBuffer.getvalue()
 		sys.stdout.flush()
 		
 		p = subprocess.Popen(['ns', 'Script.tcl'], stdout=out, stderr=err, cwd=self.__tempDir)
@@ -109,8 +113,7 @@ class RepeatRunner:
 			sys.stdout.flush()
 			return False
 		
-		print '* NS-2 simulation on directory %s running time: %s' % (self.__tempDir, TimeFormatter.formatTime(time.time() - simStartTime))
-		print ''
+		print '* NS-2 simulation on directory %s running time: %s\n\n' % (self.__tempDir, TimeFormatter.formatTime(time.time() - simStartTime))
 		sys.stdout.flush()
 		
 		self.__compressOutputLog()

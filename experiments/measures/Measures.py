@@ -72,8 +72,6 @@ class Measures:
 		measureClass = get_class(clazz + '.' + className)
 		
 		return measureClass(period, self.__simulationTime)
-					
-		print 'Invalid measure type: ', value
 		return None
 	
 	def __getMeasureUnits(self, clazz, period):
@@ -155,8 +153,7 @@ class Measures:
 		else:
 			return self.__getXMLConfigurationResults(configurationResults, n, tag, type, simulationTime, discardTime)	
 			
-	def savePartialResults(self, filePath):
-		print '* Saving partial results to ' + filePath		
+	def savePartialResults(self, filePath):		
 		resultsFile = open(filePath, 'w')
 		for measure in self.__currentResults.keys():
 			values = self.__currentResults[measure]

@@ -57,7 +57,7 @@ class CommonSearchBehavior:
             
         return (init, end)
     
-    def generate(self, workingDir, oFile):              
+    def generate(self, workingDir, oFile, strBuffer):              
         init, end = self.__getTimeRange()
         
         searches = math.ceil(self.__searchFreq * (self.__getTimeRange()[1] - self.__getTimeRange()[0]))
@@ -65,13 +65,13 @@ class CommonSearchBehavior:
         if self.__different and searches > len(self.getElements()):
             raise Exception('Cannot generated %d searches using %d elements' % (searches, len(self.getElements())))
         
-        print ''   
-        print '************* %s ****************' % self.__behaviorName
-        print '* Nodes: %d' % self.__nNodes
-        print '* Frequency: %.3f searches/s' % self.__searchFreq
-        print '* Generated: %d searches' % searches
-        print '* Time range: [%s, %s] s' % (self.__getTimeRange()[0], self.__getTimeRange()[1])
-        self.printInfo()
+        strBuffer.writeln('')
+        strBuffer.writeln('************* %s ****************' % self.__behaviorName)
+        strBuffer.writeln('* Nodes: %d' % self.__nNodes)
+        strBuffer.writeln('* Frequency: %.3f searches/s' % self.__searchFreq)
+        strBuffer.writeln('* Generated: %d searches' % searches)
+        strBuffer.writeln('* Time range: [%s, %s] s' % (self.__getTimeRange()[0], self.__getTimeRange()[1]))
+        self.printInfo(strBuffer)
 
         startTime = time()
         
@@ -85,8 +85,8 @@ class CommonSearchBehavior:
                 #Increment time
                 currentTime += self.__searchPeriod
                 
-        print '* Behavior generation time: %s ' % TimeFormatter.formatTime(time() - startTime) 
-        print '**********************************************************'        
+        strBuffer.writeln('* Behavior generation time: %s ' % TimeFormatter.formatTime(time() - startTime)) 
+        strBuffer.writeln('**********************************************************')
                 
     def perform(self, time, oFile):
         pass 

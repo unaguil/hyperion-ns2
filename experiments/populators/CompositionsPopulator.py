@@ -38,30 +38,30 @@ class CompositionsPopulator:
             self.__serviceNameGenerator = self.__nameGenerator()
             self.__parameterNameGenerator = self.__nameGenerator()
     
-    def generate(self, workingDir):
+    def generate(self, workingDir, strBuffer):
         self.__workingDir = workingDir
         self.__servicesDir = self.__workingDir + '/services'
         self.__solutionsDir = self.__servicesDir + '/solutions/'
                     
-        print ''
-        print '************* Composition populator ****************'
+        strBuffer.writeln('')
+        strBuffer.writeln('************* Composition populator ****************')
         
         startTime = time()
         self.__generate()
-        print '* Compositions generation time: %s ' % TimeFormatter.formatTime(time() - startTime)
+        strBuffer.writeln('* Compositions generation time: %s ' % TimeFormatter.formatTime(time() - startTime))
 
-        print '****************************************************'
+        strBuffer.writeln('****************************************************')
     
     def __generate(self):        
         compositionsWithSolutions = int(self.__nCompositions * self.__sDistribution)
         compositionsWithoutSolutions = self.__nCompositions - compositionsWithSolutions
          
-        print '* Nodes: %d' % self.__nNodes   
-        print '* Total compositions: %d' % self.__nCompositions
-        print '* Solution distribution: %s -> (%d, %d)' % (self.__sDistribution, compositionsWithSolutions, compositionsWithoutSolutions)
-        print '* CompositionIO: %s' % str(self.__compositionIO)
-        print '* Depth distribution: %s' % str(self.__dDistribution)
-        print '* Solution width: %s' % str(self.__width)
+        strBuffer.writeln('* Nodes: %d' % self.__nNodes)   
+        strBuffer.writeln('* Total compositions: %d' % self.__nCompositions)
+        strBuffer.writeln('* Solution distribution: %s -> (%d, %d)' % (self.__sDistribution, compositionsWithSolutions, compositionsWithoutSolutions))
+        strBuffer.writeln('* CompositionIO: %s' % str(self.__compositionIO))
+        strBuffer.writeln('* Depth distribution: %s' % str(self.__dDistribution))
+        strBuffer.writeln('* Solution width: %s' % str(self.__width))
         
         self.__createServiceDirectory()
         
@@ -88,7 +88,7 @@ class CompositionsPopulator:
             self.__compositions.append(composition)
             services += compositionServices
 
-        print '* Generated services: %d' % len(services)
+        strBuffer.writeln('* Generated services: %d' % len(services))
         
         subsetSize = 0
         nodes = {}  
@@ -111,7 +111,7 @@ class CompositionsPopulator:
                 
             subsetSize = len(shuffledNodes) 
                 
-        print '* Nodes with services: %d' % subsetSize
+        strBuffer.writeln('* Nodes with services: %d' % subsetSize)
         
         taxonomy = Taxonomy('TaxonomyRootElement')
         self.__generateXMLNodeConfigurations(self.__compositions, nodes, taxonomy)
@@ -253,7 +253,7 @@ class CompositionsPopulator:
         return distributionTable
     
     def __createServiceDirectory(self):
-        print '* Creating %s directory ' % self.__servicesDir
+        strBuffer.writeln('* Creating %s directory ' % self.__servicesDir)
         os.mkdir(self.__servicesDir)
         os.mkdir(self.__solutionsDir)
     

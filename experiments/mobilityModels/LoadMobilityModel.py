@@ -25,13 +25,14 @@ class LoadMobilityModel:
             if key == "pauseTime":
                 self.__pauseTime = value
         
-    def generate(self, workingDir, outputFile, repeat):
+    def generate(self, workingDir, outputFile, repeat, strBuffer):
         numScenario = repeat % MAX_SCENARIOS
         mobilityFile = 'mobility-%s-%s-%s-%s-%s-%s-%s-%d.txt' % (str(self.__nNodes), str(self.__simTime), str(self.__maxX), str(self.__maxY), str(self.__minSpeed), str(self.__maxSpeed), str(self.__pauseTime), numScenario)
         relativePath = 'mobilityScenarios/' + mobilityFile
-        print 'Using mobility scenario %s' % relativePath
+        strBuffer.writeln('Using mobility scenario %s' % relativePath)
         absolutePath = os.path.abspath(relativePath)
         if not os.path.exists(absolutePath):
-            print 'ERROR: Mobility file %s not found' % relativePath
+            strBuffer.writeln('ERROR: Mobility file %s not found' % relativePath)
+            print strBuffer.getvalue()
             sys.exit()
         return absolutePath

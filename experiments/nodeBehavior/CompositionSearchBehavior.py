@@ -27,5 +27,5 @@ class CompositionSearchBehavior(CommonSearchBehavior):
     def getElements(self):
         return self.getNodePopulator().getCompositions()
         
-    def printInfo(self):
-        print '* Using a total of %d different compositions' % len(self.getNodePopulator().getCompositions())        
+    def printInfo(self, strBuffer):
+        strBuffer.writeln('* Using a total of %d different compositions' % len(self.getNodePopulator().getCompositions()))        

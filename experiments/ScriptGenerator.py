@@ -5,8 +5,10 @@ from mobilityModels.MobilityModelGenerator import MobilityModelGenerator
 from populators.PopulatorGenerator import PopulatorGenerator
 from nodeBehavior.NodeBehaviorGenerator import NodeBehaviorGenerator
 
+import threading
+
 class ScriptGenerator:
-	def __init__(self, config, expConfigFile):
+	def __init__(self, config, expConfigFile, strBuffer):
 		scriptConfig = minidom.parseString(config)
 		self.__entries = scriptConfig.getElementsByTagName("entry")
 		
@@ -55,20 +57,20 @@ class ScriptGenerator:
 		if neighborCount > self.getNNodes() - 1:
 			neighborCount = self.getNNodes() - 1;
 		
-		print '**************** Scenario parameters **********************'
-		print '* Simulation time: %.2f s' % self.__finishTime
-		print '* Initial discarded time: %.2f s' % self.__discardTime
-		print '* Simulation area: %.2f m x %.2f m = %.2f m^2' % (self.getGridW(), self.getGridH(), simulationArea)
-		print '* Number of nodes: %d' % self.getNNodes()
-		print '* Node density: %.5f nodes/m^2' % nDensity
-		print '* Transmission range: %.2f m' % self.getTransmissionRange() 
-		print '* Node coverage: %.2f m^2' % nCoverage
-		print '* Footprint: %.2f %%' % footprint
-		print '* Covered ratio: %.2f %%' % coveredRatio
-		print '* Maximum path: %.2f m' % maximumPath
-		print '* Network diameter: %.2f hops' % networkDiameter
-		print '* Neighbor count: %.2f neighbors/node' % neighborCount
-		print '***********************************************************'
+		strBuffer.writeln('**************** Scenario parameters **********************')
+		strBuffer.writeln('* Simulation time: %.2f s' % self.__finishTime)
+		strBuffer.writeln('* Initial discarded time: %.2f s' % self.__discardTime)
+		strBuffer.writeln('* Simulation area: %.2f m x %.2f m = %.2f m^2' % (self.getGridW(), self.getGridH(), simulationArea))
+		strBuffer.writeln('* Number of nodes: %d' % self.getNNodes())
+		strBuffer.writeln('* Node density: %.5f nodes/m^2' % nDensity)
+		strBuffer.writeln('* Transmission range: %.2f m' % self.getTransmissionRange()) 
+		strBuffer.writeln('* Node coverage: %.2f m^2' % nCoverage)
+		strBuffer.writeln('* Footprint: %.2f %%' % footprint)
+		strBuffer.writeln('* Covered ratio: %.2f %%' % coveredRatio)
+		strBuffer.writeln('* Maximum path: %.2f m' % maximumPath)
+		strBuffer.writeln('* Network diameter: %.2f hops' % networkDiameter)
+		strBuffer.writeln('* Neighbor count: %.2f neighbors/node' % neighborCount)
+		strBuffer.writeln('***********************************************************')
 		
 		expConfig = minidom.parse(expConfigFile)
 		codeTag = expConfig.getElementsByTagName("code")
@@ -77,7 +79,7 @@ class ScriptGenerator:
 		else:
 			self.__codeFile = ''
 		
-	def generate(self, fileName, workingDir, repeat):
+	def generate(self, fileName, workingDir, repeat, strBuffer):
 		#Use mobility model generator to create mobility model using script configuration
 		mobilityModelGenerator = MobilityModelGenerator()
 		mobilityModel = mobilityModelGenerator.generateModel(self.__entries) 
@@ -91,7 +93,7 @@ class ScriptGenerator:
 		nodeBehavior = behaviorGenerator.generateNodeBehavior(self.__entries, nodePopulator)
 		
 		if nodePopulator is not None:
-			nodePopulator.generate(workingDir)
+			nodePopulator.generate(workingDir, strBuffer)
 		
 		file = open(workingDir + '/' + fileName, "w")
 		file.write("source WCommon.tcl\n")
@@ -119,13 +121,13 @@ class ScriptGenerator:
 		
 		if mobilityModel is not None:
 			file.write('\n')
-			mobilityFilePath = mobilityModel.generate(workingDir, 'mobility-scenario.txt', repeat)
+			mobilityFilePath = mobilityModel.generate(workingDir, 'mobility-scenario.txt', repeat, strBuffer)
 			file.write('source ' + mobilityFilePath + '\n')
 			
 		if nodeBehavior is not None:
 			file.write('\n')
 			oFile = open(workingDir + '/nodeBehavior.txt', 'w')
-			nodeBehavior.generate(workingDir, oFile)
+			nodeBehavior.generate(workingDir, oFile, strBuffer)
 			oFile.close()
 			file.write('source nodeBehavior.txt\n')
 		

@@ -26,23 +26,23 @@ class RandomWaypoint:
             if key == "pauseTime":
                 self.__pauseTime = value
         
-    def generate(self, workingDir, file, repeat):
+    def generate(self, workingDir, file, repeat, strBuffer):
         command = 'tools/setdest'
         parameters = '-v 2 -n %s -s 1 -m %s -M %s -t %s -P 1 -p %s -x %s -y %s' % (self.__nNodes, self.__minSpeed, self.__maxSpeed, self.__simTime, self.__pauseTime, self.__maxX, self.__maxY)
         
         cmd = command + ' ' + parameters
         
-        print ''
-        print '************* Random waypoint ****************'
-        print '* Nodes: %s' % self.__nNodes
-        print '* Minimum speed: %s m/s' % self.__minSpeed
-        print '* Maximum speed: %s m/s' % self.__maxSpeed
-        print '* Simulation time: %s s' % self.__simTime
-        print '* Pause time: %s s' % self.__pauseTime
-        print '* Max X: %s m' % self.__maxX
-        print '* Max Y: %s m' % self.__maxY
+        strBuffer.writeln('')
+        strBuffer.writeln('************* Random waypoint ****************')
+        strBuffer.writeln('* Nodes: %s' % self.__nNodes)
+        strBuffer.writeln('* Minimum speed: %s m/s' % self.__minSpeed)
+        strBuffer.writeln('* Maximum speed: %s m/s' % self.__maxSpeed)
+        strBuffer.writeln('* Simulation time: %s s' % self.__simTime)
+        strBuffer.writeln('* Pause time: %s s' % self.__pauseTime)
+        strBuffer.writeln('* Max X: %s m' % self.__maxX)
+        strBuffer.writeln('* Max Y: %s m' % self.__maxY)
         
-        print '* Generated using external command: %s' % cmd
+        strBuffer.writeln('* Generated using external command: %s' % cmd)
         
         paramList = [command]
                 
@@ -58,11 +58,12 @@ class RandomWaypoint:
         outputFile.close()
         
         if result != 0:
-            print "ERROR: There was a problem during mobility model generation"
+            strBuffer.writeln('ERROR: There was a problem during mobility model generation')
+            print strBuffer.getvalue()
             sys.exit()
 
-        print '* Model generation time: %s' % TimeFormatter.formatTime(time() - startTime)
+        strBuffer.writeln('* Model generation time: %s' % TimeFormatter.formatTime(time() - startTime))
         
-        print '**********************************************'
+        strBuffer.writeln('**********************************************')
         
         return file 

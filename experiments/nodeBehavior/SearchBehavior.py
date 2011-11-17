@@ -34,5 +34,5 @@ class SearchBehavior(CommonSearchBehavior):
     def getElements(self):
         return self.getNodePopulator().getParameters()
     
-    def printInfo(self):
-        print '* %s: Using a total of %d different parameters' % (self.getBehaviorName(), len(self.getNodePopulator().getParameters()))        
+    def printInfo(self, strBuffer):
+        strBuffer.writeln('* %s: Using a total of %d different parameters' % (self.getBehaviorName(), len(self.getNodePopulator().getParameters())))        
