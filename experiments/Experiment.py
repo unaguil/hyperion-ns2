@@ -250,8 +250,10 @@ class Experiment:
 			self.__processRepeat(measures, outputLogs)
 
 			result = measures.endConfiguration()
-			
-			outputFile = open(self.__outputDir + self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml', 'w')
+
+			outputFilePath = self.__outputDir + self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml'
+			print '* Writing configuration result to file %s ' % outputFilePath			
+			outputFile = open(outputFilePath, 'w')
 			outputFile.write(result)
 			
 			measures.savePartialResults(configurationDir + '/partialResults.txt')
