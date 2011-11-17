@@ -47,12 +47,12 @@ class CompositionsPopulator:
         strBuffer.writeln('************* Composition populator ****************')
         
         startTime = time()
-        self.__generate()
+        self.__generate(strBuffer)
         strBuffer.writeln('* Compositions generation time: %s ' % TimeFormatter.formatTime(time() - startTime))
 
         strBuffer.writeln('****************************************************')
     
-    def __generate(self):        
+    def __generate(self, strBuffer):        
         compositionsWithSolutions = int(self.__nCompositions * self.__sDistribution)
         compositionsWithoutSolutions = self.__nCompositions - compositionsWithSolutions
          
@@ -63,7 +63,7 @@ class CompositionsPopulator:
         strBuffer.writeln('* Depth distribution: %s' % str(self.__dDistribution))
         strBuffer.writeln('* Solution width: %s' % str(self.__width))
         
-        self.__createServiceDirectory()
+        self.__createServiceDirectory(strBuffer)
         
         self.__checkRange(self.__compositionIO, 'compositionIO')
         self.__checkRange(self.__width, 'width')
@@ -252,7 +252,7 @@ class CompositionsPopulator:
             
         return distributionTable
     
-    def __createServiceDirectory(self):
+    def __createServiceDirectory(self, strBuffer):
         strBuffer.writeln('* Creating %s directory ' % self.__servicesDir)
         os.mkdir(self.__servicesDir)
         os.mkdir(self.__solutionsDir)

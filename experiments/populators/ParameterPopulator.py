@@ -32,7 +32,7 @@ class ParameterPopulator:
     def generate(self, workingDir, strBuffer):            
         strBuffer.writeln('')
         strBuffer.writeln('************* Parameter populator ****************')
-        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__gDistribution, self.__tDistribution)    
+        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__gDistribution, self.__tDistribution, strBuffer)    
         
         self.__generateXMLNodeConfigurations(workingDir, parametersTable, taxonomy)
 
@@ -41,7 +41,7 @@ class ParameterPopulator:
     def getParameters(self):
         return self.__parameters
     
-    def __generate(self, nNodes, nDistribution, gDistribution, tDistribution):    
+    def __generate(self, nNodes, nDistribution, gDistribution, tDistribution, strBuffer):    
         nDistributionTable = self.__getNDistributionTable(nNodes, nDistribution)
         
         strBuffer.writeln('* ParameterPopulator: Node distribution: %s' % str(nDistribution))

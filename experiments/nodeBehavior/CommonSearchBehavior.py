@@ -91,7 +91,7 @@ class CommonSearchBehavior:
     def perform(self, time, oFile):
         pass 
     
-    def printInfo(self):
+    def printInfo(self, strBuffer):
         pass
     
     def getElements(self):
