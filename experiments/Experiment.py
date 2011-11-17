@@ -54,11 +54,11 @@ class JVMCheckingTimer(threading.Thread):
 		self.__stop = True
 
 class RepeatRunner:
-	def __init__(self, tempDir, config, workingDir, scriptGenerator, configGenerator, repeat, repeatNumber):
+	def __init__(self, tempDir, config, workingDir, inputFile, configGenerator, repeat, repeatNumber):
 		self.__tempDir = tempDir
 		self.__config = config
 		self.__configDir = workingDir
-		self.__scriptGenerator = scriptGenerator
+		self.__inputFile = inputFile
 		self.__configGenerator = configGenerator
 		self.__repeat = repeat
 		self.__repeatNumber = repeatNumber
@@ -83,7 +83,8 @@ class RepeatRunner:
 			print '* ERROR: Discard time %.2f should be smaller than simulation time %.2f ' % (self.__configGenerator.getDiscardTime(), self.__configGenerator.getSimulationTime())
 			sys.exit()
 						
-		self.__scriptGenerator.generate('Script.tcl', self.__tempDir, self.__repeat)
+		scriptGenerator = ScriptGenerator(self.__config, self.__inputFile)
+		scriptGenerator.generate('Script.tcl', self.__tempDir, self.__repeat)
 		
 		#Run script
 		simStartTime = time.time()
@@ -166,9 +167,9 @@ class RepeatRunner:
 				shutil.copy2(srcPath, dstPath)
 				
 def runRepeat(args):
-	repeatDir, config, configDir, scriptGenerator, configGenerator, counter, repeatNumber = args
+	repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber = args
 			
-	r = RepeatRunner(repeatDir, config, configDir, scriptGenerator, configGenerator, counter, repeatNumber)
+	r = RepeatRunner(repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber)
 	return (not r.run(), r.getOutputLog())
 
 class Experiment:
@@ -228,13 +229,11 @@ class Experiment:
 			generatedConfigFile.write(generatedExpConfig)
 			generatedConfigFile.close()						
 			
-			scriptGenerator = ScriptGenerator(config, self.__inputFile)
-			
 			data = []
 			
 			for counter in range(repeatNumber):		
 				repeatDir = configurationDir + '/repeat-' + str(counter)
-				data.append((repeatDir, config, self.__configDir, scriptGenerator, configGenerator, counter, repeatNumber))
+				data.append((repeatDir, config, self.__configDir, self.__inputFile, configGenerator, counter, repeatNumber))
 				
 			pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
 			results = pool.map(runRepeat, data) 
