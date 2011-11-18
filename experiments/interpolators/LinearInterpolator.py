@@ -9,7 +9,7 @@ class LinearInterpolator:
 		self.__text = dynamicEntry.getAttribute("text")
 
 		if self.__step == 0 or self.__start == self.__end:
-			self.__values = [self__start]
+			self.__values = [self.__start]
 		else:
 			self.__values = numpy.arange(self.__start, self.__end + self.__step, self.__step) 
 
