@@ -251,7 +251,7 @@ class Experiment:
 
 			result = measures.endConfiguration()
 
-			outputFilePath = self.__outputDir + self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml'
+			outputFilePath = self.__outputDir + '/' + self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml'
 			print '* Writing configuration result to file %s ' % outputFilePath			
 			outputFile = open(outputFilePath, 'w')
 			outputFile.write(result)
