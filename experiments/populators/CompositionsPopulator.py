@@ -111,6 +111,7 @@ class CompositionsPopulator:
                 
             subsetSize = len(shuffledNodes) 
                 
+        strBuffer.writeln('* Service distribution: %s' % self.__nDistribution)
         strBuffer.writeln('* Nodes with services: %d' % subsetSize)
         
         taxonomy = Taxonomy('TaxonomyRootElement')
