@@ -56,6 +56,10 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 			break;
 		}
 	}
+	
+	public void disableMulticastLayer() {
+		compositionSearch.disableMulticastLayer();
+	}
 
 	@Override
 	protected boolean peerCommands(final String command, final String[] args) {
