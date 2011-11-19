@@ -67,7 +67,6 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 	 *            extend the basic functionality of message counter.
 	 */
 	public CommonAgentJ() {
-		Logger.setDeltaTime(500);
 		this.setNativeDebugLevel(AgentJDebugLevel.error);
 		this.setJavaDebugLevel(LogLevel.ERROR);
 
