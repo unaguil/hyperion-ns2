@@ -42,7 +42,7 @@
 	<measures>
 		<measure type="generic.BroadcastedPackets" period="5.0" />
 		<measure type="generic.ReceivedPackets" period="5.0" />
-				
+		<measure type="generic.BroadcastTime" period="5.0" />
 		<measure type="detection.AvgNeighbors" period="5.0" />
 		<measure type="generic.ReliableBroadcastedMessages" period="5.0" />
 		<measure type="generic.RebroadcastedMessages" period="5.0" />
