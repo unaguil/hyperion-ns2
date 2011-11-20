@@ -5,6 +5,7 @@ import graphcreation.services.Service;
 import graphcreation.services.ServiceList;
 import graphsearch.backward.BackwardCompositionSearch;
 import graphsearch.bidirectionalsearch.BidirectionalSearch;
+import graphsearch.commonCompositionSearch.CommonCompositionSearch;
 import graphsearch.forward.ForwardCompositionSearch;
 import graphsearch.util.Utility;
 
@@ -58,7 +59,11 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 	}
 	
 	public void disableMulticastLayer() {
-		compositionSearch.disableMulticastLayer();
+		((CommonCompositionSearch)compositionSearch).disableMulticastLayer();
+	}
+	
+	public void disableGraphCreationLayer() {
+		((CommonCompositionSearch)compositionSearch).disableGraphCreationLayer();
 	}
 
 	@Override
