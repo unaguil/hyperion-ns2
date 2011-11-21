@@ -74,7 +74,7 @@ public class BasicTest {
 		@Override
 		public void perform() throws Exception {
 			File wDir = new File(workingDir);
-			File tempDir = new File(System.getProperty("java.io.tmpdir") + File.pathSeparatorChar + wDir.getName() + "-" + System.currentTimeMillis());
+			File tempDir = new File(System.getProperty("java.io.tmpdir") + File.separatorChar + wDir.getName() + "-" + System.currentTimeMillis());
 			tempDir.mkdir();
 			
 			File oDir = new File(outputDir);
