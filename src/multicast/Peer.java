@@ -227,7 +227,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	}
 
 	@Override
-	public void changedParameterRoutes(final Map<MessageID, Set<Parameter>> changedParameterRoutes, final Set<MessageID> lostParameterRoutes, final Map<MessageID, MessageID> associatedRoutes) {
+	public void changedParameterRoutes(final Map<MessageID, Set<Parameter>> changedParameterRoutes, final Set<MessageID> lostParameterRoutes) {
 	}
 
 	@Override
