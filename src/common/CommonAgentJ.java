@@ -120,8 +120,8 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 			final DatagramPacket p = new DatagramPacket(data, data.length, socketAddress);
 			socket.send(p);
 		} catch (IllegalArgumentException e) {
-			System.err.println("Peer " + peer.getPeerID() + " socketAddress: " + socketAddress);
-			e.printStackTrace();
+			//System.err.println("Peer " + peer.getPeerID() + " socketAddress: " + socketAddress);
+			//e.printStackTrace();
 		}
 	}
 	
