@@ -19,7 +19,6 @@
 	<test workingDir="scripts/tests/multicast/breakNetwork" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/breakNetwork2" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/breakNetwork3" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/breakNetwork4" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/cancelSearch" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/cancelSearch2" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/cancelSearch3" script="Script.tcl"/>
