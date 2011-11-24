@@ -13,6 +13,7 @@
 	<test workingDir="scripts/tests/graphcreation/multipleConnectionsRemoveService" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/simpleComposition" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/simpleCompositionBreak" script="Script.tcl"/>
+	<test workingDir="scripts/tests/graphcreation/simpleNodeMoves" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/simpleTaxonomy" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/multipleCollisionsTaxonomy" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/simpleBreakNetworkTaxonomy" script="Script.tcl"/>
