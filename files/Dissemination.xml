@@ -9,6 +9,7 @@
 	<test workingDir="scripts/tests/dissemination/simpleRemoveParameter" script="Script.tcl"/>
 	<test workingDir="scripts/tests/dissemination/simpleBreakNetwork" script="Script.tcl"/>
 	<test workingDir="scripts/tests/dissemination/breakNetwork4" script="Script.tcl"/>
+	<test workingDir="scripts/tests/dissemination/nodeMoving1" script="Script.tcl"/>
 	<test workingDir="scripts/tests/dissemination/replicatedDissemination" script="Script.tcl"/>
 	<test workingDir="scripts/tests/dissemination/replicatedDissemination2" script="Script.tcl"/>
 	<test workingDir="scripts/tests/dissemination/replicatedDisseminationBreak" script="Script.tcl"/>
