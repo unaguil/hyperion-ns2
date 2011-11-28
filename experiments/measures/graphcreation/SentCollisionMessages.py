@@ -1,8 +1,8 @@
-from measures.dissemination.SentUpdateTableXXXMessages import SentUpdateTableXXXMessages
+from measures.generic.SentPayloadXXXMessages import SentPayloadXXXMessages
 
-class SentCollisionMessages(SentUpdateTableXXXMessages):
+class SentCollisionMessages(SentPayloadXXXMessages):
 	"""Total number of sent collision messages"""
 	
 	def __init__(self, period, simulationTime):
-		SentUpdateTableXXXMessages.__init__(self, 'graphcreation.collisionbased.message.CollisionMessage', period, simulationTime)
+		SentPayloadXXXMessages.__init__(self, 'graphcreation.collisionbased.message.CollisionMessage', period, simulationTime)
 		
