@@ -25,7 +25,7 @@
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">0.0</entry>
+		<entry key="searchFreq">0.1</entry>
 		<entry key="timeRange">(3.0, 'END')</entry>
 
 		<!-- Peer configuration variables -->
