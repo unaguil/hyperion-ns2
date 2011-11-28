@@ -34,12 +34,18 @@ class ConfigGenerator:
 				self.__finishTime = float(value)
 			if key == "discardTime":
 				self.__discardTime = float(value)
+				
+		self.__once = True
 
 	def hasNext(self):
 		if len(self.interpolatedEntries) > 0:
 			return self.interpolatedEntries[0].hasNext()
 		else:
-			return True		
+			if self.__once:
+				self.__once = False
+				return True
+			else:
+				return False	
 
 	def next(self):
 		start = """<?xml version="1.0" encoding="UTF-8"?>\n""" + """<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">\n""" + """<properties>\n"""
@@ -75,9 +81,9 @@ class ConfigGenerator:
 		for staticEntry in self.staticEntries:
 			generatedExpConfig = generatedExpConfig + staticEntry.toxml() + "\n"
 
-		dynamicEntry = "<entry key=\"" + interpolatedEntry.getKey() + "\">" + str(value) + "</entry>"
-
-		generatedExpConfig = generatedExpConfig + dynamicEntry + "\n"
+		if len(self.interpolatedEntries) > 0:
+			dynamicEntry = "<entry key=\"" + interpolatedEntry.getKey() + "\">" + str(value) + "</entry>"
+			generatedExpConfig = generatedExpConfig + dynamicEntry + "\n"
 		
 		generatedExpConfig += "</staticConfig>\n"
 		
