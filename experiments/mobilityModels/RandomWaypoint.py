@@ -4,6 +4,8 @@ from time import time
 
 import util.TimeFormatter as TimeFormatter
 
+DELTA_TIME = 0.5
+
 class RandomWaypoint:
     
     def __init__(self, entries):
@@ -14,7 +16,7 @@ class RandomWaypoint:
             if key == "nNodes":
                 self.__nNodes = value
             if key == "finishTime":
-                self.__simTime = value
+                self.__finishTime = float(value) + DELTA_TIME
             if key == "gridW":
                 self.__maxX = value
             if key == "gridH":
@@ -28,7 +30,7 @@ class RandomWaypoint:
         
     def generate(self, workingDir, file, repeat, strBuffer):
         command = 'tools/setdest'
-        parameters = '-v 2 -n %s -s 1 -m %s -M %s -t %s -P 1 -p %s -x %s -y %s' % (self.__nNodes, self.__minSpeed, self.__maxSpeed, self.__simTime, self.__pauseTime, self.__maxX, self.__maxY)
+        parameters = '-v 2 -n %s -s 1 -m %s -M %s -t %.1f -P 1 -p %s -x %s -y %s' % (self.__nNodes, self.__minSpeed, self.__maxSpeed, self.__finishTime, self.__pauseTime, self.__maxX, self.__maxY)
         
         cmd = command + ' ' + parameters
         
@@ -37,7 +39,7 @@ class RandomWaypoint:
         strBuffer.writeln('* Nodes: %s' % self.__nNodes)
         strBuffer.writeln('* Minimum speed: %s m/s' % self.__minSpeed)
         strBuffer.writeln('* Maximum speed: %s m/s' % self.__maxSpeed)
-        strBuffer.writeln('* Simulation time: %s s' % self.__simTime)
+        strBuffer.writeln('* Simulation time: %s s' % self.__finishTime)
         strBuffer.writeln('* Pause time: %s s' % self.__pauseTime)
         strBuffer.writeln('* Max X: %s m' % self.__maxX)
         strBuffer.writeln('* Max Y: %s m' % self.__maxY)

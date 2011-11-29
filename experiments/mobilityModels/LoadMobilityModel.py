@@ -3,6 +3,8 @@ import sys
 
 MAX_SCENARIOS = 4
 
+DELTA_TIME = 0.5
+
 class LoadMobilityModel:
     
     def __init__(self, entries):
@@ -13,7 +15,7 @@ class LoadMobilityModel:
             if key == "nNodes":
                 self.__nNodes = value
             if key == "finishTime":
-                self.__simTime = value
+                self.__finishTime = float(value) + DELTA_TIME 
             if key == "gridW":
                 self.__maxX = value
             if key == "gridH":
@@ -27,7 +29,7 @@ class LoadMobilityModel:
         
     def generate(self, workingDir, outputFile, repeat, strBuffer):
         numScenario = repeat % MAX_SCENARIOS
-        mobilityFile = 'mobility-%s-%s-%s-%s-%s-%s-%s-%d.txt' % (str(self.__nNodes), str(self.__simTime), str(self.__maxX), str(self.__maxY), str(self.__minSpeed), str(self.__maxSpeed), str(self.__pauseTime), numScenario)
+        mobilityFile = 'mobility-%s-%.1f-%s-%s-%s-%s-%s-%d.txt' % (str(self.__nNodes), self.__finishTime, str(self.__maxX), str(self.__maxY), str(self.__minSpeed), str(self.__maxSpeed), str(self.__pauseTime), numScenario)
         relativePath = 'mobilityScenarios/' + mobilityFile
         strBuffer.writeln('Using mobility scenario %s' % relativePath)
         absolutePath = os.path.abspath(relativePath)

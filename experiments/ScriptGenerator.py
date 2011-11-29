@@ -7,6 +7,8 @@ from nodeBehavior.NodeBehaviorGenerator import NodeBehaviorGenerator
 
 import threading
 
+DELTA_TIME = 0.5
+
 class ScriptGenerator:
 	def __init__(self, config, expConfigFile, strBuffer):
 		scriptConfig = minidom.parseString(config)
@@ -26,7 +28,7 @@ class ScriptGenerator:
 			if key == "nNodes":
 				self.__nNodes = int(value)
 			if key == "finishTime":
-				self.__finishTime = float(value)
+				self.__finishTime = float(value) + DELTA_TIME
 			if key == "gridW":
 				self.__gridW = float(value)
 			if key == "gridH":
