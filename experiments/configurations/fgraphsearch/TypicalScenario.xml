@@ -40,7 +40,7 @@
 	<dynamicConfig>
 		<dynamicEntry key="nDistribution" interpolator="LinearInterpolator" text="% nodes with services" start="0.3" end="0.3" step="0.3"/>
 	</dynamicConfig>
-	<repeat number="1" />
+	<repeat number="20" />
 	<measures>
 		<measure type="generic.BroadcastedPackets" period="0.25" />
 		<measure type="generic.ReceivedPackets" period="0.25" />
