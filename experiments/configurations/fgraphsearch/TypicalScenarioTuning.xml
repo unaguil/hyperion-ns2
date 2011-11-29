@@ -82,5 +82,6 @@
 		<measure type="graphcreation.SentForwardMessages" period="0.25" />
 		<measure type="graphcreation.SentInhibeCollisionsMessages" period="0.25" />
 		<measure type="graphcreation.SentRemovedServicesMessages" period="0.25" />
+		<measure type="graphcreation.StartedCollisionMessages" period="0.25" />
 	</measures>
 </experiment>
