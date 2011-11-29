@@ -286,26 +286,24 @@ class Graph:
 					measure = createMeasure('measures.' + measureType, 5.0)
 					measureName = measure.getName()
 			
-					label = '%s (%d %s)' % (measureName, result.getTag(), name)
+					label = '%s (%s %s)' % (measureName, result.getTag(), name)
 					
 					self.__printPeriodicInfo(y, x, result.getStdValues(), relStdValues, label, '')
 			
 					line = plt.plot(x, y)
 					
+					if isinstance(measure, GenericAvgMeasure):
+						#draw average line
+						avgValues = [result.getMeanTotal() for e in x]
+						avgLine = plt.plot(x, avgValues)
+						avgLabel = 'Avg. of %s: %s %s' % (measureName, result.getMeanTotal(), units)
+						lines.append(avgLine)
+						labels.append(avgLabel)
+					else:
+						label += '\nTotal: %s %s' % (result.getMeanTotal(), units)
+						
 					lines.append(line)
 					labels.append(label)
-					
-					#draw average line
-					avgValues = [result.getMeanTotal() for e in x]
-					avgLine = plt.plot(x, avgValues)
-					
-					if isinstance(measure, GenericAvgMeasure):
-						avgLabel = 'Avg. of %s' % (measureName)
-					else:
-						avgLabel = 'Total of %s' % (measureName)
-						
-					lines.append(avgLine)
-					labels.append(avgLabel)
 		
 		if not yLabel is None:
 			plt.ylabel(yLabel)
