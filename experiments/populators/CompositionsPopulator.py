@@ -24,6 +24,7 @@ class CompositionsPopulator:
                 self.__nCompositions = int(value)
             if key == "compositionIO":
                 self.__compositionIO = eval(value)
+                self.__compositionIO = (self.__compositionIO[0], self.__compositionIO[1] + 1)
             if key == "nDistribution":
                 self.__nDistribution = float(value)
             #all compositions are valid
@@ -32,6 +33,7 @@ class CompositionsPopulator:
                 self.__dDistribution = eval(value)
             if key == "width":
                 self.__width = eval(value)
+                self.__width = (self.__width[0], self.__width[1] + 1)
             if key == 'nNodes':
                 self.__nNodes = int(value)
                 
