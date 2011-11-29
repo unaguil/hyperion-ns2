@@ -28,7 +28,8 @@ class ScriptGenerator:
 			if key == "nNodes":
 				self.__nNodes = int(value)
 			if key == "finishTime":
-				self.__finishTime = float(value) + DELTA_TIME
+				self.__simulationTime = float(value)
+				self.__finishTime = self.__simulationTime + DELTA_TIME
 			if key == "gridW":
 				self.__gridW = float(value)
 			if key == "gridH":
@@ -60,7 +61,7 @@ class ScriptGenerator:
 			neighborCount = self.getNNodes() - 1;
 		
 		strBuffer.writeln('**************** Scenario parameters **********************')
-		strBuffer.writeln('* Simulation time: %.2f s' % self.__finishTime)
+		strBuffer.writeln('* Simulation time: %.2f s' % self.__simulationTime)
 		strBuffer.writeln('* Initial discarded time: %.2f s' % self.__discardTime)
 		strBuffer.writeln('* Simulation area: %.2f m x %.2f m = %.2f m^2' % (self.getGridW(), self.getGridH(), simulationArea))
 		strBuffer.writeln('* Number of nodes: %d' % self.getNNodes())
@@ -124,14 +125,14 @@ class ScriptGenerator:
 		if mobilityModel is not None:
 			file.write('\n')
 			mobilityFilePath = mobilityModel.generate(workingDir, 'mobility-scenario.txt', repeat, strBuffer)
-			file.write('source ' + mobilityFilePath + '\n')
+			file.write('\tsource ' + mobilityFilePath + '\n')
 			
 		if nodeBehavior is not None:
 			file.write('\n')
 			oFile = open(workingDir + '/nodeBehavior.txt', 'w')
 			nodeBehavior.generate(workingDir, oFile, strBuffer)
 			oFile.close()
-			file.write('source nodeBehavior.txt\n')
+			file.write('\tsource nodeBehavior.txt\n')
 		
 		file.write("}\n")
 		file.write("\n")
