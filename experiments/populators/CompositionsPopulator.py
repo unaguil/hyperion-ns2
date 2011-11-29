@@ -24,7 +24,6 @@ class CompositionsPopulator:
                 self.__nCompositions = int(value)
             if key == "compositionIO":
                 self.__compositionIO = eval(value)
-                self.__compositionIO = (self.__compositionIO[0], self.__compositionIO[1] + 1)
             if key == "nDistribution":
                 self.__nDistribution = float(value)
             #all compositions are valid
@@ -33,7 +32,6 @@ class CompositionsPopulator:
                 self.__dDistribution = eval(value)
             if key == "width":
                 self.__width = eval(value)
-                self.__width = (self.__width[0], self.__width[1] + 1)
             if key == 'nNodes':
                 self.__nNodes = int(value)
                 
@@ -126,7 +124,7 @@ class CompositionsPopulator:
         serviceName = "Composition-" + self.__serviceNameGenerator.next()
         composition = Service(serviceName)
         
-        for i in xrange(random.randrange(self.__compositionIO[0], self.__compositionIO[1])):
+        for i in xrange(random.randrange(self.__compositionIO[0], self.__compositionIO[1] + 1)):
             composition.addInput(self.__parameterNameGenerator.next())
             
         currentOutputs = self.__getInitOutputs(composition)
@@ -141,13 +139,13 @@ class CompositionsPopulator:
     def __createGraph(self, currentOutputs, services, currentDepth, maxDepth, invalid):
         #create next services
         nextServices = []
-        for i in xrange(random.randrange(self.__width[0], self.__width[1])):
+        for i in xrange(random.randrange(self.__width[0], self.__width[1] +  1)):
             nextService = Service('Service-' + self.__serviceNameGenerator.next())
             selectedInputs = self.__selectInputs(currentOutputs)
             for input in selectedInputs:
                 nextService.addInput(self.__getParamID(input))
                 
-            for i in xrange(random.randrange(self.__compositionIO[0], self.__compositionIO[1])):
+            for i in xrange(random.randrange(self.__compositionIO[0], self.__compositionIO[1] + 1)):
                 nextService.addOutput(self.__parameterNameGenerator.next())
             
             nextServices.append(nextService)
@@ -156,7 +154,7 @@ class CompositionsPopulator:
             
         if invalid and self.__stopGeneration(currentDepth, maxDepth):
             randomOutputs = []
-            for i in xrange(random.randrange(self.__compositionIO[0], self.__compositionIO[1])):
+            for i in xrange(random.randrange(self.__compositionIO[0], self.__compositionIO[1] + 1)):
                 randomOutputs.append(self.__parameterNameGenerator.next())
             return randomOutputs
             
