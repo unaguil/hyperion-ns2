@@ -4,6 +4,8 @@ from time import time
 
 import util.TimeFormatter as TimeFormatter
 
+DELTA_TIME = 0.5
+
 class CommonSearchBehavior:
     """
         Defines the common behavior for periodic actions generation.
@@ -50,7 +52,7 @@ class CommonSearchBehavior:
         init, end = self.__timeRange
         
         if init == 'START':
-            init = 0.5
+            init = 0.0
             
         if end == 'END' or end >= self.__finishTime:
             end = self.__finishTime
@@ -77,8 +79,8 @@ class CommonSearchBehavior:
         
         if self.__searchPeriod > 0.0:            
             #Create search events each specified period of time during specified time range        
-            currentTime = init
-            while (currentTime < end):
+            currentTime = init + DELTA_TIME
+            while (currentTime < end + DELTA_TIME):
                 #perform action
                 self.perform(currentTime, oFile)
                 
