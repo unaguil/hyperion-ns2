@@ -17,28 +17,28 @@
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
-		<entry key="nCompositions">1</entry>
+		<entry key="nCompositions">4</entry>
 		<entry key="compositionIO">(1, 1)</entry>
-		<entry key="dDistribution">((0.99, 1), (0.01, 1))</entry>
+		<entry key="dDistribution">((0.99, 5), (0.01, 5))</entry>
 		<!-- <entry key="nDistribution">0</entry>-->
-		<entry key="width">(1, 1)</entry>
+		<entry key="width">(5, 5)</entry>
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">0.01</entry>
-		<entry key="timeRange">(10.0, 'END')</entry>
+		<entry key="searchFreq">0.1</entry>
+		<entry key="timeRange">('START', 40.0)</entry>
 
 		<!-- Peer configuration variables -->
 		<entry key="messageProcessor.randomWait">100</entry>
 		<entry key="beaconDetector.beaconTime">1000</entry>
 		<entry key="reliableBroadcast.maxTries">10</entry>
 		<entry key="dissemination.maxDistance">5</entry>
-		<entry key="parameterSearch.searchMessageTTL">5</entry>
+		<entry key="parameterSearch.searchMessageTTL">1</entry>
 		<entry key="graphsearch.maxTTL">10</entry>
 		<entry key="graphsearch.searchExpiration">20000</entry>
 	</staticConfig>
 	<dynamicConfig>
-		<dynamicEntry key="nDistribution" interpolator="LinearInterpolator" text="% nodes with services" start="0.3" end="0.3" step="0.3"/>
+		<dynamicEntry key="nDistribution" interpolator="LinearInterpolator" text="% nodes with services" start="1.0" end="1.0" step="0.3"/>
 	</dynamicConfig>
 	<repeat number="1" />
 	<measures>
