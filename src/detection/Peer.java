@@ -3,7 +3,9 @@ package detection;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import util.logger.Logger;
@@ -67,7 +69,8 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 	@Override
 	protected boolean peerCommands(final String command, final String[] args) {
 		if (command.equals("broadcast")) {
-			final MessageString msgStr = new MessageString(peer.getPeerID(), new String(new byte[1]));
+			final List<PeerID> currentNeighbors = new ArrayList<PeerID>(peer.getDetector().getCurrentNeighbors().getPeerSet());
+			final MessageString msgStr = new MessageString(peer.getPeerID(), currentNeighbors, new String(new byte[1]));
 			peer.enqueueBroadcast(msgStr);
 			return true;
 		}
