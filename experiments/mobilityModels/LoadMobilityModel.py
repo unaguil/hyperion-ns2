@@ -6,8 +6,9 @@ MAX_SCENARIOS = 4
 DELTA_TIME = 0.5
 
 class LoadMobilityModel:
-    
     def __init__(self, entries):
+        self.__rotate = True
+        
         for entry in entries:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
@@ -26,9 +27,15 @@ class LoadMobilityModel:
                 self.__maxSpeed = value
             if key == "pauseTime":
                 self.__pauseTime = value
+            if key == "rotate":
+                self.__rotate = eval(value)
         
-    def generate(self, workingDir, outputFile, repeat, strBuffer):
-        numScenario = repeat % MAX_SCENARIOS
+    def generate(self, workingDir, outputFile, repeat, strBuffer):        
+        if self.__rotate:
+            numScenario = repeat % MAX_SCENARIOS
+        else:
+            numScenario = 0
+            
         mobilityFile = 'mobility-%s-%.1f-%s-%s-%s-%s-%s-%d.txt' % (str(self.__nNodes), self.__finishTime, str(self.__maxX), str(self.__maxY), str(self.__minSpeed), str(self.__maxSpeed), str(self.__pauseTime), numScenario)
         relativePath = 'mobilityScenarios/' + mobilityFile
         strBuffer.writeln('Using mobility scenario %s' % relativePath)

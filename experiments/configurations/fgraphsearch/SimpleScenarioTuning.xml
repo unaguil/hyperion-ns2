@@ -11,6 +11,7 @@
 
         <!-- Random waypoint configuration -->
         <entry key="mobilityModel">LoadMobilityModel</entry>
+        <entry key="rotate">False</entry>
         <entry key="minSpeed">0.00</entry>
         <entry key="maxSpeed">0.00</entry>
         <entry key="pauseTime">100.0</entry>
