@@ -98,12 +98,12 @@ class RepeatRunner:
 		print strBuffer.getvalue()
 		sys.stdout.flush()
 		
-		p = subprocess.Popen(['ns', 'Script.tcl'], stdout=out, stderr=err, cwd=self.__tempDir)
+		self.__p = subprocess.Popen(['ns', 'Script.tcl'], stdout=out, stderr=err, cwd=self.__tempDir)
 		
-		timer = JVMCheckingTimer(JVM_DUMP_CHECK_TIME, p, self.__tempDir) 
-		timer.start()
-		result = p.wait()
-		timer.cancel()
+		self.__timer = JVMCheckingTimer(JVM_DUMP_CHECK_TIME, self.__p, self.__tempDir) 
+		self.__timer.start()
+		result = self.__p.wait()
+		self.__timer.cancel()
 		
 		out.close()
 		err.close()
@@ -119,6 +119,10 @@ class RepeatRunner:
 		self.__compressOutputLog()
 		
 		return True
+	
+	def terminate(self):
+		self.__p.kill()
+		self.__timer.cancel()
 		
 	def run(self):
 		success = False
@@ -170,10 +174,14 @@ class RepeatRunner:
 				shutil.copy2(srcPath, dstPath)
 				
 def runRepeat(args):
-	repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber = args
-			
-	r = RepeatRunner(repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber)
-	return (not r.run(), r.getOutputLog())
+	try:
+		repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber = args
+				
+		r = RepeatRunner(repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber)
+		return (not r.run(), r.getOutputLog())
+	except KeyboardInterrupt:
+		print '* Terminating process'
+		r.terminate()
 
 class Experiment:
 	def __init__(self, configDir, inputFile, outputDir, debug, workingDir, processing):
