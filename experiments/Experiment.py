@@ -384,7 +384,7 @@ def main():
 	parser.add_option("-f", "--file", dest="inputFile", help="experiment configuration file")
 	parser.add_option("-o", "--output", dest="outputDir", help="experiment results output directory", default='/tmp')
 	parser.add_option("-w", "--workingDir", dest="workingDir", help="directory to store simulation results")
-	parser.add_option("-d", "--debug", dest="debug", help="debug mode", default=False)
+	parser.add_option("-d", "--debug", dest="debug", help="preserve working directory output", action="store_true", default=False)
 	parser.add_option("-p", "--processDir", dest="processDir", help="process output directory")
 	
 	(options, args) = parser.parse_args()
