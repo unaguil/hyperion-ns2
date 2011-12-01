@@ -381,8 +381,8 @@ def main():
 	
 	parser = OptionParser()
 	parser.add_option("-c", "--configDir", dest="configDir", help="experiment configuration directory")
-	parser.add_option("-f", "--file", dest="inputFile", help="experiment configuration file")
-	parser.add_option("-o", "--output", dest="outputDir", help="experiment results output directory", default='/tmp')
+	parser.add_option("-i", "--inputFile", dest="inputFile", help="experiment configuration file")
+	parser.add_option("-o", "--outputDir", dest="outputDir", help="experiment results output directory", default='/tmp')
 	parser.add_option("-w", "--workingDir", dest="workingDir", help="directory to store simulation results")
 	parser.add_option("-d", "--debug", dest="debug", help="preserve working directory output", action="store_true", default=False)
 	parser.add_option("-p", "--processDir", dest="processDir", help="process output directory")
