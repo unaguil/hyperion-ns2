@@ -109,6 +109,8 @@ class Graph:
 					period = measureNode.getAttribute('period')
 					units = measureNode.getAttribute('units')
 					resultNodes = measureNode.getElementsByTagName('result') 
+
+					print 'Parsing measure %s' % mType
 					
 					if not mType in self.__measures:
 						self.__measures[mType] = (type, units, [])
@@ -119,14 +121,14 @@ class Graph:
 						stdTotal = float(resultNode.getAttribute('stdTotal'))
 						
 						entryNodes = resultNode.getElementsByTagName('entry')
-						
+
 						values = []
 						for entryNode in entryNodes:
 							mean = float(entryNode.getAttribute('mean'))
 							std = float(entryNode.getAttribute('std'))
 							time = float(entryNode.getAttribute('time'))
 							values.append((mean, std, time))
-							
+
 						result = PeriodicResult(tag, float(period), values, meanTotal, stdTotal, sampleSize)
 						
 						expectedType = self.__measures[mType][0]
@@ -135,8 +137,8 @@ class Graph:
 							sys.exit()
 						
 						self.__measures[mType][2].append(result)
-			except Exception:
-				print 'ERROR: Parser error processing file %s' % file
+			except Exception as e:
+				print 'ERROR: Parser error processing file %s. Cause: %s' % (file, e.message)
 				sys.exit()
 	
 	def getMeasures(self):
