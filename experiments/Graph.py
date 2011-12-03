@@ -86,8 +86,23 @@ class PeriodicResult:
 		return self.__stdTotal
 
 class Graph:
-	def __init__(self, files):
+	def __init__(self, files, lang):
 		self.__measures = {}
+		
+		self.__measureNames = {}
+		try:
+			file = open('measureNames.' + lang)
+			for line in file.readlines():
+				entry = line.split('=')
+				if len(entry) == 2:
+					key = entry[0].strip()
+					value = entry[1].strip()
+					if not value == '':
+						self.__measureNames[entry[0].strip()] = entry[1].strip()
+				
+		except IOError:
+			print 'Error: Could not load measure names file.'
+			sys.exit()
 		
 		for file in files:
 			try:
@@ -205,7 +220,7 @@ class Graph:
 			else:
 				plt.xlabel(name)
 				
-			label = self.__formatType(measureType)
+			label, measure = self.__getMeasureInfo(measureType)
 		
 			self.__printTotalInfo(y, stdValues, relStdValues, label, '')
 		
@@ -230,16 +245,15 @@ class Graph:
 			plt.show()
 		else:
 			plt.savefig(fName, format=format)
-		
-	def __formatType(self, measureType):
-		words = re.findall('[A-Z][^A-Z]*', measureType)
-		for num, word in enumerate(words):
-			if num > 0:
-				result = result + ' ' + word.lower()
-			else:
-				result = word
-		return result
-		
+	
+	def __getMeasureInfo(self, measureType):
+		measureClass = 'measures.' + measureType
+		measure = createMeasure(measureClass, 5.0)
+		if measureClass in self.__measureNames:
+			return self.__measureNames[measureClass], measure 
+		else:
+			return measure.getName(), measure
+			
 	def __setAxis(self, plt, xmin, xmax, ymin, ymax):
 		axis = list(plt.axis())
 
@@ -285,8 +299,7 @@ class Graph:
 					#print "X: ", x
 					#print "Y: ", y
 			
-					measure = createMeasure('measures.' + measureType, 5.0)
-					measureName = measure.getName()
+					measureName, measure = self.__getMeasureInfo(measureType)
 			
 					label = '%s (%s %s)' % (measureName, result.getTag(), name)
 					
@@ -421,7 +434,7 @@ def main():
 		else:
 			files.append(options.inputFile)
 			
-		graph = Graph(files)
+		graph = Graph(files, 'en')
 		
 		if options.all: 
 			graph.plotAll(options.format, options.onePDF, options.periodic)
