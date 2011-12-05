@@ -2,7 +2,7 @@
 <experiment>
 	<staticConfig>
 		<!-- Script configuration variables -->
-        <entry key="nNodes">2</entry>
+        <entry key="nNodes">14</entry>
         <entry key="finishTime">50.0</entry>
         <entry key="gridW">20</entry>
         <entry key="gridH">20</entry>
@@ -10,7 +10,8 @@
         <entry key="javaAgent">graphsearch.ForwardPeerMulticastDisabled</entry>
 
         <!-- Random waypoint configuration -->
-        <entry key="mobilityModel">RandonWaypoint</entry>
+        <entry key="mobilityModel">RandomWaypoint</entry>
+        <entry key="rotate">False</entry>
         <entry key="minSpeed">0.0000000000000001</entry>
         <entry key="maxSpeed">0.0000000000000001</entry>
         <entry key="pauseTime">100.0</entry>
@@ -25,11 +26,11 @@
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">0.01</entry>
+		<entry key="searchFreq">0.00</entry>
 		<entry key="timeRange">('START', 40.0)</entry>
 
 		<!-- Peer configuration variables -->
-		<entry key="messageProcessor.randomWait">100</entry>
+		<entry key="messageProcessor.randomWait">50</entry>
 		<entry key="beaconDetector.beaconTime">1000</entry>
 		<entry key="reliableBroadcast.maxTries">10</entry>
 		<entry key="dissemination.maxDistance">5</entry>

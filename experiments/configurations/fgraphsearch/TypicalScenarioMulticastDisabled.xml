@@ -26,11 +26,11 @@
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">0.01</entry>
+		<entry key="searchFreq">0.00</entry>
 		<entry key="timeRange">('START', 40.0)</entry>
 
 		<!-- Peer configuration variables -->
-		<entry key="messageProcessor.randomWait">100</entry>
+		<entry key="messageProcessor.randomWait">50</entry>
 		<entry key="beaconDetector.beaconTime">1000</entry>
 		<entry key="reliableBroadcast.maxTries">10</entry>
 		<entry key="dissemination.maxDistance">5</entry>
@@ -38,7 +38,7 @@
 		<entry key="graphsearch.maxTTL">10</entry>
 		<entry key="graphsearch.searchExpiration">20000</entry>
 	</staticConfig>
-	<repeat number="5" />
+	<repeat number="1" />
 	<measures>
 		<measure type="generic.BroadcastedPackets" period="0.25" />
 		<measure type="generic.ReceivedPackets" period="0.25" />
