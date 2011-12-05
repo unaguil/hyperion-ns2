@@ -18,7 +18,7 @@
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
-		<entry key="nCompositions">1</entry>
+		<entry key="nCompositions">4</entry>
 		<entry key="compositionIO">(1, 1)</entry>
 		<entry key="dDistribution">((0.99, 5), (0.01, 5))</entry>
 		<entry key="nDistribution">1.0</entry>
@@ -39,7 +39,7 @@
 		<entry key="graphsearch.searchExpiration">20000</entry>
 	</staticConfig>
 	<dynamicConfig/>
-	<repeat number="5" />
+	<repeat number="1" />
 	<measures>
 		<measure type="generic.BroadcastedPackets" period="0.25" />
 		<measure type="generic.ReceivedPackets" period="0.25" />
