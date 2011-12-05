@@ -21,12 +21,12 @@
 		<entry key="nCompositions">4</entry>
 		<entry key="compositionIO">(1, 1)</entry>
 		<entry key="dDistribution">((0.99, 5), (0.01, 5))</entry>
-		<entry key="nDistribution">1.0</entry>
+		<entry key="nDistribution">0.3</entry>
 		<entry key="width">(5, 5)</entry>
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">0.01</entry>
+		<entry key="searchFreq">0.1</entry>
 		<entry key="timeRange">('START', 40.0)</entry>
 
 		<!-- Peer configuration variables -->
