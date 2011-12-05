@@ -10,26 +10,26 @@
         <entry key="javaAgent">graphsearch.ForwardPeerMulticastDisabled</entry>
 
         <!-- Random waypoint configuration -->
-        <entry key="mobilityModel">RandomWaypoint</entry>
-        <entry key="minSpeed">0.00000000000000000001</entry>
-        <entry key="maxSpeed">0.00000000000000000001</entry>
+        <entry key="mobilityModel">LoadMobilityModel</entry>
+        <entry key="minSpeed">0.00</entry>
+        <entry key="maxSpeed">0.00</entry>
         <entry key="pauseTime">100.0</entry>
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
-		<entry key="nCompositions">10</entry>
-		<entry key="compositionIO">(1, 5)</entry>
-		<entry key="dDistribution">((0.3, 5), (0.4, 4), (0.3, 2))</entry>
-		<!-- <entry key="nDistribution">0</entry>-->
-		<entry key="width">(1, 4)</entry>
+		<entry key="nCompositions">1</entry>
+		<entry key="compositionIO">(1, 1)</entry>
+		<entry key="dDistribution">((0.99, 20), (0.01, 20))</entry>
+		<entry key="nDistribution">1.0</entry>
+		<entry key="width">(1, 1)</entry>
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">0.0</entry>
-		<entry key="timeRange">(3.0, 'END')</entry>
+		<entry key="searchFreq">0.01</entry>
+		<entry key="timeRange">('START', 40.0)</entry>
 
 		<!-- Peer configuration variables -->
-		<entry key="messageProcessor.randomWait">0</entry>
+		<entry key="messageProcessor.randomWait">100</entry>
 		<entry key="beaconDetector.beaconTime">1000</entry>
 		<entry key="reliableBroadcast.maxTries">10</entry>
 		<entry key="dissemination.maxDistance">5</entry>
@@ -37,9 +37,6 @@
 		<entry key="graphsearch.maxTTL">10</entry>
 		<entry key="graphsearch.searchExpiration">20000</entry>
 	</staticConfig>
-	<dynamicConfig>
-		<dynamicEntry key="nDistribution" interpolator="LinearInterpolator" text="% nodes with services" start="0.3" end="0.3" step="0.3"/>
-	</dynamicConfig>
 	<repeat number="1" />
 	<measures>
 		<measure type="generic.BroadcastedPackets" period="0.25" />

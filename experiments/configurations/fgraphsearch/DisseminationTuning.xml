@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<experiment tag="0" type="">
+<experiment>
 	<staticConfig>
 		<!-- Script configuration variables -->
-        <entry key="nNodes">20</entry>
+        <entry key="nNodes">2</entry>
         <entry key="finishTime">50.0</entry>
-        <entry key="gridW">290</entry>
-        <entry key="gridH">290</entry>
+        <entry key="gridW">20</entry>
+        <entry key="gridH">20</entry>
         <entry key="discardTime">0</entry>
-        <entry key="javaAgent">graphsearch.ForwardPeer</entry>
+        <entry key="javaAgent">graphsearch.ForwardPeerMulticastDisabled</entry>
 
         <!-- Random waypoint configuration -->
-        <entry key="mobilityModel">LoadMobilityModel</entry>
-        <entry key="rotate">False</entry>
-        <entry key="minSpeed">0.00</entry>
-        <entry key="maxSpeed">0.00</entry>
+        <entry key="mobilityModel">RandonWaypoint</entry>
+        <entry key="minSpeed">0.0000000000000001</entry>
+        <entry key="maxSpeed">0.0000000000000001</entry>
         <entry key="pauseTime">100.0</entry>
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
 		<entry key="nCompositions">1</entry>
 		<entry key="compositionIO">(1, 1)</entry>
-		<entry key="dDistribution">((0.99, 5), (0.01, 5))</entry>
+		<entry key="dDistribution">((0.99, 20), (0.01, 20))</entry>
 		<entry key="nDistribution">1.0</entry>
-		<entry key="width">(5, 5)</entry>
+		<entry key="width">(1, 1)</entry>
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
@@ -38,8 +37,7 @@
 		<entry key="graphsearch.maxTTL">10</entry>
 		<entry key="graphsearch.searchExpiration">20000</entry>
 	</staticConfig>
-	<dynamicConfig/>
-	<repeat number="5" />
+	<repeat number="1" />
 	<measures>
 		<measure type="generic.BroadcastedPackets" period="0.25" />
 		<measure type="generic.ReceivedPackets" period="0.25" />
@@ -81,6 +79,5 @@
 		<measure type="graphcreation.SentForwardMessages" period="0.25" />
 		<measure type="graphcreation.SentInhibeCollisionsMessages" period="0.25" />
 		<measure type="graphcreation.SentRemovedServicesMessages" period="0.25" />
-		<measure type="graphcreation.StartedCollisionMessages" period="0.25" />
 	</measures>
 </experiment>
