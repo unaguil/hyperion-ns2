@@ -178,7 +178,7 @@ class Graph:
 				print 'Unknown measure %s' % measureType
 				sys.exit()
 	
-	def plotTotal(self, measureTypes, xLabel=None, yLabel=None, xmin=None, xmax=None, ymin=None, ymax=None):
+	def plotTotal(self, measureTypes, xLabel=None, yLabel=None, xAxis=None, yAxis=None):
 		self.__checkMeasureTypes(self.__measures, measureTypes)			
 		self.__checkUnits(self.__measures, measureTypes)
 							
@@ -236,7 +236,7 @@ class Graph:
 
 		plt.xticks(x)
 
-		self.__setAxis(plt, xmin, xmax, ymin, ymax) 
+		self.__setAxis(plt, xAxis, yAxis) 
 
 		plt.figlegend(lines, labels, 'upper right')
 		
@@ -254,25 +254,29 @@ class Graph:
 		else:
 			return measure.getName(), measure
 			
-	def __setAxis(self, plt, xmin, xmax, ymin, ymax):
+	def __setAxis(self, plt, xAxis, yAxis, defaultXAxis = None):
 		axis = list(plt.axis())
 
+		if defaultXAxis is not None:
+			axis[0] = defaultXAxis[0]
+			axis[1] = defaultXAxis[1]
+			
 		axis[2] = 0
 		axis[3] = axis[3] * 1.10
 
-		if xmin is not None and xmax is not None:
-			axis[0] = float(xmin)
-			axis[1] = float(xmax)
+		if xAxis is not None:
+			axis[0] = float(xAxis[0])
+			axis[1] = float(xAxis[1])
 			
-		if ymin is not None and ymax is not None:
-			axis[2] = float(ymin)
-			axis[3] = float(ymax)
+		if yAxis is not None:
+			axis[2] = float(yAxis[0])
+			axis[3] = float(yAxis[1])
 
 		plt.grid(True)
 			
 		plt.axis(axis)
 		
-	def plotPeriodic(self, measureTypes, yLabel=None, xmin=None, xmax=None, ymin=None, ymax=None):
+	def plotPeriodic(self, measureTypes, yLabel=None, xAxis=None, yAxis=None):
 		self.__checkMeasureTypes(self.__measures, measureTypes)			
 		self.__checkUnits(self.__measures, measureTypes)
 						
@@ -323,9 +327,9 @@ class Graph:
 		if not yLabel is None:
 			plt.ylabel(yLabel)
 		else:
-			plt.ylabel(units)
+			plt.ylabel(units) 
 			
-		self.__setAxis(plt, xmin, xmax, ymin, ymax)
+		self.__setAxis(plt, xAxis, yAxis, (min(x), max(x)))
 		
 		plt.figlegend(lines, labels, 'upper right')  
 		
@@ -452,10 +456,10 @@ def main():
 		else:  					
 			if not options.periodic:
 				#Plot selected measure types				
-				graph.plotTotal(args, options.xLabel, options.yLabel, options.xmin, options.xmax, options.ymin, options.ymax)
+				graph.plotTotal(args, options.xLabel, options.yLabel, (options.xmin, options.xmax), (options.ymin, options.ymax))
 				graph.finishPlotting(plt, options.writeFile, options.format)
 			else: 
-				graph.plotPeriodic(args, options.yLabel, options.xmin, options.xmax, options.ymin, options.ymax)
+				graph.plotPeriodic(args, options.yLabel, (options.xmin, options.xmax), (options.ymin, options.ymax))
 				graph.finishPlotting(plt, options.writeFile, options.format)
 
 if __name__ == '__main__':
