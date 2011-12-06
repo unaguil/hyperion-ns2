@@ -198,7 +198,7 @@ class Measures:
 		
 		return doc.toprettyxml()
 												
-	def __getXMLConfigurationResults(self, configurationResults, n, tag, type, discardTime, experimentTime):
+	def __getXMLConfigurationResults(self, configurationResults, n, tag, type, simulationTime, discardTime):
 		doc = minidom.Document()
 		
 		configurationNode = doc.createElement('configuration')
@@ -229,7 +229,7 @@ class Measures:
 			resultNode.setAttribute('stdTotal', Units.str_formatter(units, entry.stdTotal))
 			resultNode.setAttribute('sampleSize', '%d' % entry.size)
 			
-			numPeriod = Util.getPeriod(discardTime, entry.period, self.__simulationTime)
+			numPeriod = Util.getPeriod(discardTime, entry.period, simulationTime)
 			for index, mean in enumerate(entry.meanValues):
 				if index >= numPeriod:
 					valueNode = doc.createElement('entry')
