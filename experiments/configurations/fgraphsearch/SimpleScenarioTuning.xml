@@ -3,10 +3,10 @@
 	<staticConfig>
 		<!-- Script configuration variables -->
         <entry key="nNodes">20</entry>
-        <entry key="finishTime">50.0</entry>
+        <entry key="finishTime">100.0</entry>
         <entry key="gridW">290</entry>
         <entry key="gridH">290</entry>
-        <entry key="discardTime">0</entry>
+        <entry key="discardTime">60.0</entry>
         <entry key="javaAgent">graphsearch.ForwardPeer</entry>
 
         <!-- Random waypoint configuration -->
@@ -14,7 +14,7 @@
         <entry key="rotate">False</entry>
         <entry key="minSpeed">0.00</entry>
         <entry key="maxSpeed">0.00</entry>
-        <entry key="pauseTime">100.0</entry>
+        <entry key="pauseTime">200.0</entry>
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
@@ -27,7 +27,7 @@
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
 		<entry key="searchFreq">0.1</entry>
-		<entry key="timeRange">('START', 40.0)</entry>
+		<entry key="timeRange">(60.0, 100.0)</entry>
 
 		<!-- Peer configuration variables -->
 		<entry key="messageProcessor.randomWait">100</entry>
