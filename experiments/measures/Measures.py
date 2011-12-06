@@ -235,7 +235,7 @@ class Measures:
 					valueNode = doc.createElement('entry')
 					valueNode.setAttribute('mean', Units.str_formatter(units, mean))
 					valueNode.setAttribute('std', Units.str_formatter(units, entry.stdValues[index]))
-					time = (index + 1) * entry.period
+					time = index * entry.period
 					valueNode.setAttribute('time', str(time))
 					resultNode.appendChild(valueNode) 
 			measureNode.appendChild(resultNode)
