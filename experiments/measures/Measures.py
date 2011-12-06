@@ -44,6 +44,8 @@ class Measures:
 			
 			if key == 'finishTime':
 				self.__simulationTime = float(value)
+			if key == 'discardTime':
+				self.__discardTime = float(value)
 
 		self.__measureData = {}
 		
@@ -56,11 +58,11 @@ class Measures:
 			else:
 				period = DEFAULT_PERIOD
 			
-			units = self.__getMeasureUnits(clazz, period)
+			units, discardable = self.__getMeasureInfo(clazz, period)
 			
-			self.__measureData[clazz] = (clazz, period, units)
+			self.__measureData[clazz] = (clazz, period, units, discardable)
 		
-		self.__compiledTimePattern = re.compile(r'.*? ([0-9]+\,[0-9]+) Thread-[0-9]+')
+		self.__compiledTimePattern = re.compile(r'.*?([0-9]+\,[0-9]+)$')
 		self.__compiledFinishedPattern = re.compile(r'INFO  peer.BasicPeer  - Simulation finished.*?')
 		
 		self.__simulationFinished = False
@@ -74,9 +76,9 @@ class Measures:
 		return measureClass(period, self.__simulationTime)
 		return None
 	
-	def __getMeasureUnits(self, clazz, period):
+	def __getMeasureInfo(self, clazz, period):
 		measure = self.__createMeasure(clazz, period)
-		return measure.getUnits()
+		return measure.getUnits(), measure.isDiscardable()
 
 	def parseLog(self, outputLog):
 		outputFile = gzip.open(outputLog, 'r')
@@ -85,13 +87,13 @@ class Measures:
 		while (line != '' ):
 			line.replace( '\n', '' )
 		
-			time = self.__getLogLineTime(line) 
-			
 			self.__checkFinished(line)
-					
+
+			time = self.__getLogLineTime(line)					
 			#Parse line using each measure
 			for measure in self.currentMeasures:
-				measure.parseLine(line)
+				if time >= self.__discardTime or not measure.isDiscardable():
+					measure.parseLine(line)
 
 			line = outputFile.readline()
 			
@@ -117,7 +119,7 @@ class Measures:
 			
 	def startRepeat(self): 		
 		self.currentMeasures = []
-		for clazz, period, units in self.__measureData.values():
+		for clazz, period, units, discardable in self.__measureData.values():
 			measure = self.__createMeasure(clazz, period)
 			self.currentMeasures.append(measure)
 			
@@ -151,7 +153,7 @@ class Measures:
 		if not self.__repeatsFinished():	
 			return self.__getXMLError(n, tag, type)
 		else:
-			return self.__getXMLConfigurationResults(configurationResults, n, tag, type, simulationTime, discardTime)	
+			return self.__getXMLConfigurationResults(configurationResults, n, tag, type)	
 			
 	def savePartialResults(self, filePath):		
 		resultsFile = open(filePath, 'w')
@@ -198,7 +200,7 @@ class Measures:
 		
 		return doc.toprettyxml()
 												
-	def __getXMLConfigurationResults(self, configurationResults, n, tag, type, simulationTime, discardTime):
+	def __getXMLConfigurationResults(self, configurationResults, n, tag, type):
 		doc = minidom.Document()
 		
 		configurationNode = doc.createElement('configuration')
@@ -218,9 +220,11 @@ class Measures:
 		for measureName in sorted(self.__measureData.keys()):
 			measureNode = doc.createElement('measure')
 			configurationNode.appendChild(measureNode)
-			measureNode.setAttribute('type', measureName[measureName.index('.') + 1:]) 
-			measureNode.setAttribute('period', str(self.__measureData[measureName][1]))
-			units = str(self.__measureData[measureName][2])
+			measureNode.setAttribute('type', measureName[measureName.index('.') + 1:])
+			
+			clazz, period, units, discardable = self.__measureData[measureName]
+			
+			measureNode.setAttribute('period', str(period))
 			measureNode.setAttribute('units', units)
 			resultNode = doc.createElement('result')
 			
@@ -229,9 +233,9 @@ class Measures:
 			resultNode.setAttribute('stdTotal', Units.str_formatter(units, entry.stdTotal))
 			resultNode.setAttribute('sampleSize', '%d' % entry.size)
 			
-			numPeriod = Util.getPeriod(discardTime, entry.period, simulationTime)
+			discardIndex = Util.getPeriod(self.__discardTime, entry.period, self.__simulationTime)
 			for index, mean in enumerate(entry.meanValues):
-				if index >= numPeriod:
+				if index >= discardIndex or not discardable:
 					valueNode = doc.createElement('entry')
 					valueNode.setAttribute('mean', Units.str_formatter(units, mean))
 					valueNode.setAttribute('std', Units.str_formatter(units, entry.stdValues[index]))

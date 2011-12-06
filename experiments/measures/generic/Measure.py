@@ -23,3 +23,6 @@ class Measure:
     
     def finish(self):
         pass
+    
+    def isDiscardable(self):
+        return True

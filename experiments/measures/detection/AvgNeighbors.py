@@ -45,3 +45,6 @@ class AvgNeighbors(GenericAvgMeasure):
 	def __checkPeer(self, peer):
 		if not peer in self.__currentNeighbors:
 			self.__currentNeighbors[peer] = [] 
+			
+	def isDiscardable(self):
+		return False

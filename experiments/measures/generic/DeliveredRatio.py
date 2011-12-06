@@ -77,3 +77,6 @@ class DeliveredRatio(GenericAvgMeasure):
 				values.setValue(index, delivered / float(broadcasted))
 			 
 		return values
+	
+	def isDiscardable(self):
+		return False
