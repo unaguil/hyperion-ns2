@@ -23,7 +23,6 @@
 		<!-- Peer configuration -->
 		<entry key="messageProcessor.randomWait">200</entry>
 		<entry key="beaconDetector.beaconTime">1000</entry>
-		<entry key="reliableBroadcast.rebroadcastTime">200</entry>
 		<entry key="reliableBroadcast.maxTries">3</entry>
 
 	</staticConfig>
