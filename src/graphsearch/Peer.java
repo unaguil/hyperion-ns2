@@ -11,6 +11,7 @@ import graphsearch.util.Utility;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -167,6 +168,16 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 	@Override
 	public void compositionFound(final ExtendedServiceGraph composition, final SearchID searchID) {
 		receivedCompositions.get(searchID).add(composition);
+		
+		final String fileName = "solution-" + System.currentTimeMillis() + ".dot";
+		
+		try {
+			FileOutputStream os = new FileOutputStream(fileName);  
+			composition.saveToDOT(os);
+			os.close();
+		} catch (IOException e) {
+			myLogger.error("Peer " + peer.getPeerID() + " error writing found solution to file " + fileName);
+		}
 	}
 
 	@Override
