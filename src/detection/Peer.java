@@ -42,7 +42,14 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 		@Override
 		public void stop() {
 		}
+
+		@Override
+		public boolean checkWaitingMessages(List<BroadcastMessage> waitingMessages, BroadcastMessage sendingMessage) {
+			return true;
+		}
 	}
+	
+	private final DumbCommunicationLayer communicationLayer = new DumbCommunicationLayer();
 
 	private final Logger myLogger = Logger.getLogger(Peer.class);
 
@@ -53,7 +60,7 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 		final Set<Class<? extends BroadcastMessage>> messageClasses = new HashSet<Class<? extends BroadcastMessage>>();
 		messageClasses.add(MessageString.class);
 		try {
-			peer.addCommunicationLayer(new DumbCommunicationLayer(), messageClasses);
+			peer.addCommunicationLayer(communicationLayer, messageClasses);
 		} catch (final RegisterCommunicationLayerException e) {
 			myLogger.error("Peer " + peer.getPeerID() + " had problem registering communication layer: " + e.getMessage());
 		}
@@ -71,7 +78,7 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 		if (command.equals("broadcast")) {
 			final List<PeerID> currentNeighbors = new ArrayList<PeerID>(peer.getDetector().getCurrentNeighbors().getPeerSet());
 			final MessageString msgStr = new MessageString(peer.getPeerID(), currentNeighbors, new String(new byte[1]));
-			peer.enqueueBroadcast(msgStr);
+			peer.enqueueBroadcast(msgStr, communicationLayer);
 			return true;
 		}
 		return false;
