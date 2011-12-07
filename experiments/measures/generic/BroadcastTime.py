@@ -12,10 +12,12 @@ class ReceivedMessages(GenericMeasure):
 	def parseInc(self, line):
 		m = self.getProg().match(line)
 		if m is not None:
-			messageID = m.group(1)			
-			startTime = self.__broadcastTable[messageID]
-			time  = float(m.group(2).replace(',','.'))
-			return (startTime, time)
+			messageID = m.group(1)
+			if messageID in self.__broadcastTable:			
+				startTime = self.__broadcastTable[messageID]
+				time  = float(m.group(2).replace(',','.'))
+				return (startTime, time)
+		return None
 			
 class BroadcastedMessages(GenericMeasure):	
 	def __init__(self, period, simulationTime):
