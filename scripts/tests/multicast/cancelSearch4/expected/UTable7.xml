@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<unicastTable/>
+<unicastTable>
+	<route dest="9" through="8" />
+	<route dest="6" through="3" />
+	<route dest="0" through="3" />
+</unicastTable>

@@ -11,10 +11,6 @@ import multicast.search.ParameterSearchImpl;
 import multicast.search.message.SearchMessage;
 import multicast.search.message.SearchMessage.SearchType;
 import multicast.search.message.SearchResponseMessage;
-
-import util.logger.Logger;
-
-import peer.message.MessageID;
 import peer.message.MessageString;
 import peer.message.MessageStringPayload;
 import peer.message.PayloadMessage;
@@ -24,6 +20,7 @@ import taxonomy.parameter.InvalidParameterIDException;
 import taxonomy.parameter.Parameter;
 import taxonomy.parameter.ParameterFactory;
 import taxonomy.parameterList.ParameterList;
+import util.logger.Logger;
 
 import common.CommonAgentJ;
 
@@ -225,12 +222,10 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 			final PayloadMessage payload) {
 		return new MessageStringPayload(peer.getPeerID(), "Table changed");
 	}
-
+	
 	@Override
-	public void changedParameterRoutes(final Map<MessageID, Set<Parameter>> changedParameterRoutes, final Set<MessageID> lostParameterRoutes) {
-	}
-
-	@Override
-	public void changedSearchRoutes(final Map<MessageID, Set<Parameter>> changedSearchRoutes, final Set<MessageID> lostSearchRoutes) {
+	public void lostDestinations(Set<PeerID> lostDestinations) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <unicastTable>
-	<route dest="4" parameter="I-A" through="10" type="SEARCH"/>
-	<route dest="13" parameter="I-A" through="12" type="PARAMETER"/>
+	<search peer="4">
+		<parameter value="I-A" />
+	</search>
+	<route dest="4" through="10" />
+	<route dest="13" through="12" />
 </unicastTable>

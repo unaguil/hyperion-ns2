@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <unicastTable>
-	<route dest="9" parameter="I-A" through="7" type="SEARCH"/>
-	<route dest="9" parameter="I-B" through="7" type="SEARCH"/>
-	<route dest="0" parameter="I-A" through="2" type="PARAMETER"/>
-	<route dest="0" parameter="I-B" through="2" type="PARAMETER"/>
+	<search peer="9">
+		<parameter value="I-A" />
+	</search>
+	<search peer="9">
+		<parameter value="I-B" />
+	</search>
+	<route dest="6" through="4" />
+	<route dest="9" through="7" />
+	<route dest="0" through="2" />
 </unicastTable>

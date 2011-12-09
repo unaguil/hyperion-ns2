@@ -14,13 +14,13 @@
 	<test workingDir="scripts/tests/graphcreation/simpleComposition" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/simpleCompositionBreak" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/simpleNodeMoves" script="Script.tcl"/>
-	<test workingDir="scripts/tests/graphcreation/simpleTaxonomy" script="Script.tcl"/>
-	<test workingDir="scripts/tests/graphcreation/multipleCollisionsTaxonomy" script="Script.tcl"/>
-	<test workingDir="scripts/tests/graphcreation/simpleBreakNetworkTaxonomy" script="Script.tcl"/>
-	<test workingDir="scripts/tests/graphcreation/simpleMultipleServicesConnectedTaxonomy" script="Script.tcl"/>
-	<test workingDir="scripts/tests/graphcreation/simpleMultipleServicesConnectedTaxonomyA" script="Script.tcl"/>
-	<test workingDir="scripts/tests/graphcreation/simpleMultipleServicesConnectedTaxonomyB" script="Script.tcl"/>	
-	<test workingDir="scripts/tests/graphcreation/simpleRemoveServiceTaxonomy" script="Script.tcl"/>
-	<test workingDir="scripts/tests/graphcreation/multipleConnectionsRemoveServiceTaxonomy" script="Script.tcl"/>
+<!-- 	<test workingDir="scripts/tests/graphcreation/simpleTaxonomy" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/graphcreation/multipleCollisionsTaxonomy" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/graphcreation/simpleBreakNetworkTaxonomy" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/graphcreation/simpleMultipleServicesConnectedTaxonomy" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/graphcreation/simpleMultipleServicesConnectedTaxonomyA" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/graphcreation/simpleMultipleServicesConnectedTaxonomyB" script="Script.tcl"/>	 -->
+<!-- 	<test workingDir="scripts/tests/graphcreation/simpleRemoveServiceTaxonomy" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/graphcreation/multipleConnectionsRemoveServiceTaxonomy" script="Script.tcl"/> -->
 <!--	<test workingDir="scripts/tests/graphcreation/simpleGeneralization" script="Script.tcl"/>-->
 </tests>

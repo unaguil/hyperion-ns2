@@ -11,11 +11,8 @@
 	<test workingDir="scripts/tests/multicast/simpleNewNetworkAppears" script="Script.tcl"/> 
 	<test workingDir="scripts/tests/multicast/simpleNewParameterAppears" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/newParameterAppears2" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/simpleRemoveParameter" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/simpleBreakNetwork" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/searchParameter" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/removeParameter" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/removeParameter2" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/breakNetwork" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/breakNetwork2" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/breakNetwork3" script="Script.tcl"/>
@@ -24,12 +21,12 @@
 	<test workingDir="scripts/tests/multicast/cancelSearch2" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/cancelSearch3" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/cancelSearch4" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/simpleTaxonomy" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/simpleTaxonomyGenericSearch" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/simpleTaxonomyGenericSearchRemove" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/simpleTaxonomyRemove" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/simpleTaxonomyGenericSearch2" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/simpleTaxonomyRemove2" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/simpleTaxonomyRemove3" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/simpleTaxonomyGeneralizeSearch" script="Script.tcl"/>
+<!-- 	<test workingDir="scripts/tests/multicast/simpleTaxonomy" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/multicast/simpleTaxonomyGenericSearch" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/multicast/simpleTaxonomyGenericSearchRemove" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/multicast/simpleTaxonomyRemove" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/multicast/simpleTaxonomyGenericSearch2" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/multicast/simpleTaxonomyRemove2" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/multicast/simpleTaxonomyRemove3" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/multicast/simpleTaxonomyGeneralizeSearch" script="Script.tcl"/> -->
 </tests>

@@ -56,6 +56,7 @@
 		<delete includeemptydirs="true">
 			<fileset dir="scripts" includes="**/agentjlogs/**" />
 			<fileset dir="scripts" includes="**/hs_err_pid*.log" />
+			<fileset dir="scripts" includes="**/*.dot" />
 			<fileset dir="scripts" includes="**/tmp/**" />
 		</delete>
 			

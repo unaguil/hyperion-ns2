@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<unicastTable/>
+<unicastTable>
+	<search peer="0">
+		<parameter value="I-A" />
+	</search>
+</unicastTable>
