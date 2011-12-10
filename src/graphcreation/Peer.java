@@ -1,5 +1,6 @@
 package graphcreation;
 
+import graphcreation.GraphCreator.GraphType;
 import graphcreation.collisionbased.CollisionGraphCreator;
 import graphcreation.collisionbased.ServiceDistance;
 import graphcreation.services.Service;
@@ -33,7 +34,7 @@ public class Peer extends CommonAgentJ implements MulticastMessageListener, Grap
 	private final Logger myLogger = Logger.getLogger(Peer.class);
 
 	public Peer() {
-		graphCreation = new CollisionGraphCreator(peer, this, this);
+		graphCreation = new CollisionGraphCreator(peer, this, this, GraphType.BIDIRECTIONAL);
 	}
 
 	@Override
