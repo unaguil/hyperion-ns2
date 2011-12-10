@@ -7,7 +7,7 @@
 	<test workingDir="scripts/tests/fgraphsearch/simpleMultipleSearches" script="Script.tcl"/>
 	<test workingDir="scripts/tests/fgraphsearch/simpleDelayedSolution" script="Script.tcl"/>
 	<test workingDir="scripts/tests/fgraphsearch/simpleSearchExpired" script="Script.tcl"/>
-	<test workingDir="scripts/tests/fgraphsearch/simpleLostComposition" script="Script.tcl"/>
-	<test workingDir="scripts/tests/fgraphsearch/simpleLostComposition2" script="Script.tcl"/>
-	<test workingDir="scripts/tests/fgraphsearch/simpleLostComposition3" script="Script.tcl"/>
+<!-- 	<test workingDir="scripts/tests/fgraphsearch/simpleLostComposition" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/fgraphsearch/simpleLostComposition2" script="Script.tcl"/> -->
+<!-- 	<test workingDir="scripts/tests/fgraphsearch/simpleLostComposition3" script="Script.tcl"/> -->
 </tests>
