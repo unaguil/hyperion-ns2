@@ -58,6 +58,7 @@
 			<fileset dir="scripts" includes="**/hs_err_pid*.log" />
 			<fileset dir="scripts" includes="**/*.dot" />
 			<fileset dir="scripts" includes="**/tmp/**" />
+			<fileset dir="scripts" includes="**/trace.log" />
 		</delete>
 			
 	</target>
