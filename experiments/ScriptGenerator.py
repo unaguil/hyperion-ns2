@@ -10,7 +10,7 @@ import threading
 DELTA_TIME = 0.5
 
 class ScriptGenerator:
-	def __init__(self, config, expConfigFile, strBuffer):
+	def __init__(self, config, strBuffer):
 		scriptConfig = minidom.parseString(config)
 		self.__entries = scriptConfig.getElementsByTagName("entry")
 		
@@ -75,8 +75,7 @@ class ScriptGenerator:
 		strBuffer.writeln('* Neighbor count: %.2f neighbors/node' % neighborCount)
 		strBuffer.writeln('***********************************************************')
 		
-		expConfig = minidom.parse(expConfigFile)
-		codeTag = expConfig.getElementsByTagName("code")
+		codeTag = scriptConfig.getElementsByTagName("code")
 		if len(codeTag) > 0:
 			self.__codeFile = codeTag[0].getAttribute("codeFile")
 		else:

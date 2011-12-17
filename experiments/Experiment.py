@@ -86,7 +86,7 @@ class RepeatRunner:
 			print strBuffer.getvalue()
 			sys.exit()
 						
-		scriptGenerator = ScriptGenerator(self.__config, self.__inputFile, strBuffer)
+		scriptGenerator = ScriptGenerator(self.__config, strBuffer)
 		scriptGenerator.generate('Script.tcl', self.__tempDir, self.__repeat, strBuffer)
 		
 		#Run script
