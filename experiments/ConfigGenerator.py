@@ -2,8 +2,8 @@ import xml.dom.minidom as minidom
 import interpolators.InterpolatorLoader as InterpolatorLoader
 
 class ConfigGenerator:
-	def __init__(self, expConfigFile):
-		expConfig = minidom.parse(expConfigFile)
+	def __init__(self, buffer):
+		expConfig = minidom.parseString(buffer.getvalue())
 		experiment = expConfig.documentElement
 		self.__tag = experiment.getAttribute('tag')
 		self.__type = experiment.getAttribute('type') 

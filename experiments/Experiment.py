@@ -10,6 +10,7 @@ import threading
 import time
 import datetime
 import multiprocessing
+import StringIO
 
 import util.StrBuffer as StrBuffer
 
@@ -56,11 +57,10 @@ class JVMCheckingTimer(threading.Thread):
 		self.__stop = True
 
 class RepeatRunner:
-	def __init__(self, tempDir, config, workingDir, inputFile, configGenerator, repeat, repeatNumber):
+	def __init__(self, tempDir, config, workingDir, configGenerator, repeat, repeatNumber):
 		self.__tempDir = tempDir
 		self.__config = config
 		self.__configDir = workingDir
-		self.__inputFile = inputFile
 		self.__configGenerator = configGenerator
 		self.__repeat = repeat
 		self.__repeatNumber = repeatNumber
@@ -177,7 +177,7 @@ def runRepeat(args):
 	try:
 		repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber = args
 				
-		r = RepeatRunner(repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber)
+		r = RepeatRunner(repeatDir, config, configDir, configGenerator, counter, repeatNumber)
 		return (not r.run(), r.getOutputLog())
 	except KeyboardInterrupt:
 		print '* Terminating process'
@@ -187,8 +187,8 @@ class Experiment:
 	def __init__(self, configDir, inputFile, outputDir, debug, workingDir, processing):
 		self.__configDir = configDir
 		self.__outputDir = outputDir
-		self.__inputFileName = inputFile
 		self.__inputFile = self.__configDir + '/' + inputFile
+		self.__inputFileName = inputFile
 		self.__debug = debug
 		self.__workingDir = workingDir
 		
@@ -204,11 +204,35 @@ class Experiment:
 		oFile = open(dir + '/launched.txt', 'w')
 		oFile.write("Experiment started on: %s " % datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))
 		oFile.close()
-
-	def __run(self):		
-		configGenerator = ConfigGenerator(self.__inputFile)
 		
-		measures = Measures(self.__inputFile)
+	def __resolveImports(self, filePath):
+		buffer = StringIO.StringIO()
+		
+		doc = minidom.parse(filePath)
+		
+		replacedImports = {}		
+		for importTag in doc.getElementsByTagName('import'):
+			importedFilePath = self.__configDir + '/' + importTag.getAttribute('file')
+			importedDoc = minidom.parse(importedFilePath)
+			partTag = importedDoc.getElementsByTagName('part')[0]
+			replacedImports[importTag] = partTag.childNodes			
+		
+		for replacedImport in replacedImports.keys():
+			parent = replacedImport.parentNode
+			for child in replacedImports[replacedImport]:
+				newNode = doc.importNode(child, True) 
+				parent.insertBefore(newNode, replacedImport)
+			parent.removeChild(replacedImport)
+		
+		buffer.writelines(doc.toxml())
+		return buffer 		
+
+	def __run(self):				
+		resolvedFileBuffer = self.__resolveImports(self.__inputFile)
+		
+		configGenerator = ConfigGenerator(resolvedFileBuffer)
+		
+		measures = Measures(resolvedFileBuffer)
 		
 		initTime = time.time()
 		
@@ -244,7 +268,7 @@ class Experiment:
 			
 			for counter in range(repeatNumber):		
 				repeatDir = configurationDir + '/repeat-' + str(counter)
-				data.append((repeatDir, config, self.__configDir, self.__inputFile, configGenerator, counter, repeatNumber))
+				data.append((repeatDir, config, self.__configDir, resolvedFileBuffer, configGenerator, counter, repeatNumber))
 				
 			pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
 			results = pool.map(runRepeat, data) 

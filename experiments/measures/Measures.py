@@ -31,8 +31,8 @@ class PeriodicEntry:
 		self.size = size
 
 class Measures:
-	def __init__(self, expConfigFile):
-		expConfig = minidom.parse(expConfigFile)
+	def __init__(self, buffer):
+		expConfig = minidom.parseString(buffer.getvalue())
 				
 		measureNodes = expConfig.getElementsByTagName('measure')
 		
