@@ -134,11 +134,7 @@ class Measures:
 		self.__repeatStatus.append(self.__repeatFinished)
 		
 	def __repeatsFinished(self):
-		for status in self.__repeatStatus:
-			if not status:
-				return False
-			
-		return True
+		return all(self.__repeatStatus)
 
 	def endConfiguration(self):
 		configurationResults = {}
