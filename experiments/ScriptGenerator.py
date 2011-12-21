@@ -1,5 +1,6 @@
 import xml.dom.minidom as minidom
 import math
+import os
 
 from mobilityModels.MobilityModelGenerator import MobilityModelGenerator
 from populators.PopulatorGenerator import PopulatorGenerator
@@ -97,7 +98,8 @@ class ScriptGenerator:
 		if nodePopulator is not None:
 			nodePopulator.generate(workingDir, strBuffer)
 		
-		file = open(workingDir + '/' + fileName, "w")
+		filePath = os.path.join(workingDir, fileName)
+		file = open(filePath, "w")
 		file.write("source WCommon.tcl\n")
 		file.write("\n")
 		file.write("set nNodes " + str(self.__nNodes) + "\n")
@@ -117,7 +119,8 @@ class ScriptGenerator:
 		
 		if self.__codeFile is not '':
 			#Write code
-			codeFile = open(workingDir + '/' + self.__codeFile, 'r')
+			codeFilePath = os.path.join(workingDir, self.__codeFile)
+			codeFile = open(codeFilePath, 'r')
 			code = codeFile.read()
 			file.write(code)
 		
@@ -128,7 +131,8 @@ class ScriptGenerator:
 			
 		if nodeBehavior is not None:
 			file.write('\n')
-			oFile = open(workingDir + '/nodeBehavior.txt', 'w')
+			nodeBehaviorPath = os.path.join(workingDir, 'nodeBehavior.txt')
+			oFile = open(nodeBehaviorPath, 'w')
 			nodeBehavior.generate(workingDir, oFile, strBuffer)
 			oFile.close()
 			file.write('\tsource nodeBehavior.txt\n')

@@ -403,7 +403,7 @@ class Graph:
 def getXMLFiles(path):
 	xmlFiles = []
 	for file in os.listdir(path):
-		filePath = path + '/' + file
+		filePath = os.path.join(path, file)
 		if not os.path.isdir(filePath) and '.xml' in file:
 			xmlFiles.append(filePath)
 	

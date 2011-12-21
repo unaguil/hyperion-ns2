@@ -21,7 +21,7 @@ def main():
 def createNames(currentPath, currentName, results):
 	for entry in os.listdir(currentPath):
 		if not '.svn' in entry and not '__' in entry and not '.pyc' in entry:
-			path = currentPath + '/' + entry
+			path = os.path.join(currentPath, entry)
 			name = currentName + '.' + entry
 			if os.path.isdir(path):
 				createNames(path, name, results)

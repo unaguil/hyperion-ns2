@@ -45,7 +45,7 @@ class JVMCheckingTimer(threading.Thread):
 			try:
 				for file in os.listdir(self.__tempDir):
 					if re.match('hs_err_pid[0-9]+\.log', file) is not None:
-						print '* ERROR: JVM failed during simulation. Killing process. See ' + self.__tempDir + '/' + file
+						print '* ERROR: JVM failed during simulation. Killing process. See %s ' % os.path.join(self.__tempDir, file)
 						self.__process.kill()
 						return							
 			except OSError:
@@ -91,8 +91,8 @@ class RepeatRunner:
 		
 		#Run script
 		simStartTime = time.time()
-		out = open(self.__tempDir + '/out', 'w')
-		err = open(self.__tempDir + '/err', 'w')
+		out = open(os.path.join(self.__tempDir, 'out'), 'w')
+		err = open(os.path.join(self.__tempDir, 'err'), 'w')
 		
 		strBuffer.writeln('* Launching simulation script on directory %s try %d' % (self.__tempDir, self.__try))
 		print strBuffer.getvalue()
@@ -152,24 +152,24 @@ class RepeatRunner:
 		return True
 	
 	def __getPlainLog(self):
-		return self.__tempDir + '/output.log'
+		return os.path.join(self.__tempDir, 'output.log')
 	
 	def getOutputLog(self):
-		return self.__tempDir + '/output.log.gz'
+		return os.path.join(self.__tempDir, 'output.log.gz')
 	
 	def __prepareSimulationFiles(self, tempDir, config, workingDir):
-		configFile = open(tempDir + '/Configuration.xml', 'w')
+		configFile = open(os.path.join(tempDir, 'Configuration.xml'), 'w')
 		configFile.write(config)
 		configFile.close()
 		
-		shutil.copy2('./common/WCommon.tcl', tempDir + '/WCommon.tcl')
+		shutil.copy2('./common/WCommon.tcl', os.path.join(tempDir, 'WCommon.tcl'))
 		
-		shutil.copy2('log4j.properties', tempDir + '/log4j.properties')
+		shutil.copy2('log4j.properties', os.path.join(tempDir, 'log4j.properties'))
 		
 		#Copy all files contained in input directory to temporal directory
 		for file in os.listdir(workingDir):
-			srcPath = workingDir + '/' + file
-			dstPath = tempDir + '/' + file
+			srcPath = os.path.join(workingDir, file)
+			dstPath = os.path.join(tempDir, file)
 			if not os.path.isdir(srcPath):
 				shutil.copy2(srcPath, dstPath)
 				
@@ -187,7 +187,7 @@ class Experiment:
 	def __init__(self, configDir, inputFile, outputDir, debug, workingDir, processing):
 		self.__configDir = configDir
 		self.__outputDir = outputDir
-		self.__inputFile = self.__configDir + '/' + inputFile
+		self.__inputFile = os.path.join(self.__configDir, inputFile)
 		self.__inputFileName = inputFile
 		self.__debug = debug
 		self.__workingDir = workingDir
@@ -198,10 +198,10 @@ class Experiment:
 		if not processing:	
 			os.mkdir(self.__workingDir)
 		
-			shutil.copy2(self.__inputFile, self.__workingDir + '/')
+			shutil.copy2(self.__inputFile, self.__workingDir)
 			
 	def __saveTimestamp(self, dir):
-		oFile = open(dir + '/launched.txt', 'w')
+		oFile = open(os.path.join(dir, 'launched.txt'), 'w')
 		oFile.write("Experiment started on: %s " % datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))
 		oFile.close()
 		
@@ -243,7 +243,7 @@ class Experiment:
 		self.__saveTimestamp(self.__workingDir)
 		
 		while configGenerator.hasNext():
-			configurationDir = self.__workingDir + '/configuration-' + str(configurationCounter)
+			configurationDir = os.path.join(self.__workingDir, 'configuration-' + str(configurationCounter))
 			
 			os.mkdir(configurationDir)
 			
@@ -260,14 +260,14 @@ class Experiment:
 			measures.startConfiguration(configurationCounter, configGenerator.getTag(), configGenerator.getType(), configGenerator.getSimulationTime(), configGenerator.getDiscardTime())
 			
 			#save current configuration
-			generatedConfigFile = open(configurationDir + '/GeneratedConfig.xml' , 'w')
+			generatedConfigFile = open(os.path.join(configurationDir, 'GeneratedConfig.xml') , 'w')
 			generatedConfigFile.write(generatedExpConfig)
 			generatedConfigFile.close()						
 			
 			data = []
 			
 			for counter in range(repeatNumber):		
-				repeatDir = configurationDir + '/repeat-' + str(counter)
+				repeatDir = os.path.join(configurationDir, 'repeat-' + str(counter))
 				data.append((repeatDir, config, self.__configDir, resolvedFileBuffer, configGenerator, counter, repeatNumber))
 				
 			pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
@@ -283,12 +283,12 @@ class Experiment:
 
 			result = measures.endConfiguration()
 
-			outputFilePath = self.__outputDir + '/' + self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml'
+			outputFilePath = os.path.join(self.__outputDir, self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml')
 			print '* Writing configuration result to file %s ' % outputFilePath			
 			outputFile = open(outputFilePath, 'w')
 			outputFile.write(result)
 			
-			measures.savePartialResults(configurationDir + '/partialResults.txt')
+			measures.savePartialResults(os.path.join(configurationDir, 'partialResults.txt'))
 				
 			print '* Configuration execution time: %s' % TimeFormatter.formatTime(time.time() - startTime)
 			print ''
@@ -339,7 +339,7 @@ class Experiment:
 
 		configurationCounter = 0		
 		while configGenerator.hasNext():
-			configurationDir = self.__workingDir + '/configuration-' + str(configurationCounter)
+			configurationDir = os.path.join(self.__workingDir, 'configuration-' + str(configurationCounter))
 			
 			startTime = time.time()
 			
@@ -361,7 +361,7 @@ class Experiment:
 			outputLogs = []
 			
 			for i in range(repeatNumber):
-				outputLog = configurationDir + '/repeat-' + str(i) + '/output.log.gz'
+				outputLog = os.path.join(configurationDir, 'repeat-' + str(i), 'output.log.gz')
 				outputLogs.append(outputLog)
 			
 			self.__processRepeat(measures, outputLogs)

@@ -40,8 +40,8 @@ class CompositionsPopulator:
     
     def generate(self, workingDir, strBuffer):
         self.__workingDir = workingDir
-        self.__servicesDir = self.__workingDir + '/services'
-        self.__solutionsDir = self.__servicesDir + '/solutions/'
+        self.__servicesDir = os.path.join(self.__workingDir, 'services')
+        self.__solutionsDir = os.path.join(self.__servicesDir, 'solutions')
                     
         strBuffer.writeln('')
         strBuffer.writeln('************* Composition populator ****************')
@@ -271,13 +271,13 @@ class CompositionsPopulator:
                 serviceElement.setAttribute('name', service.getID())
                 layerElement.appendChild(serviceElement)
             
-        filePath =  self.__solutionsDir + '/' + composition.getID() + '.xml' 
+        filePath =  os.path.join(self.__solutionsDir, composition.getID() + '.xml') 
         oFile = open(filePath, 'w')
         oFile.write(doc.toprettyxml())
         oFile.close();
     
     def __generateXMLNodeConfigurations(self, compositions, nodes, taxonomy):                
-        taxonomyFilePath = self.__workingDir + '/taxonomy.xml'
+        taxonomyFilePath = os.path.join(self.__workingDir, 'taxonomy.xml')
         oFile = open(taxonomyFilePath, 'w')
         xmlTaxonomy = taxonomy.createXMLDocument() 
         oFile.write(xmlTaxonomy.toprettyxml())
@@ -289,7 +289,7 @@ class CompositionsPopulator:
         
     def __writeNodeServices(self, nodes):
         for node in nodes.keys():
-            servicesFilePath = self.__servicesDir + '/Services' + str(node) + '.xml'
+            servicesFilePath = os.path.join(self.__servicesDir, 'Services' + str(node) + '.xml')
             oFile = open(servicesFilePath, 'w')
             doc = self.__createServicesXMLDocument(nodes[node])
             oFile.write(doc.toprettyxml())
@@ -306,7 +306,7 @@ class CompositionsPopulator:
         return doc
         
     def __writeCompositions(self, compositions):
-        compositionsFilePath = self.__servicesDir + '/Services.xml'
+        compositionsFilePath = os.path.join(self.__servicesDir, 'Services.xml')
         oFile = open(compositionsFilePath, 'w')
         doc = self.__createServicesXMLDocument(compositions)
         oFile.write(doc.toprettyxml())

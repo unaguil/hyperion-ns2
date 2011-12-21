@@ -240,12 +240,12 @@ class ParameterPopulator:
     def __generateXMLNodeConfigurations(self, workingDir, parametersTable, taxonomy):
         """Generates parameter configuration XML files for each node included in the parameters table"""
         
-        dir = workingDir + '/parameters'
+        dir = os.path.join(workingDir, 'parameters')
         
         strBuffer.writeln('* ParameterPopulator: Creating %s directory ' % dir)
         os.mkdir(dir)
         
-        taxonomyFilePath = workingDir + '/taxonomy.xml'
+        taxonomyFilePath = os.path.join(workingDir, 'taxonomy.xml')
         oFile = open(taxonomyFilePath, 'w')
         xmlTaxonomy = taxonomy.createXMLDocument() 
         oFile.write(xmlTaxonomy.toprettyxml())
@@ -253,7 +253,7 @@ class ParameterPopulator:
         
         for node in parametersTable.keys():
             if len(parametersTable[node]) > 0:
-                filePath = dir + '/Parameters' + str(node) + '.xml'
+                filePath = os.path.join(dir, 'Parameters' + str(node) + '.xml')
                 strBuffer.writeln('* ParameterPopulator: Generating file %s' % filePath)
                 parameters = parametersTable[node]
                 self.__generateXML(node, set(parametersTable[node]), filePath)

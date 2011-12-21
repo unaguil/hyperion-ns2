@@ -1,5 +1,6 @@
 import sys
 import subprocess
+import os
 from time import time
 
 import util.TimeFormatter as TimeFormatter
@@ -53,7 +54,7 @@ class RandomWaypoint:
         
         startTime = time()
         
-        oFilePath = workingDir + '/' + file
+        oFilePath = os.path.join(workingDir, file)
         outputFile = open(oFilePath, 'w')
         p = subprocess.Popen(paramList, stdout=outputFile)
         result = p.wait()
