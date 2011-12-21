@@ -31,7 +31,7 @@ def __parseScenario(scenarioFilePath):
     nodeID = None
     x = y = z = None
     
-    for line in file.readlines():
+    for line in file:
         m = re.match(xPattern, line)
         if m is not None:
             nodeID = m.group(1)

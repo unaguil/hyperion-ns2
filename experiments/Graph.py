@@ -92,7 +92,7 @@ class Graph:
 		self.__measureNames = {}
 		try:
 			file = open('measureNames.' + lang)
-			for line in file.readlines():
+			for line in file:
 				entry = line.split('=')
 				if len(entry) == 2:
 					key = entry[0].strip()
