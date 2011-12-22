@@ -54,14 +54,9 @@ class PeriodicResult:
 				relStdValues.append(100 * std / mean)
 		return relStdValues
 	
-	def getMeanValues(self):
-		return [mean for mean, std, time in self.__values]
-	
-	def getStdValues(self):
-		return [std for mean, std, time in self.__values]
-	
-	def getTimeValues(self):
-		return [time for mean, std, time in self.__values]
+	def getValues(self):
+		means, stds, times = zip(*self.__values)
+		return means, stds, times
 	
 	def getMeanTotal(self):
 		return self.__meanTotal
@@ -281,8 +276,7 @@ class Graph:
 			else:			
 				name, units, results = self.__measures[measureType]
 				for result in results: 
-					x = result.getTimeValues()
-					y = result.getMeanValues()
+					means, stds, times = result.getValues()
 					relStdValues = result.getRelStdValues() 
 					
 					#print "X: ", x
@@ -292,14 +286,14 @@ class Graph:
 			
 					label = '%s (%s %s)' % (measureName, result.getTag(), name)
 					
-					self.__printPeriodicInfo(y, x, result.getStdValues(), relStdValues, label, '')
+					self.__printPeriodicInfo(means, times, stds, relStdValues, label, '')
 			
-					line = plt.plot(x, y)
+					line = plt.plot(times, means)
 					
 					if isinstance(measure, GenericAvgMeasure):
 						#draw average line
-						avgValues = [result.getMeanTotal() for e in x]
-						avgLine = plt.plot(x, avgValues)
+						avgValues = [result.getMeanTotal()] * len(times)
+						avgLine = plt.plot(times, avgValues)
 						avgLabel = 'Avg. of %s: %s %s' % (measureName, result.getMeanTotal(), units)
 						lines.append(avgLine)
 						labels.append(avgLabel)
@@ -314,7 +308,7 @@ class Graph:
 		else:
 			plt.ylabel(units) 
 			
-		self.__setAxis(plt, xAxis, yAxis, (min(x), max(x)))
+		self.__setAxis(plt, xAxis, yAxis, (min(times), max(times)))
 		
 		plt.figlegend(lines, labels, 'upper right')  
 		
