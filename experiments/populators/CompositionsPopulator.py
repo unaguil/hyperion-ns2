@@ -1,12 +1,10 @@
-import math
-import types
 import random
 import os
 from time import time
 
 import util.TimeFormatter as TimeFormatter
 
-from xml.dom.minidom import *
+from xml.dom import minidom
 
 from Service import Service
 from Taxonomy import Taxonomy
@@ -259,7 +257,7 @@ class CompositionsPopulator:
         os.mkdir(self.__solutionsDir)
     
     def __generateXMLCompositionGraph(self, composition, compositionGraph):                                        
-        doc = Document()
+        doc = minidom.Document()
         compositionGraphElement = doc.createElement('compositionGraph')
         doc.appendChild(compositionGraphElement);
         for layer in sorted(compositionGraph.keys()):
@@ -296,7 +294,7 @@ class CompositionsPopulator:
             oFile.close()
     
     def __createServicesXMLDocument(self, services):
-        doc = Document()
+        doc = minidom.Document()
         
         servicesElement = doc.createElement('services')
         doc.appendChild(servicesElement)

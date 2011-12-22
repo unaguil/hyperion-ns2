@@ -1,5 +1,5 @@
 import re
-from measures.periodicValues.PeriodicValues import *
+from measures.periodicValues.PeriodicValues import PeriodicValues
 
 from Measure import Measure
 

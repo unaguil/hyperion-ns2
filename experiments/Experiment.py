@@ -4,7 +4,6 @@ import sys
 import os
 import shutil
 import subprocess
-import math
 import re
 import threading
 import time

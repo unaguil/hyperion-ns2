@@ -1,5 +1,5 @@
-from RandomWaypoint import *
-from LoadMobilityModel import *
+from RandomWaypoint import RandomWaypoint
+from LoadMobilityModel import LoadMobilityModel
 
 class MobilityModelGenerator:
     

@@ -1,9 +1,7 @@
-import math
-import types
 import random
 import os
 
-from xml.dom.minidom import *
+from xml.dom import minidom
 
 from Taxonomy import Taxonomy
 
@@ -223,7 +221,7 @@ class ParameterPopulator:
             raise Exception('Node distribution percentages do not add to 1.0. Obtained %f instead' % total) 
             
     def __generateXML(self, node, parameters, outputFilePath):
-        doc = Document()
+        doc = minidom.Document()
         
         parameterList = doc.createElement('parameterlist')
         doc.appendChild(parameterList)          
@@ -236,8 +234,9 @@ class ParameterPopulator:
         oFile = open(outputFilePath, 'w')
         oFile.write(doc.toprettyxml())
         oFile.close()
-            
-    def __generateXMLNodeConfigurations(self, workingDir, parametersTable, taxonomy):
+        
+    
+    def __generateXMLNodeConfigurations(self, workingDir, parametersTable, taxonomy, strBuffer):
         """Generates parameter configuration XML files for each node included in the parameters table"""
         
         dir = os.path.join(workingDir, 'parameters')
@@ -255,7 +254,6 @@ class ParameterPopulator:
             if len(parametersTable[node]) > 0:
                 filePath = os.path.join(dir, 'Parameters' + str(node) + '.xml')
                 strBuffer.writeln('* ParameterPopulator: Generating file %s' % filePath)
-                parameters = parametersTable[node]
                 self.__generateXML(node, set(parametersTable[node]), filePath)
     
         strBuffer.writeln('* ParameterPopulator: Generation finished')

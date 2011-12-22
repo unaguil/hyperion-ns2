@@ -1,5 +1,4 @@
 import re
-import numpy
 
 import measures.generic.Units as Units
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure

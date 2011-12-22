@@ -1,7 +1,7 @@
 from GenericMeasure import GenericMeasure
 from GenericAvgMeasure import GenericAvgMeasure
 
-from measures.periodicValues.PeriodicValues import *
+from measures.periodicValues.PeriodicValues import PeriodicValues
 
 import Units
 

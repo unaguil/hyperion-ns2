@@ -6,19 +6,12 @@ from mobilityModels.MobilityModelGenerator import MobilityModelGenerator
 from populators.PopulatorGenerator import PopulatorGenerator
 from nodeBehavior.NodeBehaviorGenerator import NodeBehaviorGenerator
 
-import threading
-
 DELTA_TIME = 0.5
 
 class ScriptGenerator:
 	def __init__(self, config, strBuffer):
 		scriptConfig = minidom.parseString(config)
 		self.__entries = scriptConfig.getElementsByTagName("entry")
-		
-		mobilityModel = None
-		minSpeed = None
-		maxSpeed = None
-		pauseTime = None
 		
 		#Default transmission range (100 meters)
 		self.__transmissionRange = 100

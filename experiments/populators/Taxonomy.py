@@ -1,4 +1,4 @@
-from xml.dom.minidom import *
+from xml.dom import minidom
 
 class Element:
     def __init__(self, id):
@@ -38,7 +38,7 @@ class Taxonomy:
             self.__recursiveWrite(child, docRoot, doc)
             
     def createXMLDocument(self):
-        doc = Document()
+        doc = minidom.Document()
         
         docRoot = doc.createElement('taxonomy');
         docRoot.setAttribute('root', self.getRoot().getID());

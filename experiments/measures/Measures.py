@@ -3,8 +3,6 @@ import re
 import numpy
 import gzip
 
-import periodicValues.PeriodicValues
-
 import periodicValues.Util as Util
 
 import datetime

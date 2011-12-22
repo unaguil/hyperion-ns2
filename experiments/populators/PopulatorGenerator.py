@@ -1,5 +1,5 @@
-from ParameterPopulator import *
-from CompositionsPopulator import *
+from ParameterPopulator import ParameterPopulator
+from CompositionsPopulator import CompositionsPopulator
 
 class PopulatorGenerator:
     

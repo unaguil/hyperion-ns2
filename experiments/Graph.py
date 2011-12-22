@@ -2,11 +2,7 @@
 
 import matplotlib.pyplot as plt
 import numpy
-import re
-import math
-
 import os
-
 import sys
 
 from optparse import OptionParser
@@ -29,13 +25,10 @@ def get_class(clazz):
 	return m
 
 def createMeasure(clazz, period):
-		className = clazz.split('.')[-1]
-		measureClass = get_class(clazz + '.' + className)
-		
-		return measureClass(period, 10.0)
-					
-		print 'Invalid measure type: ', value
-		return None
+	className = clazz.split('.')[-1]
+	measureClass = get_class(clazz + '.' + className)
+	
+	return measureClass(period, 10.0)
 
 class PeriodicResult:
 	def __init__(self, tag, period, values, meanTotal, stdTotal, sampleSize):
@@ -79,9 +72,6 @@ class PeriodicResult:
 	def getSampleSize(self):
 		return self.__sampleSize
 	
-	def getMeanTotal(self):
-		return self.__meanTotal
-	
 	def geStdTotal(self):
 		return self.__stdTotal
 
@@ -98,7 +88,7 @@ class Graph:
 					key = entry[0].strip()
 					value = entry[1].strip()
 					if not value == '':
-						self.__measureNames[entry[0].strip()] = entry[1].strip()
+						self.__measureNames[key] = value
 				
 		except IOError:
 			print 'Error: Could not load measure names file.'
@@ -181,8 +171,6 @@ class Graph:
 	def plotTotal(self, measureTypes, xLabel=None, yLabel=None, xAxis=None, yAxis=None):
 		self.__checkMeasureTypes(self.__measures, measureTypes)			
 		self.__checkUnits(self.__measures, measureTypes)
-							
-		plotValues = {}
 		
 		lines = []
 		labels = []						
@@ -279,8 +267,6 @@ class Graph:
 	def plotPeriodic(self, measureTypes, yLabel=None, xAxis=None, yAxis=None):
 		self.__checkMeasureTypes(self.__measures, measureTypes)			
 		self.__checkUnits(self.__measures, measureTypes)
-						
-		plotValues = {}
 
 		plt.xlabel('time [s]')
 		
@@ -297,8 +283,7 @@ class Graph:
 				for result in results: 
 					x = result.getTimeValues()
 					y = result.getMeanValues()
-					relStdValues = result.getRelStdValues()
-					maxRelStd = max(relStdValues) 
+					relStdValues = result.getRelStdValues() 
 					
 					#print "X: ", x
 					#print "Y: ", y
