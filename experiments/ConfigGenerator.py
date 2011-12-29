@@ -23,6 +23,11 @@ class ConfigGenerator:
 		dynamicEntries = expConfig.getElementsByTagName("dynamicEntry")
 		for dynamicEntry in dynamicEntries:
 			self.interpolatedEntries.append(InterpolatorLoader.loadInterpolator(dynamicEntry))
+			dynamicKey = dynamicEntry.getAttribute('key')
+			for staticEntry in self.staticEntries:
+				staticKey = staticEntry.getAttribute('key')
+				if dynamicKey == staticKey:
+					self.staticEntries.remove(staticEntry)
 			
 		self.__measures = expConfig.getElementsByTagName("measure")
 		
