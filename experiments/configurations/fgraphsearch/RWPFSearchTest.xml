@@ -28,11 +28,18 @@
 		<entry key="searchFreq">0.01</entry>
 		<entry key="timeRange">('START', 'END')</entry>
 
-		<import file="DefaultPeerConfig.xml"/>	
+		<!-- Peer configuration variables -->
+		<entry key="messageProcessor.randomWait">200</entry>
+		<entry key="beaconDetector.beaconTime">1000</entry>
+		<entry key="reliableBroadcast.maxTries">10</entry>
+		<entry key="dissemination.maxDistance">5</entry>
+		<entry key="parameterSearch.searchMessageTTL">5</entry>
+		<entry key="graphsearch.maxTTL">10</entry>
+		<entry key="graphsearch.searchExpiration">20000</entry>
 	</staticConfig>
 	<dynamicConfig />
 	<repeat number="1" />
 	<measures>
-		<import file="AllMeasures.xml"/>	
+		<import file="AllMeasures.xml" />
 	</measures>
 </experiment>
