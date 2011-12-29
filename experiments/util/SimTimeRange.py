@@ -1,9 +1,9 @@
 
-def getTimeRange(timeRange, finishTime):
+def getTimeRange(timeRange, finishTime, discardTime):
         init, end = timeRange
         
         if init == 'START':
-            init = 0.0
+            init = discardTime
             
         if end == 'END' or end >= finishTime:
             end = finishTime

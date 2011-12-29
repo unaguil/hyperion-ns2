@@ -25,6 +25,9 @@ class CommonSearchBehavior:
             if key == "finishTime":
                 self.__finishTime = float(value)
                 
+            if key == "discardTime":
+                self.__discardTime = float(value)
+                
             if key == "nNodes":
                 self.__nNodes = int(value)
                 
@@ -50,7 +53,7 @@ class CommonSearchBehavior:
         return self.__behaviorName
     
     def generate(self, workingDir, oFile, strBuffer):              
-        init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime)
+        init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime, self.__discardTime)
         searches = int(math.ceil(self.__searchFreq * (end - init)))
         
         if self.__different and searches > len(self.getElements()):

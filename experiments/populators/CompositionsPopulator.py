@@ -22,6 +22,8 @@ class CompositionsPopulator:
             
             if key == "finishTime":
                 self.__finishTime = float(value)   
+            if key == "discardTime":
+                self.__discardTime = float(value)
             if key == 'timeRange':
                 self.__timeRange = eval(value)
             if key == "searchFreq":
@@ -42,7 +44,7 @@ class CompositionsPopulator:
         self.__serviceNameGenerator = self.__nameGenerator()
         self.__parameterNameGenerator = self.__nameGenerator()
         
-        init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime)
+        init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime, self.__discardTime)
     
         self.__nCompositions = int(math.ceil((end - init) * self.__searchFreq))
     
