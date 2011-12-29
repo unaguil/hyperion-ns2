@@ -6,7 +6,7 @@
 		<entry key="finishTime">15.0</entry>
 		<entry key="gridW">70</entry>
 		<entry key="gridH">70</entry>
-		<entry key="discardTime">1.0</entry>
+		<entry key="discardTime">3.0</entry>
 		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
 
 		<!-- Random waypoint configuration -->
@@ -26,7 +26,7 @@
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
 		<entry key="searchFreq">0.01</entry>
-		<entry key="timeRange">(3.0, 'END')</entry>
+		<entry key="timeRange">('START', 'END')</entry>
 
 		<import file="DefaultPeerConfig.xml"/>	
 	</staticConfig>
