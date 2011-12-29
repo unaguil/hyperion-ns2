@@ -3,6 +3,7 @@ import math
 from time import time
 
 import util.TimeFormatter as TimeFormatter
+import util.SimTimeRange as SimTimeRange
 
 DELTA_TIME = 0.5
 
@@ -47,22 +48,10 @@ class CommonSearchBehavior:
     
     def getBehaviorName(self):
         return self.__behaviorName
-
-    def __getTimeRange(self):
-        init, end = self.__timeRange
-        
-        if init == 'START':
-            init = 0.0
-            
-        if end == 'END' or end >= self.__finishTime:
-            end = self.__finishTime
-            
-        return (init, end)
     
     def generate(self, workingDir, oFile, strBuffer):              
-        init, end = self.__getTimeRange()
-        
-        searches = math.ceil(self.__searchFreq * (self.__getTimeRange()[1] - self.__getTimeRange()[0]))
+        init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime)
+        searches = int(math.ceil(self.__searchFreq * (end - init)))
         
         if self.__different and searches > len(self.getElements()):
             raise Exception('Cannot generated %d searches using %d elements' % (searches, len(self.getElements())))
@@ -72,7 +61,7 @@ class CommonSearchBehavior:
         strBuffer.writeln('* Nodes: %d' % self.__nNodes)
         strBuffer.writeln('* Frequency: %.3f searches/s' % self.__searchFreq)
         strBuffer.writeln('* Generated: %d searches' % searches)
-        strBuffer.writeln('* Time range: [%s, %s] s' % (self.__getTimeRange()[0], self.__getTimeRange()[1]))
+        strBuffer.writeln('* Time range: [%s, %s] s' % (init, end))
         self.printInfo(strBuffer)
 
         startTime = time()

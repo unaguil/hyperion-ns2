@@ -1,8 +1,10 @@
 import random
 import os
+import math
 from time import time
 
 import util.TimeFormatter as TimeFormatter
+import util.SimTimeRange as SimTimeRange
 
 from xml.dom import minidom
 
@@ -18,8 +20,12 @@ class CompositionsPopulator:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
             
-            if key == "nCompositions":
-                self.__nCompositions = int(value)
+            if key == "finishTime":
+                self.__finishTime = float(value)   
+            if key == 'timeRange':
+                self.__timeRange = eval(value)
+            if key == "searchFreq":
+                self.__searchFreq = float(value)
             if key == "compositionIO":
                 self.__compositionIO = eval(value)
             if key == "nDistribution":
@@ -33,8 +39,12 @@ class CompositionsPopulator:
             if key == 'nNodes':
                 self.__nNodes = int(value)
                 
-            self.__serviceNameGenerator = self.__nameGenerator()
-            self.__parameterNameGenerator = self.__nameGenerator()
+        self.__serviceNameGenerator = self.__nameGenerator()
+        self.__parameterNameGenerator = self.__nameGenerator()
+        
+        init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime)
+    
+        self.__nCompositions = int(math.ceil((end - init) * self.__searchFreq))
     
     def generate(self, workingDir, strBuffer):
         self.__workingDir = workingDir
@@ -51,6 +61,9 @@ class CompositionsPopulator:
         strBuffer.writeln('****************************************************')
     
     def __generate(self, strBuffer):        
+        self.__checkRange(self.__compositionIO, 'compositionIO')
+        self.__checkRange(self.__width, 'width')
+        
         compositionsWithSolutions = int(self.__nCompositions * self.__sDistribution)
         compositionsWithoutSolutions = self.__nCompositions - compositionsWithSolutions
          
@@ -62,9 +75,6 @@ class CompositionsPopulator:
         strBuffer.writeln('* Solution width: %s' % str(self.__width))
         
         self.__createServiceDirectory(strBuffer)
-        
-        self.__checkRange(self.__compositionIO, 'compositionIO')
-        self.__checkRange(self.__width, 'width')
     
         dDistributionTable = self.__getDistributionTable(compositionsWithSolutions, self.__dDistribution, 'dDistribution')
         
