@@ -5,15 +5,14 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.util.List;
 
-import detection.NeighborDetector;
-import detection.NeighborEventsListener;
-
 import multicast.search.unicastTable.UnicastTable;
 import peer.message.BroadcastMessage;
 import peer.peerid.PeerID;
 import peer.peerid.PeerIDSet;
 import testing.BasicTest;
 import testing.MultipleTests;
+import detection.NeighborDetector;
+import detection.NeighborEventsListener;
 
 class UTableFileFilter implements FileFilter {
 
@@ -34,8 +33,8 @@ public class MulticastTest extends MultipleTests {
 		public void stop() {}
 
 		@Override
-		public boolean checkWaitingMessages(List<BroadcastMessage> waitingMessages, BroadcastMessage sendingMessage) {
-			return false;
+		public BroadcastMessage isDuplicatedMessage(List<BroadcastMessage> waitingMessages, BroadcastMessage sendingMessage) {
+			return null;
 		}
 
 		@Override

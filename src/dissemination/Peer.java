@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
-import util.logger.Logger;
-
 import peer.message.PayloadMessage;
 import peer.peerid.PeerID;
 import peer.peerid.PeerIDSet;
@@ -15,6 +13,7 @@ import taxonomy.parameter.InvalidParameterIDException;
 import taxonomy.parameter.Parameter;
 import taxonomy.parameter.ParameterFactory;
 import taxonomy.parameterList.ParameterList;
+import util.logger.Logger;
 
 import common.CommonAgentJ;
 

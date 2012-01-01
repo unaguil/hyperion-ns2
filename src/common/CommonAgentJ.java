@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import peer.BasicPeer;
-import peer.Peer;
 import peer.CommProvider;
+import peer.Peer;
 import peer.message.BroadcastMessage;
 import peer.peerid.PeerID;
 import proto.logging.api.Logger.LogLevel;

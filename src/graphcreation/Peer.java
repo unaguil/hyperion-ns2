@@ -12,11 +12,9 @@ import java.util.Map;
 import java.util.Set;
 
 import multicast.MulticastMessageListener;
-
-import util.logger.Logger;
-
 import peer.message.PayloadMessage;
 import peer.peerid.PeerID;
+import util.logger.Logger;
 
 import common.CommonAgentJ;
 
