@@ -2,18 +2,19 @@
 <experiment tag="0.5" type="% nodes with parameters">
 	<staticConfig>
 		<!-- Script configuration variables -->
-		<entry key="nNodes">4</entry>
-		<entry key="finishTime">15.0</entry>
-		<entry key="gridW">70</entry>
-		<entry key="gridH">70</entry>
+		<entry key="nNodes">20</entry>
+		<entry key="finishTime">20.0</entry>
+		<entry key="gridW">290</entry>
+		<entry key="gridH">290</entry>
 		<entry key="discardTime">3.0</entry>
 		<entry key="javaAgent">reliableBroadcast.Peer</entry>
 
 		<!-- Random waypoint configuration -->
-		<entry key="mobilityModel">RandomWaypoint</entry>
-		<entry key="minSpeed">1.0</entry>
-		<entry key="maxSpeed">10.0</entry>
-		<entry key="pauseTime">10.0</entry>
+		<entry key="mobilityModel">LoadMobilityModel</entry>
+		<entry key="minSpeed">0.00</entry>
+		<entry key="maxSpeed">0.00</entry>
+		<entry key="pauseTime">500.0</entry>
+		<entry key="rotate">False</entry>
 
 		<!-- Peer configuration variables -->
 		<entry key="beaconDetector.beaconTime">1000</entry>
