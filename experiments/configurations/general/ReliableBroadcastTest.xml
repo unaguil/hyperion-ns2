@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<experiment tag="0.5" type="% nodes with parameters">
+	<staticConfig>
+		<!-- Script configuration variables -->
+		<entry key="nNodes">4</entry>
+		<entry key="finishTime">15.0</entry>
+		<entry key="gridW">70</entry>
+		<entry key="gridH">70</entry>
+		<entry key="discardTime">3.0</entry>
+		<entry key="javaAgent">reliableBroadcast.Peer</entry>
+
+		<!-- Random waypoint configuration -->
+		<entry key="mobilityModel">RandomWaypoint</entry>
+		<entry key="minSpeed">1.0</entry>
+		<entry key="maxSpeed">10.0</entry>
+		<entry key="pauseTime">10.0</entry>
+
+		<!-- Peer configuration variables -->
+		<entry key="beaconDetector.beaconTime">1000</entry>
+		<entry key="reliableBroadcast.maxTries">10</entry>
+		<entry key="dissemination.maxDistance">5</entry>
+		<entry key="parameterSearch.searchMessageTTL">5</entry>
+		<entry key="graphsearch.maxTTL">10</entry>
+		<entry key="graphsearch.searchExpiration">20000</entry>
+	</staticConfig>
+	<dynamicConfig />
+	<repeat number="1" />
+	<measures>
+		<import file="AllMeasures.xml" />
+	</measures>
+</experiment>
