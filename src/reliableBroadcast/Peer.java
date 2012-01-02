@@ -33,7 +33,9 @@ public class Peer extends CommonAgentJ {
 			}
 		}
 		
-		private static final int PERIOD = 1000;
+		private static final int PERIOD = 500;
+		
+		private static final int MESSAGE_SIZE = 64;
 		
 		private final Timer timer = new Timer(PERIOD, this);
 		
@@ -46,7 +48,6 @@ public class Peer extends CommonAgentJ {
 		@Override
 		public void init() {
 			timer.start();
-			
 			stopThread.start();
 		}
 
@@ -57,7 +58,7 @@ public class Peer extends CommonAgentJ {
 		}
 		
 		public void perform() {
-			final MessageString msgStr = new MessageString(peer.getPeerID(), peer.getDetector().getCurrentNeighbors().getPeerSet(), "Hello, world");
+			final MessageString msgStr = new MessageString(peer.getPeerID(), peer.getDetector().getCurrentNeighbors().getPeerSet(), new String(new byte[MESSAGE_SIZE]));
 			peer.enqueueBroadcast(msgStr, communicationLayer);
 		}
 
