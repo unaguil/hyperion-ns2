@@ -25,11 +25,10 @@
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">1.0</entry>
+		<entry key="searchFreq">0.01</entry>
 		<entry key="timeRange">('START', 'END')</entry>
 
 		<!-- Peer configuration variables -->
-		<entry key="messageProcessor.randomWait">200</entry>
 		<entry key="beaconDetector.beaconTime">1000</entry>
 		<entry key="reliableBroadcast.maxTries">10</entry>
 		<entry key="dissemination.maxDistance">5</entry>
