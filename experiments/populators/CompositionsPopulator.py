@@ -41,12 +41,16 @@ class CompositionsPopulator:
             if key == 'nNodes':
                 self.__nNodes = int(value)
                 
+            if key == 'nCompositions':
+                self.__nCompositions = int(value)
+                
         self.__serviceNameGenerator = self.__nameGenerator()
         self.__parameterNameGenerator = self.__nameGenerator()
         
         init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime, self.__discardTime)
     
-        self.__nCompositions = int(math.ceil((end - init) * self.__searchFreq))
+        if self.__nCompositions is None:
+            self.__nCompositions = int(math.ceil((end - init) * self.__searchFreq))
     
     def generate(self, workingDir, strBuffer):
         self.__workingDir = workingDir
