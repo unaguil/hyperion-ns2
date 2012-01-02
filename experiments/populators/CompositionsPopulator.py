@@ -16,6 +16,8 @@ class CompositionsPopulator:
        It also includes a function to generate the XML configuration for each node in the format used in simulations.
     """
     def __init__(self, entries):
+        self.__nCompositions = None
+        
         for entry in entries:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
