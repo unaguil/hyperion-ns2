@@ -12,9 +12,9 @@ class CommonSearchBehavior:
         Defines the common behavior for periodic actions generation.
     """
     
-    def __init__(self, entries, nodePopulator, behaviorName, different=False):
-        self.__different = different
-        
+    def __init__(self, entries, nodePopulator, behaviorName):
+        self.__different = False
+                
         for entry in entries:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
@@ -33,6 +33,9 @@ class CommonSearchBehavior:
                 
             if key == 'timeRange':
                 self.__timeRange = eval(value)
+                
+            if key == 'different':
+                self.__different = eval(value)
                     
         self.__nodePopulator = nodePopulator
         
@@ -51,6 +54,9 @@ class CommonSearchBehavior:
     
     def getBehaviorName(self):
         return self.__behaviorName
+    
+    def mustBeDifferent(self):
+        return self.__different
     
     def generate(self, workingDir, oFile, strBuffer):              
         init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime, self.__discardTime)
