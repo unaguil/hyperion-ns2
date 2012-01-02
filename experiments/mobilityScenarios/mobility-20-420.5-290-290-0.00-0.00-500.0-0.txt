@@ -1,6 +1,6 @@
 #
 # nodes: 20, speed type: 1, min speed: 0.00, max speed: 0.00
-# avg speed: -nan, pause type: 1, pause: 200.00, max x: 290.00, max y: 290.00
+# avg speed: -nan, pause type: 1, pause: 500.00, max x: 290.00, max y: 290.00
 #
 $node_(0) set X_ 90.747178037514
 $node_(0) set Y_ 15.106399143611
