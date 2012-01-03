@@ -46,7 +46,7 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 	private DatagramSocket socket;
 	private byte[] data;
 
-	private static final int SO_TIMEOUT = 0;
+	private static final int SO_TIMEOUT = 5;
 
 	// Default UDP port
 	private static final int DEFAULT_PORT = 5555;
