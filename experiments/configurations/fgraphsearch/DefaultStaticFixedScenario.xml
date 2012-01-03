@@ -5,8 +5,8 @@
 	<entry key="gridW">290</entry>
 	<entry key="gridH">290</entry>
 		
-	<entry key="finishTime">420.0</entry>
-	<entry key="discardTime">60.0</entry>
+	<entry key="finishTime">600.0</entry>
+	<entry key="discardTime">100.0</entry>
 	<entry key="javaAgent">graphsearch.ForwardPeer</entry>
 	
 	<!-- Random waypoint configuration -->
@@ -18,7 +18,7 @@
 	
 	<!-- Composition populator -->
 	<entry key="populator">CompositionsPopulator</entry>
-	<entry key="nCompositions">10</entry>
+	<entry key="nCompositions">4</entry>
 	<entry key="compositionIO">(3, 3)</entry>
 	<entry key="dDistribution">((0.9, 4), (0.1, 4))</entry>
 	<entry key="nDistribution">0.3</entry>
@@ -26,6 +26,7 @@
 	
 	<!-- Search behavior -->
 	<entry key="nodeBehavior">CompositionSearchBehavior</entry>
+	<entry key="different">True</entry>
 	<entry key="searchFreq">0.01</entry>
 	<entry key="timeRange">('START', 360)</entry>
 	

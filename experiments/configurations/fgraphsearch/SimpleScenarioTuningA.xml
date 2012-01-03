@@ -2,11 +2,11 @@
 <experiment tag="0.5" type="% nodes with parameters">
 	<staticConfig>
 		<!-- Script configuration variables -->
-		<entry key="nNodes">4</entry>
-		<entry key="finishTime">80.0</entry>
+		<entry key="nNodes">8</entry>
+		<entry key="finishTime">200.0</entry>
 		<entry key="gridW">70</entry>
 		<entry key="gridH">70</entry>
-		<entry key="discardTime">10.0</entry>
+		<entry key="discardTime">0.0</entry>
 		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
 
 		<!-- Random waypoint configuration -->
@@ -14,10 +14,11 @@
 		<entry key="mobilityModel">RandomWaypoint</entry>
 		<entry key="minSpeed">0.00000000000000000001</entry>
 		<entry key="maxSpeed">0.00000000000000000001</entry>
-		<entry key="pauseTime">100.0</entry>
+		<entry key="pauseTime">300.0</entry>
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
+		<entry key="nCompositions">6</entry>
 		<entry key="compositionIO">(1, 5)</entry>
 		<entry key="dDistribution">((0.9, 10), (0.1, 10))</entry>
 		<entry key="nDistribution">1.0</entry>
@@ -25,20 +26,19 @@
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">0.1</entry>
+		<entry key="different">True</entry>
+		<entry key="searchFreq">0.0</entry>
 		<entry key="timeRange">('START', 60.0)</entry>
 
 		<!-- Peer configuration variables -->
-		<entry key="messageProcessor.randomWait">100</entry>
 		<entry key="beaconDetector.beaconTime">1000</entry>
-		<entry key="reliableBroadcast.maxTries">10</entry>
 		<entry key="dissemination.maxDistance">5</entry>
 		<entry key="parameterSearch.searchMessageTTL">5</entry>
 		<entry key="graphsearch.maxTTL">100</entry>
 		<entry key="graphsearch.searchExpiration">10000</entry>
 	</staticConfig>
 	<dynamicConfig />
-	<repeat number="5" />
+	<repeat number="1" />
 	<measures>
 		<import file="AllMeasures.xml" />
 	</measures>
