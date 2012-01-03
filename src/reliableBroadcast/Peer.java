@@ -33,16 +33,24 @@ public class Peer extends CommonAgentJ {
 			}
 		}
 		
-		private static final int PERIOD = 500;
-		
-		private static final int MESSAGE_SIZE = 64;
+		private static final int PERIOD = 250;
 		
 		private final Timer timer = new Timer(PERIOD, this);
+		
+		private final Set<String> receivedMessages = new HashSet<String>();
 		
 		private final StopTimerThread stopThread = new StopTimerThread();
 
 		@Override
 		public void messageReceived(final BroadcastMessage message, final long receptionTime) {
+			if (message instanceof MessageString) {
+				final String str = ((MessageString) message).toString();
+				
+				if (!receivedMessages.contains(str)) {
+					enqueueMessage(str);
+					receivedMessages.add(str);
+				}
+			}
 		}
 
 		@Override
@@ -58,7 +66,12 @@ public class Peer extends CommonAgentJ {
 		}
 		
 		public void perform() {
-			final MessageString msgStr = new MessageString(peer.getPeerID(), peer.getDetector().getCurrentNeighbors().getPeerSet(), new String(new byte[MESSAGE_SIZE]));
+			enqueueMessage(peer.getPeerID().toString());
+			receivedMessages.add(peer.getPeerID().toString());
+		}
+		
+		private void enqueueMessage(final String str) {
+			final MessageString msgStr = new MessageString(peer.getPeerID(), peer.getDetector().getCurrentNeighbors().getPeerSet(), str);
 			peer.enqueueBroadcast(msgStr, communicationLayer);
 		}
 
