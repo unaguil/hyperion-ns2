@@ -6,7 +6,7 @@
 		<entry key="finishTime">20.0</entry>
 		<entry key="gridW">290</entry>
 		<entry key="gridH">290</entry>
-		<entry key="discardTime">3.0</entry>
+		<entry key="discardTime">0.0</entry>
 		<entry key="javaAgent">reliableBroadcast.Peer</entry>
 
 		<!-- Random waypoint configuration -->
