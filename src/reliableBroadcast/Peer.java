@@ -8,7 +8,7 @@ import peer.CommunicationLayer;
 import peer.RegisterCommunicationLayerException;
 import peer.message.BroadcastMessage;
 import peer.message.MessageString;
-import util.WaitableThread;
+import peer.peerid.PeerID;
 import util.logger.Logger;
 import util.timer.Timer;
 import util.timer.TimerTask;
@@ -19,27 +19,13 @@ public class Peer extends CommonAgentJ {
 	
 	private class TestCommunicationLayer implements CommunicationLayer, TimerTask {
 		
-		class StopTimerThread extends WaitableThread {
-			
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(10000);
-				} catch (InterruptedException e) {
-					interrupt();
-				}
-				
-				timer.stopAndWait();
-			}
-		}
-		
-		private static final int PERIOD = 250;
+		private static final int PERIOD = 5000;
+		private static final int MAX_TIME = 10000;
 		
 		private final Timer timer = new Timer(PERIOD, this);
+		private long startTime;
 		
 		private final Set<String> receivedMessages = new HashSet<String>();
-		
-		private final StopTimerThread stopThread = new StopTimerThread();
 
 		@Override
 		public void messageReceived(final BroadcastMessage message, final long receptionTime) {
@@ -55,23 +41,30 @@ public class Peer extends CommonAgentJ {
 
 		@Override
 		public void init() {
-			timer.start();
-			stopThread.start();
+			if (peer.getPeerID().equals(new PeerID("0"))) {
+				myLogger.debug("Peer " + peer.getPeerID() + " starting timer");
+				timer.start();
+				startTime = System.currentTimeMillis();
+			}
 		}
 
 		@Override
 		public void stop() {
-			stopThread.stopAndWait();
-			timer.stopAndWait();
+			if (peer.getPeerID().equals(new PeerID("0"))) {
+				timer.stopAndWait();
+			}
 		}
 		
 		public void perform() {
-			enqueueMessage(peer.getPeerID().toString());
-			receivedMessages.add(peer.getPeerID().toString());
+			if ((System.currentTimeMillis() - startTime) <= MAX_TIME) {
+				enqueueMessage(peer.getPeerID().toString());
+				receivedMessages.add(peer.getPeerID().toString());
+			}
 		}
 		
 		private void enqueueMessage(final String str) {
 			final MessageString msgStr = new MessageString(peer.getPeerID(), peer.getDetector().getCurrentNeighbors().getPeerSet(), str);
+			myLogger.debug("Peer " + peer.getPeerID() + " enqueing message");
 			peer.enqueueBroadcast(msgStr, communicationLayer);
 		}
 
