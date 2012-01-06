@@ -8,7 +8,6 @@ import peer.CommunicationLayer;
 import peer.RegisterCommunicationLayerException;
 import peer.message.BroadcastMessage;
 import peer.message.MessageString;
-import peer.peerid.PeerID;
 import util.logger.Logger;
 import util.timer.Timer;
 import util.timer.TimerTask;
@@ -41,18 +40,14 @@ public class Peer extends CommonAgentJ {
 
 		@Override
 		public void init() {
-			if (peer.getPeerID().equals(new PeerID("0"))) {
-				myLogger.debug("Peer " + peer.getPeerID() + " starting timer");
-				timer.start();
-				startTime = System.currentTimeMillis();
-			}
+			myLogger.debug("Peer " + peer.getPeerID() + " starting timer");
+			timer.start();
+			startTime = System.currentTimeMillis();
 		}
 
 		@Override
 		public void stop() {
-			if (peer.getPeerID().equals(new PeerID("0"))) {
-				timer.stopAndWait();
-			}
+			timer.stopAndWait();
 		}
 		
 		public void perform() {
