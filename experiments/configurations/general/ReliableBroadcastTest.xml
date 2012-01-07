@@ -18,13 +18,15 @@
 
 		<!-- Peer configuration variables -->
 		<entry key="beaconDetector.beaconTime">1000</entry>
-		<entry key="reliableBroadcast.maxTries">10</entry>
+		<entry key="basicPeer.transmissionWait">50</entry>
 		<entry key="dissemination.maxDistance">5</entry>
 		<entry key="parameterSearch.searchMessageTTL">5</entry>
 		<entry key="graphsearch.maxTTL">10</entry>
 		<entry key="graphsearch.searchExpiration">20000</entry>
 	</staticConfig>
-	<dynamicConfig />
+	<dynamicConfig>
+		<dynamicEntry key="basicPeer.transmissionWait" interpolator="IntegerInterpolator" text="Wait period" start="10" end="100" step="10"/>
+	</dynamicConfig>
 	<repeat number="1" />
 	<measures>
 		<import file="AllMeasures.xml" />
