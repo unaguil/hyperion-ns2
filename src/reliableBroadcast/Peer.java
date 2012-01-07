@@ -1,7 +1,11 @@
 package reliableBroadcast;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
@@ -9,12 +13,16 @@ import peer.CommunicationLayer;
 import peer.RegisterCommunicationLayerException;
 import peer.message.BroadcastMessage;
 import peer.message.MessageString;
+import peer.peerid.PeerID;
 import util.WaitableThread;
 import util.logger.Logger;
 
 import common.CommonAgentJ;
 
 public class Peer extends CommonAgentJ {
+	
+	private static final Map<String, Long> sentTimes = Collections.synchronizedMap(new HashMap<String, Long>()); 
+	private static final Map<String, Long> lastTimeReceived = Collections.synchronizedMap(new HashMap<String, Long>());
 	
 	private class TestCommunicationLayer implements CommunicationLayer {
 		
@@ -59,6 +67,7 @@ public class Peer extends CommonAgentJ {
 				myLogger.debug("Peer " + peer.getPeerID() + " sending string " + str);
 				enqueueMessage(str);
 				receivedMessages.add(str);
+				sentTimes.put(str, System.currentTimeMillis());
 			}
 		}
 		
@@ -72,6 +81,8 @@ public class Peer extends CommonAgentJ {
 			if (message instanceof MessageString) {
 				final String str = ((MessageString) message).toString();
 				
+				lastTimeReceived.put(str, System.currentTimeMillis());
+
 				if (!receivedMessages.contains(str)) {
 					enqueueMessage(str);
 					receivedMessages.add(str);
@@ -117,7 +128,23 @@ public class Peer extends CommonAgentJ {
 	} 
 
 	@Override
-	protected void printOutputs() {}
+	protected void printOutputs() {
+		if (peer.getPeerID().equals(new PeerID("0"))) {
+			long total = 0;
+			int counter = 0;
+			for (final Entry<String, Long> lastReception : lastTimeReceived.entrySet()) {
+				total += lastReception.getValue().longValue() - sentTimes.get(lastReception.getKey()).longValue();
+				counter++;
+			}
+			
+			final float delay = total / (float) counter; 
+			
+			myLogger.info(sentTimes);
+			myLogger.info(lastTimeReceived);
+			
+			myLogger.info("Peer " + peer.getPeerID() + " end to end delay: " + delay + " ms");
+		}
+	}
 
 	@Override
 	protected boolean peerCommands(String command, String[] args) {
