@@ -276,22 +276,28 @@ class Experiment:
 			print ''
 			sys.stdout.flush()
 			
+			configurationError = any([error for error in results])
+			
 			outputLogs = [outputLog for error, outputLog in results]
 			
-			self.__processRepeat(measures, outputLogs)
+			if not configurationError:
+				self.__processRepeat(measures, outputLogs)
 
 			result = measures.endConfiguration()
 
-			outputFilePath = os.path.join(self.__outputDir, self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml')
-			print '* Writing configuration result to file %s ' % outputFilePath			
-			outputFile = open(outputFilePath, 'w')
-			outputFile.write(result)
+			if not configurationError:
+				outputFilePath = os.path.join(self.__outputDir, self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml')
+				print '* Writing configuration result to file %s ' % outputFilePath			
+				outputFile = open(outputFilePath, 'w')
+				outputFile.write(result)
 			
-			measures.savePartialResults(os.path.join(configurationDir, 'partialResults.txt'))
+				measures.savePartialResults(os.path.join(configurationDir, 'partialResults.txt'))
 				
-			print '* Configuration execution time: %s' % TimeFormatter.formatTime(time.time() - startTime)
-			print ''
-			sys.stdout.flush()
+				print '* Configuration execution time: %s' % TimeFormatter.formatTime(time.time() - startTime)
+				print ''
+				sys.stdout.flush()
+			else:
+				print '* Errors during execution of configuration %d' % configurationCounter
 			
 			configurationCounter = configurationCounter + 1
 			
