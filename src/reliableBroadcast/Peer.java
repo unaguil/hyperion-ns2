@@ -2,29 +2,68 @@ package reliableBroadcast;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import peer.CommunicationLayer;
 import peer.RegisterCommunicationLayerException;
 import peer.message.BroadcastMessage;
 import peer.message.MessageString;
+import util.WaitableThread;
 import util.logger.Logger;
-import util.timer.Timer;
-import util.timer.TimerTask;
 
 import common.CommonAgentJ;
 
 public class Peer extends CommonAgentJ {
 	
-	private class TestCommunicationLayer implements CommunicationLayer, TimerTask {
+	private class TestCommunicationLayer implements CommunicationLayer {
 		
-		private static final int PERIOD = 5000;
+		private static final int START_TIME = 5000;
 		private static final int MAX_TIME = 10000;
+		private static final int MAX_SLEEP = 1000;
 		
-		private final Timer timer = new Timer(PERIOD, this);
+		class SendThread extends WaitableThread {
+			
+			private int counter = 0;
+			
+			private final Random r = new Random();
+			
+			@Override
+			public void run() {
+				
+				try {
+					WaitableThread.sleep(START_TIME);
+				} catch (InterruptedException e) {
+					interrupt();
+				}
+				
+				while (!Thread.interrupted() && (System.currentTimeMillis() - startTime) <= MAX_TIME) {
+					final int sleepTime = r.nextInt(MAX_SLEEP);
+					
+					sendMessage(peer.getPeerID() + "-" + counter);
+					counter++;
+					
+					if (sleepTime > 0) {
+						try {
+							WaitableThread.sleep(sleepTime);
+						} catch (InterruptedException e) {
+							interrupt();
+						}
+					}
+				}
+			}
+			
+			public void sendMessage(final String str) {
+				myLogger.debug("Peer " + peer.getPeerID() + " sending string " + str);
+				enqueueMessage(str);
+				receivedMessages.add(str);
+			}
+		}
+		
 		private long startTime;
 		
 		private final Set<String> receivedMessages = new HashSet<String>();
+		private final SendThread sendThread = new SendThread();
 
 		@Override
 		public void messageReceived(final BroadcastMessage message, final long receptionTime) {
@@ -41,20 +80,13 @@ public class Peer extends CommonAgentJ {
 		@Override
 		public void init() {
 			myLogger.debug("Peer " + peer.getPeerID() + " starting timer");
-			timer.start();
+			sendThread.start();
 			startTime = System.currentTimeMillis();
 		}
 
 		@Override
 		public void stop() {
-			timer.stopAndWait();
-		}
-		
-		public void perform() {
-			if ((System.currentTimeMillis() - startTime) <= MAX_TIME) {
-				enqueueMessage(peer.getPeerID().toString());
-				receivedMessages.add(peer.getPeerID().toString());
-			}
+			sendThread.stopAndWait();
 		}
 		
 		private void enqueueMessage(final String str) {
