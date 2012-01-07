@@ -326,12 +326,12 @@ class Graph:
 				result = tagValues[tag]
 				print ' *%s: %s mean: %.2f std: %.2f' % (name, tag, result.getMeanTotal(), result.getStdTotal())
 				
-	def plotAll(self, format, onePDF, periodic=False):
+	def plotAll(self, format, onePDF, outputFile, periodic=False):
 		if onePDF:
 			rowsPerPage = 1
 			columnsPerPage = 1
 			plotsPerPage = rowsPerPage * columnsPerPage
-			pp = PdfPages('allPlots.pdf')
+			pp = PdfPages(outputFile)
 			
 			for index, measure in enumerate(sorted(self.__measures)):
 				
@@ -414,15 +414,17 @@ def main():
 		parser.print_usage()
 	else:
 		files = []
+		outputFile = 'allPlots.pdf'
 		if not options.directory is None:
 			files = getXMLFiles(options.directory)
+			outputFile = os.path.join(options.directory, outputFile)
 		else:
 			files.append(options.inputFile)
 			
 		graph = Graph(files, 'en')
 		
 		if options.all: 
-			graph.plotAll(options.format, options.onePDF, options.periodic)
+			graph.plotAll(options.format, options.onePDF, outputFile, options.periodic)
 			sys.exit()
 			
 		if options.summary:
