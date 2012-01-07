@@ -19,8 +19,8 @@ public class Peer extends CommonAgentJ {
 	private class TestCommunicationLayer implements CommunicationLayer {
 		
 		private static final int START_TIME = 5000;
-		private static final int MAX_TIME = 10000;
-		private static final int MAX_SLEEP = 1000;
+		private static final int MAX_PERIOD = 10000;
+		private static final int MAX_SLEEP = 100;
 		
 		class SendThread extends WaitableThread {
 			
@@ -37,7 +37,9 @@ public class Peer extends CommonAgentJ {
 					interrupt();
 				}
 				
-				while (!Thread.interrupted() && (System.currentTimeMillis() - startTime) <= MAX_TIME) {
+				startTime = System.currentTimeMillis();
+				
+				while (!Thread.interrupted() && (System.currentTimeMillis() - startTime) <= MAX_PERIOD) {
 					final int sleepTime = r.nextInt(MAX_SLEEP);
 					
 					sendMessage(peer.getPeerID() + "-" + counter);
@@ -81,7 +83,6 @@ public class Peer extends CommonAgentJ {
 		public void init() {
 			myLogger.debug("Peer " + peer.getPeerID() + " starting timer");
 			sendThread.start();
-			startTime = System.currentTimeMillis();
 		}
 
 		@Override
