@@ -90,6 +90,8 @@ class Graph:
 			sys.exit()
 		
 		for file in files:
+			print 'Parsing file %s' % file
+			
 			try:
 				parser = minidom.parse(file)
 				
