@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<part>
+	<measure type="generic.BroadcastedPackets" period="0.25" />
+	<measure type="generic.ReceivedPackets" period="0.25" />
+	<measure type="generic.BroadcastTime" period="0.25" />
+	<measure type="generic.ReliableBroadcastedMessages" period="0.25" />
+	<measure type="generic.SentACKMessages" period="0.25" />
+	<measure type="generic.ReceivedACKMessages" period="0.25" />
+	<measure type="generic.RebroadcastedMessages" period="0.25" />
+	<measure type="generic.DeliveredRatio" period="0.25" />
+	<measure type="generic.DeliveringTime" period="0.25" />
+		
+	<measure type="detection.SentBeaconMessages" period="0.25" />
+	<measure type="detection.AvgNeighbors" period="0.25" />
+</part>

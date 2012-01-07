@@ -29,6 +29,6 @@
 	</dynamicConfig>
 	<repeat number="1" />
 	<measures>
-		<import file="AllMeasures.xml" />
+		<import file="Measures.xml" />
 	</measures>
 </experiment>
