@@ -25,7 +25,7 @@
 		<entry key="graphsearch.searchExpiration">20000</entry>
 	</staticConfig>
 	<dynamicConfig>
-		<dynamicEntry key="basicPeer.transmissionWait" interpolator="IntegerInterpolator" text="Wait period" start="10" end="100" step="10"/>
+		<dynamicEntry key="basicPeer.transmissionWait" interpolator="IntegerInterpolator" text="Wait period" start="0" end="100" step="10"/>
 	</dynamicConfig>
 	<repeat number="1" />
 	<measures>
