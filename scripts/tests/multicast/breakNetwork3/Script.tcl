@@ -18,7 +18,7 @@ proc do_something {agents_ nodes_ god_} {
 	$ns_ at 5.0 "$node_(4) setdest 5.0 0.1 5.0"
 	$ns_ at 5.0 "$node_(5) setdest 6.0 0.1 5.0"
 	
-	$ns_ at 8.0 "$node_(2) setdest 2.0 0.1 5.0"
+	$ns_ at 8.0 "$node_(2) setdest 2.0 50.0 50.0"
 }
 
 

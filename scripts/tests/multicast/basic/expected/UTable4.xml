@@ -3,10 +3,6 @@
 	<search peer="3">
 		<parameter value="I-B" />
 	</search>
-	<search peer="10">
-		<parameter value="I-A" />
-	</search>
 	<route dest="3" through="3" />
 	<route dest="5" through="5" />
-	<route dest="10" through="3" />
 </unicastTable>

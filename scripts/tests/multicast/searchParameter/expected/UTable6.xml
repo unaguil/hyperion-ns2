@@ -4,12 +4,5 @@
 		<parameter value="I-A" />
 		<parameter value="I-B" />
 	</search>
-	<search peer="9">
-		<parameter value="I-A" />
-	</search>
-	<search peer="9">
-		<parameter value="I-B" />
-	</search>
-	<route dest="0" through="5" />
-	<route dest="9" through="5" />
+	<route dest="1" through="5" />
 </unicastTable>

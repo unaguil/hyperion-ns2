@@ -66,7 +66,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 			if (args.length > 0)
 				try {
 					final Set<Parameter> searchedParameters = parseParameters(args);
-					pSearch.sendSearchMessage(searchedParameters, new MessageStringPayload(peer.getPeerID(), "Hello, parameter"), SearchType.Exact);
+					pSearch.sendSearchMessageDefaultTTL(searchedParameters, new MessageStringPayload(peer.getPeerID(), "Hello, parameter"), SearchType.Exact);
 					return true;
 				} catch (final InvalidParameterIDException ipe) {
 					myLogger.error("Peer " + peer.getPeerID() + " processed invalid parameter. " + ipe.getMessage());
@@ -77,7 +77,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 			if (args.length > 0)
 				try {
 					final Set<Parameter> searchedParameters = parseParameters(args);
-					pSearch.sendSearchMessage(searchedParameters, new MessageStringPayload(peer.getPeerID(), "Hello, parameter"), SearchType.Generic);
+					pSearch.sendSearchMessageDefaultTTL(searchedParameters, new MessageStringPayload(peer.getPeerID(), "Hello, parameter"), SearchType.Generic);
 					return true;
 				} catch (final InvalidParameterIDException ipe) {
 					myLogger.error("Peer " + peer.getPeerID() + " processed invalid parameter. " + ipe.getMessage());

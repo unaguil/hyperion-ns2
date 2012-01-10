@@ -8,5 +8,4 @@
 	</search>
 	<route dest="6" through="2" />
 	<route dest="9" through="2" />
-	<route dest="0" through="0" />
 </unicastTable>

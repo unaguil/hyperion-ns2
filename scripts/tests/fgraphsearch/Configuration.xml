@@ -5,7 +5,6 @@
 	<entry key="beaconDetector.beaconTime">1000</entry>
 	<entry key="reliableBroadcast.maxTries">10</entry>
 	<entry key="dissemination.maxDistance">5</entry>
-	<entry key="parameterSearch.searchMessageTTL">5</entry>
 	<entry key="graphsearch.maxTTL">5</entry>
 	<entry key="graphsearch.searchExpiration">20000</entry>
 </properties>

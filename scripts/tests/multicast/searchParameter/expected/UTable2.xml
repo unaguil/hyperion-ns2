@@ -12,5 +12,5 @@
 	</search>
 	<route dest="6" through="3" />
 	<route dest="9" through="3" />
-	<route dest="0" through="1" />
+	<route dest="1" through="1" />
 </unicastTable>

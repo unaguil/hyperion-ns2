@@ -17,7 +17,7 @@ proc do_something {agents_ nodes_ god_} {
 	$ns_ at 3.0 "$agents(9) agentj searchParameter I-A"
 	$ns_ at 5.0 "$agents(9) agentj searchParameter I-B"
 	
-	$ns_ at 7.0 "$node_(4) setdest 4.4 10.0 5.0"
+	$ns_ at 7.0 "$node_(4) setdest 4.0 50.0 50.0"
 }
 
 

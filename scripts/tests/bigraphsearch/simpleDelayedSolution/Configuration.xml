@@ -6,7 +6,6 @@
 	<entry key="beaconDetector.beaconTime">1000</entry>
 	<entry key="beaconDetector.randomTime">200</entry>
 	<entry key="reactivePTableUPdate.maxDistance">5</entry>
-	<entry key="parameterSearch.searchMessageTTL">5</entry>
 	<entry key="graphsearch.maxTTL">5</entry>
 	<entry key="graphsearch.searchExpiration">20000</entry>
 </properties>
