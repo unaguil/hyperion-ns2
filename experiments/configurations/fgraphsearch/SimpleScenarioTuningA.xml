@@ -33,7 +33,6 @@
 		<!-- Peer configuration variables -->
 		<entry key="beaconDetector.beaconTime">1000</entry>
 		<entry key="dissemination.maxDistance">5</entry>
-		<entry key="parameterSearch.searchMessageTTL">5</entry>
 		<entry key="graphsearch.maxTTL">100</entry>
 		<entry key="graphsearch.searchExpiration">10000</entry>
 	</staticConfig>
