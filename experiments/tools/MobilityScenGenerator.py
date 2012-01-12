@@ -15,13 +15,16 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
     print '\tPauseTime', pauseTime
     
     command = './setdest'
-    parameters = '-v 2 -n %s -s 1 -m %s -M %s -t %s -P 1 -p %s -x %s -y %s' % (nodes, minSpeed, maxSpeed, finishTime, pauseTime, gridW, gridH)
+    parameters = '-v 2 -n %s -s 1 -m %f -M %f -t %.1f -P 1 -p %s -x %s -y %s' % (nodes, minSpeed, maxSpeed, finishTime, pauseTime, gridW, gridH)
+    
+    cmd = command + ' ' + parameters
+    
+    print 'Generated using external command: %s' % cmd
     
     paramList = [command]
                     
     for e in parameters.split('-'):
         paramList.append('-' + e)
-    
     
     running = []
         

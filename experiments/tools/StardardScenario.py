@@ -3,6 +3,8 @@
 import math
 import sys
 
+import MobilityScenGenerator
+
 def getNodes(anp, asp_hops, w1, w2, w3):
 	return math.exp(w1) * math.pow(anp, w2) * math.pow(asp_hops, w3)
 
@@ -29,11 +31,18 @@ def main():
 	    
 	print 'Generating scenario with ANP = %.2f and ASPhops = %d' % (anp, asp_hops)
 	
-	nodes, area, side = generateScenario(anp, asp_hops)
+	nodes, area, width_R = generateScenario(anp, asp_hops)
 	
-	print 'Nodes: %d' % math.ceil(nodes)
+	print 'Nodes: %d' % nodes
 	print 'Area: %.2f R^2' % (area)
-	print 'Size: %.2f R' % side
+	print 'Size: %.2f R' % width_R
+	
+	################# generate scenarios
+	transmissionRange = 100
+	
+	width = width_R * transmissionRange
+	
+	MobilityScenGenerator.generateNS2MobilityScenario(nodes, 100.0, width, width, 0.000001, 0.000001, 200.0, 1)
 		
 def generateScenario(anp, asp_hops):
 	node_exps = [-0.164, -0.417, 2.468]
@@ -44,7 +53,7 @@ def generateScenario(anp, asp_hops):
 	
 	side = math.sqrt(area)
 	
-	return nodes, area, side
+	return math.ceil(nodes), area, round(side)
 	
 if __name__ == '__main__':
 	main()
