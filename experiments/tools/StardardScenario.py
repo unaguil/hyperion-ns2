@@ -36,7 +36,7 @@ def main():
 	
 	print 'Nodes: %d' % nodes
 	print 'Area: %.2f R^2' % (area)
-	print 'Size: %.2f R' % width_R
+	print 'Width: %.2f R' % width_R
 	
 	################# generate scenarios
 	transmissionRange = 100
