@@ -1,6 +1,8 @@
 from RandomWaypoint import RandomWaypoint
 from LoadMobilityModel import LoadMobilityModel
 
+import sys
+
 class MobilityModelGenerator:
     
     def generateModel(self, entries):
@@ -17,4 +19,6 @@ class MobilityModelGenerator:
             return RandomWaypoint(entries)
         if self.__mobilityModel == 'LoadMobilityModel':
             return LoadMobilityModel(entries)
-        return None
+        
+        print 'Invalid mobility model %s', self.__mobilityModel
+        sys.exit()

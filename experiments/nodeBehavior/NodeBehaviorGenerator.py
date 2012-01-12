@@ -1,6 +1,8 @@
 from SearchBehavior import SearchBehavior
 from CompositionSearchBehavior import CompositionSearchBehavior
 
+import sys
+
 class NodeBehaviorGenerator:
     
     def generateNodeBehavior(self, entries, nodePopulator):
@@ -19,4 +21,5 @@ class NodeBehaviorGenerator:
         if self.__nodeBehavior == 'CompositionSearchBehavior':
             return CompositionSearchBehavior(entries, nodePopulator)
         
-        return None
+        print 'Invalid node behavior %s' % self.__nodeBehavior
+        sys.exit()
