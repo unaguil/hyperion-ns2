@@ -4,6 +4,16 @@ import subprocess
 import sys
 
 def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, numScenarios):
+    
+    print 'Generating %d ', numScenarios
+    print '\tNodes:', nodes
+    print '\tFinishTime:', finishTime
+    print '\tWidth', gridW
+    print '\tHeight', gridH
+    print '\tMinSpeed', minSpeed
+    print '\tMaxSpeed', maxSpeed
+    print '\tPauseTime', pauseTime
+    
     command = './setdest'
     parameters = '-v 2 -n %s -s 1 -m %s -M %s -t %s -P 1 -p %s -x %s -y %s' % (nodes, minSpeed, maxSpeed, finishTime, pauseTime, gridW, gridH)
     
@@ -47,15 +57,6 @@ def main():
     pauseTime = 10.0
     
     numScenarios = 4
-    
-    print 'Generating %d ', numScenarios
-    print '\tNodes:', nodes
-    print '\tFinishTime:', finishTime
-    print '\tWidth', gridW
-    print '\tHeight', gridH
-    print '\tMinSpeed', minSpeed
-    print '\tMaxSpeed', maxSpeed
-    print '\tPauseTime', pauseTime
     
     generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, numScenarios)
 
