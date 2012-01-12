@@ -4,6 +4,7 @@ import math
 import sys
 
 import MobilityScenGenerator
+import DrawScenario
 
 def getNodes(anp, asp_hops, w1, w2, w3):
 	return math.exp(w1) * math.pow(anp, w2) * math.pow(asp_hops, w3)
@@ -42,7 +43,10 @@ def main():
 	
 	width = width_R * transmissionRange
 	
-	MobilityScenGenerator.generateNS2MobilityScenario(nodes, 100.0, width, width, 0.000001, 0.000001, 200.0, 1)
+	outputFiles = MobilityScenGenerator.generateNS2MobilityScenario(nodes, 100.0, width, width, 0.000001, 0.000001, 200.0, 1)
+	
+	for outputFile in outputFiles:
+		DrawScenario.drawScenario(outputFile, outputFile + '.png', width, width)
 		
 def generateScenario(anp, asp_hops):
 	node_exps = [-0.164, -0.417, 2.468]

@@ -27,9 +27,12 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
         paramList.append('-' + e)
     
     running = []
+    
+    files = []
         
     for i in xrange(numScenarios):
         file = 'mobility-%s-%s-%s-%s-%s-%s-%s-%d.txt' % (str(nodes), str(finishTime), str(gridW), str(gridH), str(minSpeed), str(maxSpeed), str(pauseTime), i)
+        files.append(file)        
         outputFile = open(file, 'w') 
         print 'Output file %s' % file
         sys.stdout.flush()
@@ -37,6 +40,8 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
         p = subprocess.Popen(paramList, stdout=outputFile)
         
         running.append((p, outputFile))
+        
+    outputFiles = []
     
     for index, (p, outputFile) in enumerate(running):
         result = p.wait()
@@ -48,6 +53,8 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
             print 'Scenario %d correctly generated' % (index + 1)
             
         sys.stdout.flush()
+        
+    return files
         
 def main():    
     nodes = 70

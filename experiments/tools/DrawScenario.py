@@ -78,7 +78,7 @@ def __getNeighbours(nodes):
                     
     return neighbourTable
 
-def __drawScenario(scenarioFilePath, outputFile, width, height):
+def drawScenario(scenarioFilePath, outputFile, width, height):
     nodes = __parseScenario(scenarioFilePath) 
     
     WIDTH, HEIGHT = 1000, 1000
