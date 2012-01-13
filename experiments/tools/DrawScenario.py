@@ -144,7 +144,7 @@ def main():
     if options.inputFile is None or options.outputFile is None or options.width is None or options.height is None:
         parser.print_usage()
     else:
-        __drawScenario(options.inputFile, options.outputFile, float(options.width), float(options.height))
+        drawScenario(options.inputFile, options.outputFile, float(options.width), float(options.height))
 
 if __name__ == '__main__':
      main()
