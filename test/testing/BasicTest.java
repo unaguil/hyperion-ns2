@@ -64,7 +64,7 @@ public class BasicTest {
 	public void finish() {
 		if (!outputDir.equals(""))
 			try {
-				deleteDirectory(new File(workingDir));
+				deleteDirectory(new File(outputDir));
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
