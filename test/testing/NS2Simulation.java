@@ -86,9 +86,19 @@ public class NS2Simulation {
 			} catch (Exception e) {
 				fail("NS-2 process could not be started. " + e.getMessage()); 
 			}
+			
+			if (!finished) {
+				SaveOutputDirAction saveOutputDirAction = new SaveOutputDirAction(workingDir);
+				try {
+					saveOutputDirAction.perform();
+				} catch (Exception e) {	
+					System.out.println("Error performing saving output dir action");
+				}
+			}
+			
 		} else
 			fail("Environment variables were not correctly set. Needed variables: NS_DIR, AGENTJ and JAVA_HOME");
-
+			
 		return finished;
 	}
 
