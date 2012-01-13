@@ -23,71 +23,71 @@ public class NS2Simulation {
 
 		boolean finished = false;
 
-		try {
-			// Execute command
-			final ProcessBuilder pb = new ProcessBuilder(getNSExecutablePath(), script);
-			final Map<String, String> env = pb.environment();
+		// Execute command
+		final ProcessBuilder pb = new ProcessBuilder(getNSExecutablePath(), script);
+		final Map<String, String> env = pb.environment();
 
-			if (checkEnvironment(env)) {
+		if (checkEnvironment(env)) {
 
-				final String NS2_PATH = env.get("NS_DIR");
-				final String AGENTJ_PATH = env.get("AGENTJ");
-				final String JAVA_HOME = env.get("JAVA_HOME");
+			final String NS2_PATH = env.get("NS_DIR");
+			final String AGENTJ_PATH = env.get("AGENTJ");
+			final String JAVA_HOME = env.get("JAVA_HOME");
 
-				final String NS2_BIN_PATH = NS2_PATH + File.separatorChar + "bin";
-				final String NS2_TCL_PATH = NS2_PATH + File.separatorChar + "tcl8.4.18" + File.separatorChar + "unix";
-				final String NS2_TCL_LIB_PATH = NS2_PATH + File.separatorChar + "tcl8.4.18" + File.separatorChar + "library";
-				final String NS2_TK_PATH = NS2_PATH + File.separatorChar + "tk8.4.18" + File.separatorChar + "unix";
-				final String NS2_OTCL_PATH = NS2_PATH + File.separatorChar + "otcl-1.13";
-				final String NS2_LIB_PATH = NS2_PATH + File.separatorChar + "lib";
+			final String NS2_BIN_PATH = NS2_PATH + File.separatorChar + "bin";
+			final String NS2_TCL_PATH = NS2_PATH + File.separatorChar + "tcl8.4.18" + File.separatorChar + "unix";
+			final String NS2_TCL_LIB_PATH = NS2_PATH + File.separatorChar + "tcl8.4.18" + File.separatorChar + "library";
+			final String NS2_TK_PATH = NS2_PATH + File.separatorChar + "tk8.4.18" + File.separatorChar + "unix";
+			final String NS2_OTCL_PATH = NS2_PATH + File.separatorChar + "otcl-1.13";
+			final String NS2_LIB_PATH = NS2_PATH + File.separatorChar + "lib";
 
-				final String AGENTJ_CORE_LIB = AGENTJ_PATH + File.separator + "core" + File.separator + "lib";
-				final String JAVA_AMD64_LIB = JAVA_HOME + File.separator + "jre" + File.separator + "lib" + File.separator + "amd64" + File.separator + "server";
+			final String AGENTJ_CORE_LIB = AGENTJ_PATH + File.separator + "core" + File.separator + "lib";
+			final String JAVA_AMD64_LIB = JAVA_HOME + File.separator + "jre" + File.separator + "lib" + File.separator + "amd64" + File.separator + "server";
 
-				final String CLASSPATH = AGENTJ_PATH + File.separator + "core" + File.separator + "target" + File.separator + "agentj-core-1.0.jar" + File.pathSeparator + AGENTJ_CORE_LIB + File.separator + "proto-logging-0.1.jar";
+			final String CLASSPATH = AGENTJ_PATH + File.separator + "core" + File.separator + "target" + File.separator + "agentj-core-1.0.jar" + File.pathSeparator + AGENTJ_CORE_LIB + File.separator + "proto-logging-0.1.jar";
 
-				// Set to the current Eclipse classpath
-				final String AGENTJ_CLASSPATH = System.getProperty("java.class.path");
+			// Set to the current Eclipse classpath
+			final String AGENTJ_CLASSPATH = System.getProperty("java.class.path");
 
-				env.put("PATH", env.get("PATH") + File.pathSeparator + NS2_BIN_PATH + File.pathSeparator + NS2_TCL_PATH + File.pathSeparator + NS2_TK_PATH);
-				env.put("LD_LIBRARY_PATH", env.get("LD_LIBRARY_PATH") + File.pathSeparator + NS2_OTCL_PATH + File.pathSeparator + NS2_LIB_PATH);
-				env.put("TCL_LIBRARY", env.get("TCL_LIBRARY") + File.pathSeparator + NS2_TCL_LIB_PATH);
+			env.put("PATH", env.get("PATH") + File.pathSeparator + NS2_BIN_PATH + File.pathSeparator + NS2_TCL_PATH + File.pathSeparator + NS2_TK_PATH);
+			env.put("LD_LIBRARY_PATH", env.get("LD_LIBRARY_PATH") + File.pathSeparator + NS2_OTCL_PATH + File.pathSeparator + NS2_LIB_PATH);
+			env.put("TCL_LIBRARY", env.get("TCL_LIBRARY") + File.pathSeparator + NS2_TCL_LIB_PATH);
 
-				env.put("AGENTJ", AGENTJ_PATH);
-				env.put("JAVA_HOME", JAVA_HOME);
-				env.put("LD_LIBRARY_PATH", env.get("LD_LIBRARY_PATH") + File.pathSeparator + AGENTJ_CORE_LIB + File.pathSeparator + JAVA_AMD64_LIB);
-				env.put("AGENTJ_CLASSPATH", AGENTJ_CLASSPATH);
-				env.put("CLASSPATH", env.get("CLASSPATH") + File.pathSeparator + CLASSPATH);
+			env.put("AGENTJ", AGENTJ_PATH);
+			env.put("JAVA_HOME", JAVA_HOME);
+			env.put("LD_LIBRARY_PATH", env.get("LD_LIBRARY_PATH") + File.pathSeparator + AGENTJ_CORE_LIB + File.pathSeparator + JAVA_AMD64_LIB);
+			env.put("AGENTJ_CLASSPATH", AGENTJ_CLASSPATH);
+			env.put("CLASSPATH", env.get("CLASSPATH") + File.pathSeparator + CLASSPATH);
 
-				pb.directory(new File(workingDir));
+			pb.directory(new File(workingDir));
+			try {
 				final Process p = pb.start();
-
+	
 				final ReadProcessOutput readOutput = new ReadProcessOutput(p.getInputStream(), outputFilePath);
 				readOutput.start();
-
+	
 				final ReadProcessOutput readErrorOutput = new ReadProcessOutput(p.getErrorStream(), errorFilePath);
 				readErrorOutput.start();
-
+	
 				final Timer timer = new Timer(true);
 				try {
 					final InterruptTimerTask interrupter = new InterruptTimerTask(Thread.currentThread(), action, workingDir + File.pathSeparatorChar + script);
 					timer.schedule(interrupter, ABORT_TIME);
 					finished = (p.waitFor() == 0);
 				} catch (final InterruptedException e) {
-					// do something to handle the timeout here
+					System.out.println("NS-2 simulation process was interrupted.");
 				} finally {
 					timer.cancel();
 				}
-
+	
 				p.destroy();
-
+	
 				readOutput.finish();
 				readErrorOutput.finish();
-			} else
-				fail("Environment variables were not correctly set. Needed variables: NS_DIR, AGENTJ and JAVA_HOME");
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
+			} catch (Exception e) {
+				fail("NS-2 process could not be started. " + e.getMessage()); 
+			}
+		} else
+			fail("Environment variables were not correctly set. Needed variables: NS_DIR, AGENTJ and JAVA_HOME");
 
 		return finished;
 	}
