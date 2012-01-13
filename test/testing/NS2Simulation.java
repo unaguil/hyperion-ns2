@@ -77,7 +77,6 @@ public class NS2Simulation {
 					// do something to handle the timeout here
 				} finally {
 					timer.cancel();
-					Thread.interrupted();
 				}
 
 				p.destroy();
