@@ -143,6 +143,8 @@ public abstract class MultipleTests {
 			int tryNumber = 1;
 			boolean finished = false;
 			while (tryNumber <= MAX_TRIES && !finished) {
+				if (tryNumber > 1)
+					System.out.println("Trying again test " + test.getWorkingDir() + " try " + tryNumber);	
 				finished = performTry(detectedErrorCauses);
 				tryNumber++;
 			}
