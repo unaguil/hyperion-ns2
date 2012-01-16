@@ -17,7 +17,7 @@ public class NS2Simulation {
 
 	private static final int ABORT_TIME = 120 * 1000;
 
-	public boolean runScript(final String workingDir, final String script, final String outputDir, final InterruptionAction action) {
+	public boolean runScript(final String workingDir, final String script, final String outputDir) {
 		final String outputFilePath = outputDir + File.separatorChar + "output.log";
 		final String errorFilePath = outputDir + File.separatorChar + "error.log";
 
@@ -70,7 +70,7 @@ public class NS2Simulation {
 	
 				final Timer timer = new Timer(true);
 				try {
-					final InterruptTimerTask interrupter = new InterruptTimerTask(p, Thread.currentThread(), action, workingDir + File.pathSeparator + script);
+					final InterruptTimerTask interrupter = new InterruptTimerTask(p, Thread.currentThread(), new SaveOutputDirAction(workingDir, "expired"), workingDir + File.pathSeparator + script);
 					timer.schedule(interrupter, ABORT_TIME);
 					finished = (p.waitFor() == 0);
 				} catch (final InterruptedException e) {
@@ -86,7 +86,7 @@ public class NS2Simulation {
 			}
 			
 			if (!finished) {
-				SaveOutputDirAction saveOutputDirAction = new SaveOutputDirAction(workingDir);
+				SaveOutputDirAction saveOutputDirAction = new SaveOutputDirAction(workingDir, "notFinished");
 				try {
 					saveOutputDirAction.perform();
 				} catch (Exception e) {	

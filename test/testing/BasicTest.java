@@ -58,7 +58,7 @@ public class BasicTest {
 			System.out.println("Could not create directory " + tmp.getAbsolutePath());
 
 		final NS2Simulation ns2Simulation = new NS2Simulation();
-		return ns2Simulation.runScript(workingDir, script, outputDir, new SaveOutputDirAction(outputDir));
+		return ns2Simulation.runScript(workingDir, script, outputDir);
 	}
 
 	public void finish() {
