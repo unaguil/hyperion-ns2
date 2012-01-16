@@ -270,7 +270,7 @@ class Experiment:
 				data.append((repeatDir, config, self.__configDir, resolvedFileBuffer, configGenerator, counter, repeatNumber))
 				
 			pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
-			results = map(runRepeat, data) 
+			results = pool.map(runRepeat, data) 
 
 			print '* Finalizing configuration. Parsing output log files'
 			print ''

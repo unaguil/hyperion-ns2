@@ -1,9 +1,10 @@
-import random
 import os
 
 from xml.dom import minidom
 
 from Taxonomy import Taxonomy
+
+import random
 
 class IncorrectSolution(Exception):
     def __init__(self):
@@ -14,6 +15,8 @@ class ParameterPopulator:
        It also includes a function to generate the XML configuration for each node in the format used in simulations.
     """
     def __init__(self, entries):
+        self.__equalityDistribution = {}
+        
         for entry in entries:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
@@ -21,204 +24,127 @@ class ParameterPopulator:
             if key == "nNodes":
                 self.__nNodes = int(value)
             if key == "nDistribution":
-                self.__nDistribution = eval(value)
-            if key == "gDistribution":
-                self.__gDistribution = eval(value)
-            if key == "tDistribution":
-                self.__tDistribution = eval(value)  
+                self.__nDistribution = float(eval(value))
+            if key == "parametersPerNode":
+                self.__parametersPerNode = int(eval(value))
+            if key == 'equalityDistribution':
+                self.__equalityDistribution = eval(value)
     
     def generate(self, workingDir, strBuffer):            
         strBuffer.writeln('')
         strBuffer.writeln('************* Parameter populator ****************')
-        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__gDistribution, self.__tDistribution, strBuffer)    
+        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__parametersPerNode, self.__equalityDistribution, strBuffer)    
         
-        self.__generateXMLNodeConfigurations(workingDir, parametersTable, taxonomy)
+        self.__generateXMLNodeConfigurations(workingDir, parametersTable, taxonomy, strBuffer)
 
         strBuffer.writeln('**************************************************')
         
     def getParameters(self):
         return self.__parameters
     
-    def __generate(self, nNodes, nDistribution, gDistribution, tDistribution, strBuffer):    
-        nDistributionTable = self.__getNDistributionTable(nNodes, nDistribution)
+    def __generate(self, nNodes, nDistribution, parametersPerNode, equalityDistribution, strBuffer):
+        nodesWithParameters = int(nNodes * nDistribution)
+                    
+        strBuffer.writeln('* Node distribution: %.2f' % nDistribution)
+        strBuffer.writeln('* Nodes with parameters: %d' % nodesWithParameters)
+        strBuffer.writeln('* Parameters per node: %d' % parametersPerNode)
         
-        strBuffer.writeln('* ParameterPopulator: Node distribution: %s' % str(nDistribution))
-        #strBuffer.writeln('Node distribution table: %s' % str(nDistributionTable)
+        if len(equalityDistribution) > 0:
+            strBuffer.writeln('* Using an equality distribution of %s' % str(equalityDistribution))
         
-        totalNodes = sum((nodes for nodes, parameters in nDistributionTable))
-        if not totalNodes == nNodes:
-            raise Exception('Node distribution incorrectly calculated')   
+        nodeTable, taxonomy = self.__distributeParameters(nNodes, equalityDistribution, nodesWithParameters, parametersPerNode)
         
-        totalParameters = sum((nodes * parameters for nodes, parameters in nDistributionTable))
-        strBuffer.writeln('* ParameterPopulator: Total parameters (distinct or not): %d' % totalParameters)
+        strBuffer.writeln('* Total generated parameters: %d' % self.__countParameters(nodeTable))
         
-        gDistributionTable = self.__getGDistributionTable(totalParameters, gDistribution)
-        
-        strBuffer.writeln('* ParameterPopulator: Group distribution: %s' % str(gDistribution)) 
-        #strBuffer.writeln('Group distribution table: %s' %str(gDistributionTable)
-        
-        sumParameters = sum(gDistributionTable)
-        if not sumParameters == totalParameters:
-            raise Exception('Group distribution incorrectly calculated')
-        
-        if not len(tDistribution) == len(gDistributionTable):
-            raise Exception('Taxonomy distribution size is not correct. Expected %d', len(gDistributionTable));
-        
-        tDistributionTable = self.__getTDistributionTable(gDistributionTable, tDistribution)
-        
-        strBuffer.writeln('* ParameterPopulator: Taxonomy distribution: %s' % str(tDistribution))
-        #strBuffer.writeln('Taxonomy distribution tables: %s' % str(tDistributionTable)
-        
-        correctSolution = False
-        while not correctSolution:
-            try:
-                parameters, taxonomy = self.__createParameters(gDistributionTable, tDistributionTable)
-                
-                self.__parameters = set(parameters)
-        
-                #strBuffer.writeln('Parameters %s' % str(parameters)
-        
-                if not len(parameters) == totalParameters:
-                    raise Exception('%d parameters generated. %d expected' % (len(parameters, totalParameters)))
-                
-                parametersTable =  self.__createParametersTable(nDistributionTable, parameters)
-                correctSolution = True
-            except IncorrectSolution:
-                strBuffer.writeln('* ParameterPopulator: Incorrect distribution generated. Trying another one')
-                
-        
-        #strBuffer.writeln('Parameters table: %s' % str(parametersTable)
-        
-        parametersTable = self.__randomizeTable(parametersTable)
-        
-        return parametersTable, taxonomy
+        return nodeTable, taxonomy
     
-    def __randomizeTable(self, parametersTable):
-        randomizedTable = {}
-        
-        nodes = range(self.__nNodes)
-        
-        for node in parametersTable.keys():
-            index = random.randrange(len(nodes))
-            newNode = nodes[index]
-            nodes.remove(newNode)
-            randomizedTable[newNode] = parametersTable[node]
-        
-        return randomizedTable
-        
-    def __createParametersTable(self, nDistributionTable, parameters):
-        parametersTable = {}
-        
-        nodeIndex = 0
-        for nodes, numParameters in nDistributionTable:
-            for node in xrange(nodeIndex, nodes + nodeIndex):
-                selectedParameters = self.__selectDistinctParameters(numParameters, parameters)
-                parametersTable[node] = selectedParameters
-                nodeIndex += 1
-                                
-        return parametersTable
-            
-    def __selectDistinctParameters(self, num, parameters):
-        selectedParameters = []        
-        
-        if len(set(parameters)) < num:
-            raise IncorrectSolution()
-        
-        while not len(selectedParameters) == num:
-            index = random.randrange(0, len(parameters))        
-            p = parameters[index]
-            if not p in selectedParameters:
-                selectedParameters.append(p)
-                
-        for p in selectedParameters:
-            parameters.remove(p) 
-        
-        return selectedParameters
-        
+    def __countParameters(self, nodeTable): 
+        numParameters = 0
+        for parameters in nodeTable.values():
+            numParameters += len(parameters)
+        return numParameters
+    
+    def __distributeDifferent(self, nodeTable, generatedParameters, parametersPerNode):
+        for node in nodeTable.keys():
+            remainingParameters = parametersPerNode - len(nodeTable[node])
+            selectedParameters = generatedParameters[:remainingParameters]
+            del generatedParameters[:remainingParameters]
+            nodeTable[node] += selectedParameters
+        return nodeTable; 
+                        
     def __parameterGenerator(self):
         currentParameter = 0
         while True:
             yield '%d' % currentParameter
             currentParameter += 1
+            
+    def __createNodeTable(self, nNodes, nodesWithParameters):
+        availableNodes = range(nNodes) 
+        nodeTable = {}
+        while len(nodeTable) < nodesWithParameters:
+            index = random.randrange(len(availableNodes))
+            node = availableNodes[index]
+            nodeTable[node] = []
+            del availableNodes[index]
+        return nodeTable;
+    
+    def __distributeEquality(self, nodeTable, num, type, parametersPerNode):
+        availableNodes = [node for node in nodeTable.keys() if len(nodeTable[node]) < parametersPerNode]
+                
+        distributed = 0
+        while distributed < num:
+            index = random.randrange(len(availableNodes))
+            node = availableNodes[index]
+            nodeTable[node].append(type)
+            del availableNodes[index]
+            distributed += 1
+            
+        return nodeTable
         
-    def __createParameters(self, gDistributionTable, tDistributionTable):
-        generatedParameters = []
+    def __distributeParameters(self, nNodes, equalityDistribution, nodesWithParameters, parametersPerNode):
+        nodeTable = self.__createNodeTable(nNodes, nodesWithParameters)
         
         generator = self.__parameterGenerator()
         
+        taxonomy = self.__createDistributionTaxonomy()
+            
+        for type, ratio in equalityDistribution.iteritems():
+            numNodes = int(ratio * nodesWithParameters)
+            nodeTable = self.__distributeEquality(nodeTable, numNodes, type, parametersPerNode)
+            
+        generatedParameters = self.__countParameters(nodeTable) 
+            
+        remainingParameters = nodesWithParameters * parametersPerNode - generatedParameters
+        parameters = []
+        for i in xrange(remainingParameters):
+            p = generator.next()
+            parameters.append(p)
+            taxonomy.getRoot().addChild(p)
+            
+        nodeTable = self.__distributeDifferent(nodeTable, parameters, parametersPerNode)
+                                
+        return nodeTable, taxonomy
+    
+    def __createDistributionTaxonomy(self):
         taxonomy = Taxonomy('TaxonomyRootElement')
         
-        for parameters, tElements in zip(gDistributionTable, tDistributionTable):
-            if tElements == 'UNIQUE':
-                for i in xrange(parameters):
-                    p = generator.next()
-                    generatedParameters.append(p)
-                    taxonomy.getRoot().addChild(p)
-            else:
-                parent = taxonomy.getRoot()
-                for i in xrange(len(tElements)):
-                    p = generator.next()
-                    parent = parent.addChild(p)
-                    for j in xrange(tElements[i]):
-                        generatedParameters.append(p)
-                        
-        return generatedParameters, taxonomy
+        root = taxonomy.getRoot()
+        a = root.addChild('A')
+        b = root.addChild('B')
+        c = a.addChild('C')
+        d = a.addChild('D')
+        e = b.addChild('E')
+        f = b.addChild('F')
+        g = c.addChild('G')
+        h = c.addChild('H')
+        i = d.addChild('I')
+        j = d.addChild('J')
+        k = e.addChild('K')
+        l = e.addChild('L')
+        m = f.addChild('M')
+        n = f.addChild('N')
         
-    def __getTDistributionTable(self, gDistributionTable, tDistribution):
-        tDistributionTable = []
-        
-        for parameters, gDistribution in zip(gDistributionTable, tDistribution):
-            if gDistribution == 'UNIQUE':
-                tDistributionTable.append('UNIQUE')
-            else:
-                table = self.__getGDistributionTable(parameters, gDistribution)
-                tDistributionTable.append(table)
-            
-        return tDistributionTable
-        
-    def __getGDistributionTable(self, totalParameters, gDistribution):
-        self.__checkGDistribution(gDistribution)
-           
-        sumParameters = 0
-        
-        gDistributionTable = []
-        
-        for index, percentage in enumerate(gDistribution):
-            parameters = int(round(totalParameters * percentage))
-            if index == len(gDistribution) - 1:
-                parameters = totalParameters - sumParameters
-            gDistributionTable.append(parameters)
-            sumParameters += parameters
-            
-        return gDistributionTable
-        
-    def __getNDistributionTable(self, nNodes, nDistribution):
-        self.__checkNDistribution(nDistribution)
-           
-        totalNodes = 0
-        
-        nDistributionTable = []
-        
-        for index, (percentage, parameters) in enumerate(nDistribution):
-            nodes = int(round(nNodes * percentage))
-            if index == len(nDistribution) - 1:
-                nodes = nNodes - totalNodes
-            nDistributionTable.append((nodes, parameters))
-            totalNodes += nodes
-            
-        return nDistributionTable
-    
-    def __checkGDistribution(self, gDistribution):
-        total = round(sum([percentage for percentage in gDistribution]), 2)
-        
-        if not total == 1.0:
-            raise Exception('Group distribution percentages do not add to 1.0. Obtained %f instead' % total)
-        
-    def __checkNDistribution(self, nDistribution):
-        total = round(sum([percentage for percentage, parameters in nDistribution]), 2)
-        
-        if not total == 1.0:
-            raise Exception('Node distribution percentages do not add to 1.0. Obtained %f instead' % total) 
+        return taxonomy 
             
     def __generateXML(self, node, parameters, outputFilePath):
         doc = minidom.Document()
@@ -236,12 +162,10 @@ class ParameterPopulator:
         oFile.close()
         
     
-    def __generateXMLNodeConfigurations(self, workingDir, parametersTable, taxonomy, strBuffer):
-        """Generates parameter configuration XML files for each node included in the parameters table"""
-        
+    def __generateXMLNodeConfigurations(self, workingDir, parametersTable, taxonomy, strBuffer):        
         dir = os.path.join(workingDir, 'parameters')
         
-        strBuffer.writeln('* ParameterPopulator: Creating %s directory ' % dir)
+        strBuffer.writeln('* Creating %s directory ' % dir)
         os.mkdir(dir)
         
         taxonomyFilePath = os.path.join(workingDir, 'taxonomy.xml')
@@ -253,8 +177,5 @@ class ParameterPopulator:
         for node in parametersTable.keys():
             if len(parametersTable[node]) > 0:
                 filePath = os.path.join(dir, 'Parameters' + str(node) + '.xml')
-                strBuffer.writeln('* ParameterPopulator: Generating file %s' % filePath)
                 self.__generateXML(node, set(parametersTable[node]), filePath)
-    
-        strBuffer.writeln('* ParameterPopulator: Generation finished')
         

@@ -2,8 +2,8 @@
 <tests>
 	<test workingDir="scripts/tests/dissemination/verysimple" script="Script.tcl"/>
 	<test workingDir="scripts/tests/dissemination/simple" script="Script.tcl"/>
-	<test workingDir="scripts/tests/dissemination/loop" script="Script.tcl"/>
-	<test workingDir="scripts/tests/dissemination/basic" script="Script.tcl"/>	
+	<test workingDir="scripts/tests/dissemination/basic" script="Script.tcl"/>
+	<test workingDir="scripts/tests/dissemination/loop" script="Script.tcl"/>	
 	<test workingDir="scripts/tests/dissemination/simpleNewParameterAppears" script="Script.tcl"/>
 	<test workingDir="scripts/tests/dissemination/simpleNewNetworkAppears" script="Script.tcl"/>
 	<test workingDir="scripts/tests/dissemination/simpleRemoveParameter" script="Script.tcl"/>

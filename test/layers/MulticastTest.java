@@ -33,8 +33,8 @@ public class MulticastTest extends MultipleTests {
 		public void stop() {}
 
 		@Override
-		public BroadcastMessage isDuplicatedMessage(List<BroadcastMessage> waitingMessages, BroadcastMessage sendingMessage) {
-			return null;
+		public boolean merge(List<BroadcastMessage> waitingMessages, BroadcastMessage sendingMessage) {
+			return false;
 		}
 
 		@Override

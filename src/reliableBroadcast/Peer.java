@@ -108,8 +108,8 @@ public class Peer extends CommonAgentJ {
 		}
 
 		@Override
-		public BroadcastMessage isDuplicatedMessage(List<BroadcastMessage> waitingMessages, BroadcastMessage sendingMessage) {
-			return null;
+		public boolean merge(List<BroadcastMessage> waitingMessages, BroadcastMessage sendingMessage) {
+			return false;
 		}
 	}
 	

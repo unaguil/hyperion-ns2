@@ -12,7 +12,6 @@ import peer.RegisterCommunicationLayerException;
 import peer.message.BroadcastMessage;
 import peer.message.MessageString;
 import peer.peerid.PeerID;
-import peer.peerid.PeerIDSet;
 import util.logger.Logger;
 
 import common.CommonAgentJ;
@@ -42,8 +41,8 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 		}
 
 		@Override
-		public BroadcastMessage isDuplicatedMessage(List<BroadcastMessage> waitingMessages, BroadcastMessage sendingMessage) {
-			return null;
+		public boolean merge(List<BroadcastMessage> waitingMessages, BroadcastMessage sendingMessage) {
+			return false;
 		}
 	}
 	
@@ -106,10 +105,8 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 	}
 
 	@Override
-	public void appearedNeighbors(final PeerIDSet neighbours) {
-	}
-
-	@Override
-	public void dissapearedNeighbors(final PeerIDSet neighbours) {
+	public void neighborsChanged(Set<PeerID> newNeighbors, Set<PeerID> lostNeighbors) {
+		// TODO Auto-generated method stub
+		
 	}
 }

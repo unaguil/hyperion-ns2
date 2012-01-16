@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -218,8 +219,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	}
 
 	@Override
-	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> addedParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters,
-			final PayloadMessage payload) {
+	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> addedParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, final List<PayloadMessage> payloadMessages) {
 		return new MessageStringPayload(peer.getPeerID(), "Table changed");
 	}
 	

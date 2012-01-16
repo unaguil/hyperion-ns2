@@ -164,6 +164,10 @@ proc wireless_simulation_extended {nNodes finishTime javaAgent nonDeterministic 
 	set val(ifqlen)         50                         ;# max packet in ifq
 	set val(rp)             DumbAgent                  ;# routing protocol
 	
+	Mac/802_11 set dataRate_ 11Mb
+	Mac/802_11 set PreambleLength_ 72
+	Agent/UDP set packetSize_ 1500
+	
 	set topo  [new Topography]
 
 	$topo load_flatgrid $gridW $gridH

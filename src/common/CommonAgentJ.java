@@ -57,8 +57,6 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 	private static final String COMMAND_INIT = "init";
 
 	private static final int RECV_BUFF = 65536; // TODO Check this value
-	
-	private static final long SIM_DELTA_TIME = 500;
 
 	/**
 	 * Constructor of the PeerAgentJ class. This constructor is intended to be
@@ -69,7 +67,7 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 	 *            extend the basic functionality of message counter.
 	 */
 	public CommonAgentJ() {
-		Logger.setDeltaTime(SIM_DELTA_TIME);
+		Logger.setDeltaTime(500);
 		this.setNativeDebugLevel(AgentJDebugLevel.error);
 		this.setJavaDebugLevel(LogLevel.ERROR);
 

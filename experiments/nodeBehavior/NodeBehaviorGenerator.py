@@ -21,5 +21,8 @@ class NodeBehaviorGenerator:
         if self.__nodeBehavior == 'CompositionSearchBehavior':
             return CompositionSearchBehavior(entries, nodePopulator)
         
+        if self.__nodeBehavior == 'None':
+            return None
+        
         print 'Invalid node behavior %s' % self.__nodeBehavior
         sys.exit()

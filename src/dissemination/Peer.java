@@ -3,12 +3,12 @@ package dissemination;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import peer.message.PayloadMessage;
 import peer.peerid.PeerID;
-import peer.peerid.PeerIDSet;
 import taxonomy.parameter.InvalidParameterIDException;
 import taxonomy.parameter.Parameter;
 import taxonomy.parameter.ParameterFactory;
@@ -131,16 +131,12 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 	}
 
 	@Override
-	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> addedParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters,
-			final PayloadMessage payload) {
+	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> addedParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, final List<PayloadMessage> payloadMessage) {
 		return null;
 	}
 
 	@Override
-	public void appearedNeighbors(final PeerIDSet neighbours) {
-	}
-
-	@Override
-	public void dissapearedNeighbors(final PeerIDSet neighbours) {
+	public void neighborsChanged(Set<PeerID> newNeighbors, Set<PeerID> lostNeighbors) {
+		// TODO Auto-generated method stub
 	}
 }

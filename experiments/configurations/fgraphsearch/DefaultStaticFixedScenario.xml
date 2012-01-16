@@ -7,27 +7,27 @@
 		
 	<entry key="finishTime">600.0</entry>
 	<entry key="discardTime">100.0</entry>
-	<entry key="javaAgent">graphsearch.ForwardPeer</entry>
+	<entry key="javaAgent">graphsearch.ForwardPeerMulticastDisabled</entry>
 	
 	<!-- Random waypoint configuration -->
-	<entry key="mobilityModel">LoadMobilityModel</entry>
-	<entry key="minSpeed">0.00</entry>
-	<entry key="maxSpeed">0.00</entry>
+	<entry key="mobilityModel">RandomWaypoint</entry>
+	<entry key="minSpeed">0.00000000000000000001</entry>
+	<entry key="maxSpeed">0.00000000000000000001</entry>
 	<entry key="pauseTime">500.0</entry>
 	<entry key="rotate">False</entry>
 	
 	<!-- Composition populator -->
 	<entry key="populator">CompositionsPopulator</entry>
-	<entry key="nCompositions">4</entry>
+	<entry key="nCompositions">2</entry>
 	<entry key="compositionIO">(3, 3)</entry>
 	<entry key="dDistribution">((0.9, 4), (0.1, 4))</entry>
-	<entry key="nDistribution">0.3</entry>
+	<entry key="nDistribution">1.0</entry>
 	<entry key="width">(3, 3)</entry>
 	
 	<!-- Search behavior -->
 	<entry key="nodeBehavior">CompositionSearchBehavior</entry>
 	<entry key="different">True</entry>
-	<entry key="searchFreq">0.01</entry>
+	<entry key="searchFreq">0.00</entry>
 	<entry key="timeRange">('START', 360)</entry>
 	
 	<!-- Peer configuration variables -->
