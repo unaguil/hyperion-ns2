@@ -16,6 +16,16 @@ import java.util.TimerTask;
 public class NS2Simulation {
 
 	private static final int ABORT_TIME = 120 * 1000;
+	
+	private boolean aborted = false;
+	
+	public synchronized void setAborted() {
+		aborted = true;
+	}
+	
+	public synchronized boolean wasAborted() {
+		return aborted;
+	}
 
 	public boolean runScript(final String workingDir, final String script, final String outputDir) {
 		final String outputFilePath = outputDir + File.separatorChar + "output.log";
@@ -70,7 +80,7 @@ public class NS2Simulation {
 	
 				final Timer timer = new Timer(true);
 				try {
-					final InterruptTimerTask interrupter = new InterruptTimerTask(p, Thread.currentThread(), new SaveOutputDirAction(workingDir, "expired"), workingDir + File.pathSeparator + script);
+					final InterruptTimerTask interrupter = new InterruptTimerTask(p, Thread.currentThread(), workingDir + File.pathSeparator + script, this);
 					timer.schedule(interrupter, ABORT_TIME);
 					finished = (p.waitFor() == 0);
 				} catch (final InterruptedException e) {
@@ -79,19 +89,26 @@ public class NS2Simulation {
 					timer.cancel();
 				}
 	
-				readOutput.finish();
-				readErrorOutput.finish();
+				readOutput.interrupt();
+				readOutput.join();
+				readErrorOutput.interrupt();
+				readErrorOutput.join();
+				
 			} catch (Exception e) {
 				fail("NS-2 process could not be started. " + e.getMessage()); 
 			}
 			
-			if (!finished) {
-				SaveOutputDirAction saveOutputDirAction = new SaveOutputDirAction(workingDir, "notFinished");
-				try {
+			try {
+				if (wasAborted()) { 
+					SaveOutputDirAction saveOutputDirAction = new SaveOutputDirAction(workingDir, "expired");
 					saveOutputDirAction.perform();
-				} catch (Exception e) {	
-					System.out.println("Error performing saving output dir action");
 				}
+				else if (!finished) {
+					SaveOutputDirAction saveOutputDirAction = new SaveOutputDirAction(workingDir, "notFinished");
+					saveOutputDirAction.perform();
+				}
+			} catch (Exception e) {
+				System.out.print(e.getMessage());
 			}
 			
 		} else
@@ -134,30 +151,23 @@ public class NS2Simulation {
 
 		private final Process process;
 		private final Thread thread;
-		private final InterruptionAction action;
-		private final String interruptedScript;
+		private final String interruptedScript; 
+		private final NS2Simulation simulation;
 
-		public InterruptTimerTask(final Process process, final Thread thread, final InterruptionAction action, final String interruptedScript) {
+		public InterruptTimerTask(final Process process, final Thread thread, final String interruptedScript, final NS2Simulation simulation) {
 			this.thread = thread;
 			this.process = process;
-			this.action = action;
 			this.interruptedScript = interruptedScript;
+			this.simulation = simulation;
 		}
 
 		@Override
 		public void run() {
 			System.out.println("Interrupting execution of " + interruptedScript);
+			simulation.setAborted();
 			process.destroy();
 			thread.interrupt();
-			
-			try {
-				action.perform(); 
-			}
-			catch (Exception e) {
-				System.out.println("Cannot perform interruption action. " + e.getMessage());
-			}
 		}
-
 	}
 
 	private static class ReadProcessOutput extends Thread {
@@ -167,19 +177,9 @@ public class NS2Simulation {
 		private final InputStream is;
 		private final String filePath;
 
-		private boolean finished = false;
-
 		public ReadProcessOutput(final InputStream is, final String filePath) {
 			this.is = is;
 			this.filePath = filePath;
-		}
-
-		public synchronized void finish() {
-			finished = true;
-		}
-
-		private synchronized boolean isFinished() {
-			return finished;
 		}
 
 		@Override
@@ -190,21 +190,23 @@ public class NS2Simulation {
 
 			try {
 				writer = new BufferedWriter(new FileWriter(filePath));
-				while (!isFinished() && (line = br.readLine()) != null)
+				while (!Thread.interrupted() && (line = br.readLine()) != null)
 					writer.write(line + newLineSeparator);
-			} catch (final IOException e) {} 
-			finally {
-
+			} catch (final IOException e) {
+				System.out.print(e.getMessage());
+			} finally {
+				try {
+					br.close();
+				} catch (final IOException e) {
+					System.out.print(e.getMessage());
+				}
+				
 				try {
 					if (writer != null)
 						writer.close();
 				} catch (final IOException e) {
+					System.out.print(e.getMessage());
 				}
-			}
-
-			try {
-				br.close();
-			} catch (final IOException e) {
 			}
 		}
 	}
