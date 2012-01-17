@@ -46,8 +46,6 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 	private DatagramSocket socket;
 	private byte[] data;
 
-	private static final int SO_TIMEOUT = 5;
-
 	// Default UDP port
 	private static final int DEFAULT_PORT = 5555;
 
@@ -133,17 +131,20 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 
 	@Override
 	public byte[] receiveData() throws IOException {
-		// Creates the reception buffer and packet
-		final DatagramPacket packet = new DatagramPacket(data, data.length);
-
-		socket.setSoTimeout(SO_TIMEOUT);
-		socket.receive(packet);
-		return packet.getData();
+		if (!socket.isClosed()) {
+			// Creates the reception buffer and packet
+			final DatagramPacket packet = new DatagramPacket(data, data.length);
+			socket.receive(packet);
+			return packet.getData();
+		}
+		else
+			return new byte[0];
 	}
 	
 	@Override
 	public void stopComm() throws IOException {
 		socket.close();
+		myLogger.trace("Peer " + peer.getPeerID() + " communication socket closed");
 	}
 
 	private String toString(final String[] strArray) {
