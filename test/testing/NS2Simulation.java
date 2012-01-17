@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -80,7 +81,7 @@ public class NS2Simulation {
 	
 				final Timer timer = new Timer(true);
 				try {
-					final InterruptTimerTask interrupter = new InterruptTimerTask(p, Thread.currentThread(), workingDir + File.pathSeparator + script, this);
+					final InterruptTimerTask interrupter = new InterruptTimerTask(p, workingDir + File.pathSeparator + script, this);
 					timer.schedule(interrupter, ABORT_TIME);
 					finished = (p.waitFor() == 0);
 				} catch (final InterruptedException e) {
@@ -150,12 +151,10 @@ public class NS2Simulation {
 	private static class InterruptTimerTask extends TimerTask {
 
 		private final Process process;
-		private final Thread thread;
 		private final String interruptedScript; 
 		private final NS2Simulation simulation;
 
-		public InterruptTimerTask(final Process process, final Thread thread, final String interruptedScript, final NS2Simulation simulation) {
-			this.thread = thread;
+		public InterruptTimerTask(final Process process, final String interruptedScript, final NS2Simulation simulation) {
 			this.process = process;
 			this.interruptedScript = interruptedScript;
 			this.simulation = simulation;
@@ -165,9 +164,30 @@ public class NS2Simulation {
 		public void run() {
 			System.out.println("Interrupting execution of " + interruptedScript);
 			simulation.setAborted();
-			process.destroy();
-			thread.interrupt();
+			destroy();
 		}
+		
+		private void destroy() {
+			try {
+				final int pid = getUnixPID();
+				System.out.println("Killing process with PID " + pid);
+				Runtime.getRuntime().exec("kill -9 " + pid);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+
+		private int getUnixPID() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException {  
+	        if (process.getClass().getName().equals("java.lang.UNIXProcess")) {  
+	            Class<? extends Process> proc = process.getClass();  
+	            Field field = proc.getDeclaredField("pid");  
+	            field.setAccessible(true);  
+	            Object pid = field.get(process);  
+	            return (Integer) pid;  
+	        } else {  
+	            throw new IllegalArgumentException("Not a UNIXProcess");  
+	        }  
+	    }  
 	}
 
 	private static class ReadProcessOutput extends Thread {
