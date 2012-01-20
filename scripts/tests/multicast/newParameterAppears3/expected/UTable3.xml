@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <unicastTable>
 	<search peer="6">
+		<parameter value="I-A" />
 		<parameter value="I-B" />
+	</search>
+	<search peer="9">
+		<parameter value="I-A" />
 	</search>
 	<search peer="9">
 		<parameter value="I-B" />
 	</search>
-	<route dest="9" through="2" />
-	<route dest="6" through="2" />
+	<route dest="6" through="4" />
+	<route dest="9" through="7" />
+	<route dest="1" through="2" />
 </unicastTable>

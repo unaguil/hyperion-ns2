@@ -6,5 +6,5 @@
 	<search peer="9">
 		<parameter value="I-B" />
 	</search>
-	<route dest="9" through="1" />
+	<route dest="9" through="2" />
 </unicastTable>

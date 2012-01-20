@@ -3,7 +3,7 @@
 	<search peer="4">
 		<parameter value="I-A" />
 	</search>
-	<route dest="4" through="2" />
+	<route dest="4" through="4" />
 	<route dest="0" through="2" />
 	<route dest="2" through="2" />
 </unicastTable>

@@ -11,6 +11,7 @@
 	<test workingDir="scripts/tests/multicast/simpleNewNetworkAppears" script="Script.tcl"/> 
 	<test workingDir="scripts/tests/multicast/simpleNewParameterAppears" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/newParameterAppears2" script="Script.tcl"/>
+	<test workingDir="scripts/tests/multicast/newParameterAppears3" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/simpleBreakNetwork" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/searchParameter" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/breakNetwork" script="Script.tcl"/>

@@ -5,4 +5,7 @@
 		<parameter value="I-B" />
 	</search>
 	<route dest="6" through="5" />
+	<route dest="1" through="3" />
+	<route dest="7" through="3" />
+	<route dest="3" through="6" />
 </unicastTable>
