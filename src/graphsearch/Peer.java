@@ -169,7 +169,7 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 	public void compositionFound(final ExtendedServiceGraph composition, final SearchID searchID, int hops) {
 		receivedCompositions.get(searchID).add(composition);
 		
-		final String fileName = "solution-" + System.currentTimeMillis() + "-" + hops + ".dot";
+		final String fileName = "solution-Peer" + peer.getPeerID() + "-" + System.currentTimeMillis() + "-" + hops + ".dot";
 		
 		try {
 			FileOutputStream os = new FileOutputStream(fileName);  
