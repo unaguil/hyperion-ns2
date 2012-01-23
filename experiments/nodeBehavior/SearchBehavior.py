@@ -19,7 +19,9 @@ class SearchBehavior(CommonSearchBehavior):
             
     def __randomSelect(self):
         node = random.randrange(self.getNNodes())
-        parameter = str(random.randrange(len(self.getElements())))
+        availableElements = list(self.getElements())
+        index = random.randrange(len(availableElements))
+        parameter = availableElements[index]
         return node, parameter
     
     def getElements(self):
