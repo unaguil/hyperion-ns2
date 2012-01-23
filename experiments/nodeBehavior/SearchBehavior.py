@@ -23,7 +23,8 @@ class SearchBehavior(CommonSearchBehavior):
         return node, parameter
     
     def getElements(self):
-        return self.getNodePopulator().getTaxonomy().getAllConcepts()
+        return self.getNodePopulator().getUsedConcepts()
     
     def printInfo(self, strBuffer):
-        strBuffer.writeln('* %s: Using a total of %d parameters' % (self.getBehaviorName(), len(self.getElements())))        
+        print self.getElements()
+        strBuffer.writeln('* %s: Using a total of %d concepts' % (self.getBehaviorName(), len(self.getElements())))        

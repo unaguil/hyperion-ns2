@@ -17,6 +17,8 @@ class ParameterPopulator:
     def __init__(self, entries):
         self.__equalityDistribution = {}
         
+        self.__usedConcepts = []
+        
         for entry in entries:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
@@ -33,14 +35,14 @@ class ParameterPopulator:
     def generate(self, workingDir, strBuffer):            
         strBuffer.writeln('')
         strBuffer.writeln('************* Parameter populator ****************')
-        parametersTable, self.__taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__parametersPerNode, self.__equalityDistribution, strBuffer)    
+        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__parametersPerNode, self.__equalityDistribution, strBuffer)    
         
-        self.__generateXMLNodeConfigurations(workingDir, parametersTable, self.__taxonomy, strBuffer)
+        self.__generateXMLNodeConfigurations(workingDir, parametersTable, taxonomy, strBuffer)
 
         strBuffer.writeln('**************************************************')
         
-    def getTaxonomy(self):
-        return self.__taxonomy
+    def getUsedConcepts(self):
+        return set(self.__usedConcepts)
     
     def __generate(self, nNodes, nDistribution, parametersPerNode, equalityDistribution, strBuffer):
         nodesWithParameters = int(nNodes * nDistribution)
@@ -100,6 +102,7 @@ class ParameterPopulator:
         for type, ratio in equalityDistribution.iteritems():
             numParameters = int(ratio * nodesWithParameters * parametersPerNode)
             parameters += [type] * numParameters
+            self.__usedConcepts += taxonomy.getParents(type)
             
         generatedParameters = self.__countParameters(nodeTable) 
             
@@ -107,7 +110,8 @@ class ParameterPopulator:
         for i in xrange(remainingParameters):
             p = generator.next()
             parameters.append(p)
-            taxonomy.getRoot().addChild(p)
+            taxonomy.addChild('Root', p)
+            self.__usedConcepts.append(p)
             
         random.shuffle(parameters)
         
@@ -119,24 +123,23 @@ class ParameterPopulator:
         return nodeTable, taxonomy
     
     def __createDistributionTaxonomy(self):
-        taxonomy = Taxonomy('TaxonomyRootElement')
+        taxonomy = Taxonomy('Root')
         
-        root = taxonomy.getRoot()
-        a = root.addChild('A')
-        b = root.addChild('B')
-        c = a.addChild('C')
-        d = a.addChild('D')
-        e = b.addChild('E')
-        f = b.addChild('F')
-        g = c.addChild('G')
-        h = c.addChild('H')
-        i = d.addChild('I')
-        j = d.addChild('J')
-        k = e.addChild('K')
-        l = e.addChild('L')
-        m = f.addChild('M')
-        n = f.addChild('N')
-        
+        taxonomy.addChild('Root', 'A')
+        taxonomy.addChild('Root', 'B')
+        taxonomy.addChild('A', 'C')
+        taxonomy.addChild('A', 'D')
+        taxonomy.addChild('B', 'E')
+        taxonomy.addChild('B', 'F')
+        taxonomy.addChild('C', 'G')
+        taxonomy.addChild('C', 'H')
+        taxonomy.addChild('D', 'I')
+        taxonomy.addChild('D', 'J')
+        taxonomy.addChild('E', 'K')
+        taxonomy.addChild('E', 'L')
+        taxonomy.addChild('F', 'M')
+        taxonomy.addChild('F', 'N')
+                
         return taxonomy 
             
     def __generateXML(self, node, parameters, outputFilePath):

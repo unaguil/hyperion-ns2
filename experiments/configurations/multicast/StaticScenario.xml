@@ -18,8 +18,9 @@
 	
 	<!-- Parameter populator -->
 	<entry key="populator">ParameterPopulator</entry>
-	<entry key="nDistribution">1.0</entry>
-	<entry key="parametersPerNode">30</entry>
+	<entry key="nDistribution">0.25</entry>
+	<entry key="parametersPerNode">2</entry>
+	<entry key="equalityDistribution">{'G': 0.25, 'M': 0.25}</entry>
 	
 	<entry key="nodeBehavior">SearchBehavior</entry>
 	<entry key="searchFreq">2.0</entry>
