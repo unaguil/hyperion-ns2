@@ -9,30 +9,21 @@ class SearchBehavior(CommonSearchBehavior):
     def __init__(self, entries, nodePopulator):
         CommonSearchBehavior.__init__(self, entries, nodePopulator, 'Search behavior')
         
-        self.__searchedParameters = {}
+        self.__activeSearches = []
         
     def perform(self, time, oFile):
-        if len(self.getElements()) > 0 and self.getNNodes() > 0:
+        for i in xrange(self.getSimultaneous()):        
             node, parameter = self.__randomSelect()
-            if not node in self.__searchedParameters:
-                self.__searchedParameters[node] = []
-                    
-            while parameter in self.__searchedParameters[node]:
-                node, parameter = self.__randomSelect()
-                if not node in self.__searchedParameters:
-                    self.__searchedParameters[node] = []
-            
-            self.__searchedParameters[node].append(parameter) 
-            
+            self.__activeSearches.append((node, parameter))
             oFile.write('$ns_ at %f \"$agents(%d) agentj searchParameter I-%s\"\n' % (time, node, parameter))
             
     def __randomSelect(self):
         node = random.randrange(self.getNNodes())
-        parameter = str(random.randrange(len(self.getNodePopulator().getParameters())))
+        parameter = str(random.randrange(len(self.getElements())))
         return node, parameter
     
     def getElements(self):
-        return self.getNodePopulator().getParameters()
+        return self.getNodePopulator().getTaxonomy().getAllConcepts()
     
     def printInfo(self, strBuffer):
-        strBuffer.writeln('* %s: Using a total of %d different parameters' % (self.getBehaviorName(), len(self.getNodePopulator().getParameters())))        
+        strBuffer.writeln('* %s: Using a total of %d parameters' % (self.getBehaviorName(), len(self.getElements())))        

@@ -6,8 +6,8 @@
 	<entry key="gridH">290</entry>
 		
 	<entry key="finishTime">100.0</entry>
-	<entry key="discardTime">0.0</entry>
-	<entry key="javaAgent">dissemination.Peer</entry>
+	<entry key="discardTime">10.0</entry>
+	<entry key="javaAgent">multicast.Peer</entry>
 	
 	<!-- Random waypoint configuration -->
 	<entry key="mobilityModel">LoadMobilityModel</entry>
@@ -21,7 +21,10 @@
 	<entry key="nDistribution">1.0</entry>
 	<entry key="parametersPerNode">30</entry>
 	
-	<entry key="nodeBehavior">None</entry>
+	<entry key="nodeBehavior">SearchBehavior</entry>
+	<entry key="searchFreq">2.0</entry>
+	<entry key="simultaneous">0.3</entry>
+	<entry key="timeRange">('START', 50.0)</entry>
 	
 	<!-- Peer configuration variables -->
 	<entry key="beaconDetector.beaconTime">1000</entry>

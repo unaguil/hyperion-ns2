@@ -14,19 +14,19 @@ class LoadMobilityModel:
             key = entry.getAttribute("key")
             
             if key == "nNodes":
-                self.__nNodes = value
+                self.__nNodes = int(value)
             if key == "finishTime":
                 self.__finishTime = float(value) + DELTA_TIME 
             if key == "gridW":
-                self.__maxX = value
+                self.__maxX = int(value)
             if key == "gridH":
-                self.__maxY = value
+                self.__maxY = int(value)
             if key == "minSpeed":
-                self.__minSpeed = value
+                self.__minSpeed = float(value)
             if key == "maxSpeed":
-                self.__maxSpeed = value
+                self.__maxSpeed = float(value)
             if key == "pauseTime":
-                self.__pauseTime = value
+                self.__pauseTime = float(value)
             if key == "rotate":
                 self.__rotate = eval(value)
         
@@ -36,7 +36,7 @@ class LoadMobilityModel:
         else:
             numScenario = 0
             
-        mobilityFile = 'mobility-%s-%.1f-%s-%s-%s-%s-%s-%d.txt' % (str(self.__nNodes), self.__finishTime, str(self.__maxX), str(self.__maxY), str(self.__minSpeed), str(self.__maxSpeed), str(self.__pauseTime), numScenario)
+        mobilityFile = 'mobility-%d-%.1f-%d-%d-%.2f-%.2f-%.1f-%d.txt' % (self.__nNodes, self.__finishTime, self.__maxX, self.__maxY, self.__minSpeed, self.__maxSpeed, self.__pauseTime, numScenario)
         relativePath = 'mobilityScenarios/' + mobilityFile
         strBuffer.writeln('Using mobility scenario %s' % relativePath)
         absolutePath = os.path.abspath(relativePath)

@@ -23,7 +23,6 @@ class Taxonomy:
     def getRoot(self):
         return self.__root
     
-    
     def __recursiveWrite(self, currentElement, docRoot, doc):
         element = doc.createElement('element');
         element.setAttribute('id', currentElement.getID());
@@ -47,5 +46,17 @@ class Taxonomy:
         self.__recursiveWrite(self.getRoot(), docRoot, doc)
         
         return doc 
+    
+    def __recursiveGetAllConcepts(self, currentElement, concepts):        
+        for child in currentElement.childs():
+            concepts.append(child.getID())
         
+        for child in currentElement.childs():
+            self.__recursiveGetAllConcepts(child, concepts)
+    
+    def getAllConcepts(self):
+        concepts = []
+        self.__recursiveGetAllConcepts(self.getRoot(), concepts)
+        return concepts
+           
     

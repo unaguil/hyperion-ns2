@@ -33,14 +33,14 @@ class ParameterPopulator:
     def generate(self, workingDir, strBuffer):            
         strBuffer.writeln('')
         strBuffer.writeln('************* Parameter populator ****************')
-        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__parametersPerNode, self.__equalityDistribution, strBuffer)    
+        parametersTable, self.__taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__parametersPerNode, self.__equalityDistribution, strBuffer)    
         
-        self.__generateXMLNodeConfigurations(workingDir, parametersTable, taxonomy, strBuffer)
+        self.__generateXMLNodeConfigurations(workingDir, parametersTable, self.__taxonomy, strBuffer)
 
         strBuffer.writeln('**************************************************')
         
-    def getParameters(self):
-        return self.__parameters
+    def getTaxonomy(self):
+        return self.__taxonomy
     
     def __generate(self, nNodes, nDistribution, parametersPerNode, equalityDistribution, strBuffer):
         nodesWithParameters = int(nNodes * nDistribution)
@@ -154,7 +154,6 @@ class ParameterPopulator:
         oFile.write(doc.toprettyxml())
         oFile.close()
         
-    
     def __generateXMLNodeConfigurations(self, workingDir, parametersTable, taxonomy, strBuffer):        
         dir = os.path.join(workingDir, 'parameters')
         

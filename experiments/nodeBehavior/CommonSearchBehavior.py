@@ -14,6 +14,9 @@ class CommonSearchBehavior:
     
     def __init__(self, entries, nodePopulator, behaviorName):
         self.__different = False
+        
+        self.__simultaneous = 0
+        self.__different = False
                 
         for entry in entries:
             value = entry.firstChild.data
@@ -36,6 +39,9 @@ class CommonSearchBehavior:
                 
             if key == 'different':
                 self.__different = eval(value)
+                
+            if key == 'simultaneous':
+                self.__simultaneous = float(value)
                     
         self.__nodePopulator = nodePopulator
         
@@ -44,7 +50,7 @@ class CommonSearchBehavior:
         if self.__searchFreq == 0:
             self.__searchPeriod = 0.0
         else:
-            self.__searchPeriod = 1 / self.__searchFreq
+            self.__searchPeriod = 1 / self.__searchFreq            
             
     def getNNodes(self):
         return self.__nNodes
@@ -71,6 +77,7 @@ class CommonSearchBehavior:
         strBuffer.writeln('* Frequency: %.3f searches/s' % self.__searchFreq)
         strBuffer.writeln('* Generated: %d searches' % searches)
         strBuffer.writeln('* Time range: [%s, %s] s' % (init, end))
+        strBuffer.writeln("* Simultaneous searches: %.2f" % (self.getSimultaneous()))
         self.printInfo(strBuffer)
 
         startTime = time()
@@ -96,3 +103,9 @@ class CommonSearchBehavior:
     
     def getElements(self):
         pass
+    
+    def getSimultaneous(self):
+        if self.__simultaneous == 0:
+            return 1
+        else:
+            return int(self.__simultaneous * self.getNNodes())
