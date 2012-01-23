@@ -87,19 +87,6 @@ class ParameterPopulator:
             nodeTable[node] = []
             del availableNodes[index]
         return nodeTable;
-    
-    def __distributeEquality(self, nodeTable, num, type, parametersPerNode):
-        availableNodes = [node for node in nodeTable.keys() if len(nodeTable[node]) < parametersPerNode]
-                
-        distributed = 0
-        while distributed < num:
-            index = random.randrange(len(availableNodes))
-            node = availableNodes[index]
-            nodeTable[node].append(type)
-            del availableNodes[index]
-            distributed += 1
-            
-        return nodeTable
         
     def __distributeParameters(self, nNodes, equalityDistribution, nodesWithParameters, parametersPerNode):
         nodeTable = self.__createNodeTable(nNodes, nodesWithParameters)
@@ -107,21 +94,27 @@ class ParameterPopulator:
         generator = self.__parameterGenerator()
         
         taxonomy = self.__createDistributionTaxonomy()
+        
+        parameters = []
             
         for type, ratio in equalityDistribution.iteritems():
-            numNodes = int(ratio * nodesWithParameters)
-            nodeTable = self.__distributeEquality(nodeTable, numNodes, type, parametersPerNode)
+            numParameters = int(ratio * nodesWithParameters * parametersPerNode)
+            parameters += [type] * numParameters
             
         generatedParameters = self.__countParameters(nodeTable) 
             
         remainingParameters = nodesWithParameters * parametersPerNode - generatedParameters
-        parameters = []
         for i in xrange(remainingParameters):
             p = generator.next()
             parameters.append(p)
             taxonomy.getRoot().addChild(p)
             
-        nodeTable = self.__distributeDifferent(nodeTable, parameters, parametersPerNode)
+        random.shuffle(parameters)
+        
+        for node in nodeTable.keys():
+            selectedParameters = parameters[:parametersPerNode]
+            del parameters[:parametersPerNode]
+            nodeTable[node] += selectedParameters
                                 
         return nodeTable, taxonomy
     
