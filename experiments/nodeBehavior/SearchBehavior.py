@@ -28,4 +28,4 @@ class SearchBehavior(CommonSearchBehavior):
         return self.getNodePopulator().getUsedConcepts()
     
     def printInfo(self, strBuffer):
-        strBuffer.writeln('* %s: Using a total of %d concepts' % (self.getBehaviorName(), len(self.getElements())))        
+        strBuffer.writeln('* Using a total of %d concepts' % len(self.getElements()))        
