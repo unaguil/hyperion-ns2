@@ -19,4 +19,9 @@
 	
  	<measure type="multicast.StartedSearches" period="0.25" />
 	<measure type="multicast.AvgFoundParameters" period="0.25" />
+	<measure type="multicast.AvgSearchTimeFirstOcurrence" period="0.25" />
+	<measure type="multicast.AvgSearchTime25FoundParameters" period="0.25" />
+	<measure type="multicast.AvgSearchTime50FoundParameters" period="0.25" />
+	<measure type="multicast.AvgSearchTime75FoundParameters" period="0.25" />
+	<measure type="multicast.AvgSearchTime100FoundParameters" period="0.25" />
 </part>

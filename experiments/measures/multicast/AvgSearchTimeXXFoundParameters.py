@@ -6,14 +6,17 @@ import os.path
 import measures.generic.Units as Units
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
-class AvgFoundParameters(GenericAvgMeasure):	
-	def __init__(self, period, simulationTime):		
-		GenericAvgMeasure.__init__(self, period, simulationTime, Units.PARAMETERS)
+class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):	
+	def __init__(self, period, simulationTime, minRatio):		
+		GenericAvgMeasure.__init__(self, period, simulationTime, Units.SECONDS)
 		
 		self.__searchPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? started search for parameters (\[.*?\]) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
 		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? found parameters (\[.*?\]) in node ([0-9]+) searchID (\(.*?\)) ([0-9]+\,[0-9]+).*?')
 		
 		self.__currentSearches = {}
+		self.__startTime = {}
+		
+		self.__minRatio = minRatio
 		
 	def start(self, tempDir):
 		conceptsFile = os.path.join(tempDir, 'parameters', 'usedConcepts.txt')
@@ -32,8 +35,7 @@ class AvgFoundParameters(GenericAvgMeasure):
 			time = float(m.group(3).replace(',','.'))	
 			
 			self.__currentSearches[searchID] = {}
-			
-			self.periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
+			self.__startTime[searchID] = time
 				
 			return
 		
@@ -44,13 +46,17 @@ class AvgFoundParameters(GenericAvgMeasure):
 			searchID = m.group(3)
 			time = float(m.group(4).replace(',','.'))
 			
-			for parameter in parameters:
-				if not parameter in self.__currentSearches[searchID]:
-					self.__currentSearches[searchID][parameter] = []
-				if peer not in self.__currentSearches[searchID][parameter]:
-					self.__currentSearches[searchID][parameter].append(peer) 
-								
-			self.periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
+			if searchID in self.__currentSearches:
+				for parameter in parameters:
+					if not parameter in self.__currentSearches[searchID]:
+						self.__currentSearches[searchID][parameter] = []
+					if peer not in self.__currentSearches[searchID][parameter]:
+						self.__currentSearches[searchID][parameter].append(peer)
+						
+				if self.__calculateFoundParametersRatio(searchID) >= self.__minRatio: 
+					self.periodicAvgValues.addValue(time - self.__startTime[searchID], time)
+					del self.__startTime[searchID]
+					del self.__currentSearches[searchID]
 			
 			return 
 		
@@ -62,18 +68,17 @@ class AvgFoundParameters(GenericAvgMeasure):
 			parameters.extend(self.__getParameters(values))
 		return parameters
 				
-	def __calculateAvgFoundParameters(self):			
-		avgRatios = []
-
-		for foundParameters in self.__currentSearches.values():
-			for foundParameter, peers in foundParameters.iteritems():
-				ratio = len(peers) / float(self.__availableParameters[foundParameter.split('-')[1]])
-				avgRatios.append(ratio)
+	def __calculateFoundParametersRatio(self, searchID):
+		foundParameters = self.__currentSearches[searchID]
+		ratios = []
+		for foundParameter, peers in foundParameters.iteritems():
+			ratio = len(peers) / float(self.__availableParameters[foundParameter.split('-')[1]])
+			ratios.append(ratio)
 				
-		if len(avgRatios) == 0:
+		if len(ratios) == 0:
 			return 0.0
 		else:
-			return numpy.mean(avgRatios) 
+			return numpy.mean(ratios) 
 			
 	def __checkParameter(self, parameter, list):
 		if not parameter in list:
