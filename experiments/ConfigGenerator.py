@@ -72,7 +72,7 @@ class ConfigGenerator:
 
 			configuration = configuration + dynamicEntry + "\n"
 		
-		configuration = configuration + "<entry key=\"taxonomyFile\">taxonomy.xml</entry>\n"
+		configuration = configuration + "<entry key=\"dissemination.taxonomyFile\">taxonomy.xml</entry>\n"
 
 		configuration = configuration + end + '\n'
 		

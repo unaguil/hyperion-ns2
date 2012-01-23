@@ -42,9 +42,11 @@ class ParameterPopulator:
         strBuffer.writeln('* Creating %s directory ' % dir)
         os.mkdir(dir)    
         
-        self.__generateXMLNodeConfigurations(dir, parametersTable, taxonomy, strBuffer)
+        self.__generateXMLNodeConfigurations(dir, parametersTable, strBuffer)
         
         self.__saveGeneratedParameters(dir, self.__usedConcepts)
+        
+        self.__writeTaxonomy(workingDir, taxonomy)
 
         strBuffer.writeln('**************************************************')
         
@@ -172,13 +174,14 @@ class ParameterPopulator:
         oFile.write(doc.toprettyxml())
         oFile.close()
         
-    def __generateXMLNodeConfigurations(self, outputDir, parametersTable, taxonomy, strBuffer):                
-        taxonomyFilePath = os.path.join(outputDir, 'taxonomy.xml')
+    def __writeTaxonomy(self, dir, taxonomy):
+        taxonomyFilePath = os.path.join(dir, 'taxonomy.xml')
         oFile = open(taxonomyFilePath, 'w')
         xmlTaxonomy = taxonomy.createXMLDocument() 
         oFile.write(xmlTaxonomy.toprettyxml())
         oFile.close()
         
+    def __generateXMLNodeConfigurations(self, outputDir, parametersTable, strBuffer):                        
         for node in parametersTable.keys():
             if len(parametersTable[node]) > 0:
                 filePath = os.path.join(outputDir, 'Parameters' + str(node) + '.xml')
