@@ -24,7 +24,7 @@
 	
 	<entry key="nodeBehavior">SearchBehavior</entry>
 	<entry key="searchFreq">1.0</entry>
-	<entry key="simultaneous">0.25</entry>
+	<entry key="simultaneous">0</entry>
 	<entry key="timeRange">('START', 10.0)</entry>
 	
 	<!-- Peer configuration variables -->

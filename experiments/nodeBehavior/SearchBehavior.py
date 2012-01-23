@@ -16,7 +16,7 @@ class SearchBehavior(CommonSearchBehavior):
             for i in xrange(self.getSimultaneous()):        
                 node, parameter = self.__randomSelect()
                 self.__activeSearches.append((node, parameter))
-                oFile.write('$ns_ at %f \"$agents(%d) agentj searchParameter I-%s\"\n' % (time, node, parameter))
+                oFile.write('$ns_ at %f \"$agents(%d) agentj searchParameterGeneric I-%s\"\n' % (time, node, parameter))
             
     def __randomSelect(self):
         node = random.randrange(self.getNNodes())
