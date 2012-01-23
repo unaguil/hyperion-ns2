@@ -17,7 +17,7 @@ class ParameterPopulator:
     def __init__(self, entries):
         self.__equalityDistribution = {}
         
-        self.__usedConcepts = []
+        self.__usedConcepts = {}
         
         for entry in entries:
             value = entry.firstChild.data
@@ -35,14 +35,21 @@ class ParameterPopulator:
     def generate(self, workingDir, strBuffer):            
         strBuffer.writeln('')
         strBuffer.writeln('************* Parameter populator ****************')
-        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__parametersPerNode, self.__equalityDistribution, strBuffer)    
+        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__parametersPerNode, self.__equalityDistribution, strBuffer)
         
-        self.__generateXMLNodeConfigurations(workingDir, parametersTable, taxonomy, strBuffer)
+        dir = os.path.join(workingDir, 'parameters')
+        
+        strBuffer.writeln('* Creating %s directory ' % dir)
+        os.mkdir(dir)    
+        
+        self.__generateXMLNodeConfigurations(dir, parametersTable, taxonomy, strBuffer)
+        
+        self.__saveGeneratedParameters(dir, self.__usedConcepts)
 
         strBuffer.writeln('**************************************************')
         
     def getUsedConcepts(self):
-        return set(self.__usedConcepts)
+        return self.__usedConcepts.keys()
     
     def __generate(self, nNodes, nDistribution, parametersPerNode, equalityDistribution, strBuffer):
         nodesWithParameters = int(nNodes * nDistribution)
@@ -102,7 +109,6 @@ class ParameterPopulator:
         for type, ratio in equalityDistribution.iteritems():
             numParameters = int(ratio * nodesWithParameters * parametersPerNode)
             parameters += [type] * numParameters
-            self.__usedConcepts += taxonomy.getParents(type)
             
         generatedParameters = self.__countParameters(nodeTable) 
             
@@ -111,7 +117,6 @@ class ParameterPopulator:
             p = generator.next()
             parameters.append(p)
             taxonomy.addChild('Root', p)
-            self.__usedConcepts.append(p)
             
         random.shuffle(parameters)
         
@@ -119,6 +124,16 @@ class ParameterPopulator:
             selectedParameters = parameters[:parametersPerNode]
             del parameters[:parametersPerNode]
             nodeTable[node] += selectedParameters
+            
+        distributedParameters = []
+        for parameters in nodeTable.values():
+            distributedParameters += parameters
+            
+        for parameter in distributedParameters:
+            for concept in taxonomy.getParents(parameter):
+                if concept not in self.__usedConcepts:
+                    self.__usedConcepts[concept] = 0
+                self.__usedConcepts[concept] += 1
                                 
         return nodeTable, taxonomy
     
@@ -157,13 +172,8 @@ class ParameterPopulator:
         oFile.write(doc.toprettyxml())
         oFile.close()
         
-    def __generateXMLNodeConfigurations(self, workingDir, parametersTable, taxonomy, strBuffer):        
-        dir = os.path.join(workingDir, 'parameters')
-        
-        strBuffer.writeln('* Creating %s directory ' % dir)
-        os.mkdir(dir)
-        
-        taxonomyFilePath = os.path.join(workingDir, 'taxonomy.xml')
+    def __generateXMLNodeConfigurations(self, outputDir, parametersTable, taxonomy, strBuffer):                
+        taxonomyFilePath = os.path.join(outputDir, 'taxonomy.xml')
         oFile = open(taxonomyFilePath, 'w')
         xmlTaxonomy = taxonomy.createXMLDocument() 
         oFile.write(xmlTaxonomy.toprettyxml())
@@ -171,6 +181,12 @@ class ParameterPopulator:
         
         for node in parametersTable.keys():
             if len(parametersTable[node]) > 0:
-                filePath = os.path.join(dir, 'Parameters' + str(node) + '.xml')
+                filePath = os.path.join(outputDir, 'Parameters' + str(node) + '.xml')
                 self.__generateXML(node, set(parametersTable[node]), filePath)
+                
+    def __saveGeneratedParameters(self, outputDir, usedConcepts):
+         filePath = os.path.join(outputDir, 'usedConcepts.txt')
+         file = open(filePath, 'w')
+         file.write(str(usedConcepts))    
+         file.close()
         
