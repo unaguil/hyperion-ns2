@@ -156,6 +156,9 @@ class RepeatRunner:
 	def getOutputLog(self):
 		return os.path.join(self.__tempDir, 'output.log.gz')
 	
+	def getTempDir(self):
+		return self.__tempDir
+	
 	def __prepareSimulationFiles(self, tempDir, config, workingDir):
 		configFile = open(os.path.join(tempDir, 'Configuration.xml'), 'w')
 		configFile.write(config)
@@ -177,7 +180,7 @@ def runRepeat(args):
 		repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber = args
 				
 		r = RepeatRunner(repeatDir, config, configDir, configGenerator, counter, repeatNumber)
-		return (not r.run(), r.getOutputLog())
+		return (not r.run(), r.getOutputLog(), r.getTempDir())
 	except KeyboardInterrupt:
 		print '* Terminating process'
 		r.terminate()
@@ -276,12 +279,12 @@ class Experiment:
 			print ''
 			sys.stdout.flush()
 			
-			configurationError = all([success for success, outputLog in results])
+			configurationError = all([success for success, outputLog, tempDir in results])
 			
-			outputLogs = [outputLog for success, outputLog in results]
+			output = [(outputLog, tempDir) for success, outputLog, tempDirs in results]
 			
 			if not configurationError:
-				self.__processRepeat(measures, outputLogs)
+				self.__processRepeat(measures, output)
 
 			result = measures.endConfiguration()
 
@@ -315,13 +318,13 @@ class Experiment:
 		if not self.__debug:
 			shutil.rmtree(self.__workingDir)	
 		
-	def __processRepeat(self, measures, outputLogs):
-		for outputLog in outputLogs:
+	def __processRepeat(self, measures, output):
+		for outputLog, tempDir in output:
 			print '* Output log %s file size %s' % (outputLog, self.__sizeof_fmt(os.path.getsize(outputLog)))
 			sys.stdout.flush()
 			#Measure results
 			logProcessStartTime = time.time()
-			measures.startRepeat()
+			measures.startRepeat(tempDir)
 			measures.parseLog(outputLog)
 			measures.endRepeat()
 							
@@ -363,13 +366,16 @@ class Experiment:
 			print ''
 			print 'Parsing output log files'
 			sys.stdout.flush()
+			
 			outputLogs = []
-			
+			repeatDirs = []
 			for i in range(repeatNumber):
-				outputLog = os.path.join(configurationDir, 'repeat-' + str(i), 'output.log.gz')
-				outputLogs.append(outputLog)
+				repeatDir = os.path.join(configurationDir, 'repeat-' + str(i))
+				outputLog = os.path.join(repeatDir, 'output.log.gz')
+				repeatDirs.append(repeatDir)
+				outputLogs.append(outputLog) 
 			
-			self.__processRepeat(measures, outputLogs)
+			self.__processRepeat(measures, outputLogs, repeatDirs)
 
 			measures.endConfiguration(configurationCounter)
 			

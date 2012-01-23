@@ -115,11 +115,12 @@ class Measures:
 			
 		self.__repeatStatus = [] 
 			
-	def startRepeat(self): 		
+	def startRepeat(self, tempDir): 		
 		self.currentMeasures = []
 		for clazz, period, units, discardable in self.__measureData.values():
 			measure = self.__createMeasure(clazz, period)
 			self.currentMeasures.append(measure)
+			measure.start(tempDir)
 			
 		self.__repeatFinished = False
 		

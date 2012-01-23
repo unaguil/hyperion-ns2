@@ -8,6 +8,9 @@ class Measure:
     def getName(self):
         return self.__class__.__name__
     
+    def start(self, tempDir):
+        pass
+    
     def getType(self):
         clazz = str(self.__class__)
         return clazz[:clazz.rfind('.')]

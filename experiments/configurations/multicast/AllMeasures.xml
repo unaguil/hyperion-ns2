@@ -18,6 +18,5 @@
 	<measure type="dissemination.TableMessageEndToEndDelay" period="0.25" />
 	
  	<measure type="multicast.StartedSearches" period="0.25" />
-<!-- 	<measure type="multicast.AvgSearchTime" period="0.25" /> -->
-<!-- 	<measure type="multicast.AvgFoundParameters" period="0.25" /> -->
+	<measure type="multicast.AvgFoundParameters" period="0.25" />
 </part>
