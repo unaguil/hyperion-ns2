@@ -6,6 +6,8 @@ from Taxonomy import Taxonomy
 
 import random
 
+from collections import Counter
+
 class IncorrectSolution(Exception):
     def __init__(self):
         pass
@@ -95,7 +97,7 @@ class ParameterPopulator:
         while len(nodeTable) < nodesWithParameters:
             index = random.randrange(len(availableNodes))
             node = availableNodes[index]
-            nodeTable[node] = []
+            nodeTable[node] = set([])
             del availableNodes[index]
         return nodeTable;
         
@@ -125,12 +127,15 @@ class ParameterPopulator:
         for node in nodeTable.keys():
             selectedParameters = parameters[:parametersPerNode]
             del parameters[:parametersPerNode]
-            nodeTable[node] += selectedParameters
+            for p in selectedParameters:
+                nodeTable[node].add(p)
             
         distributedParameters = []
         for parameters in nodeTable.values():
             distributedParameters += parameters
-            
+        
+        countedParameters = Counter(distributedParameters)    
+                    
         for parameter in distributedParameters:
             for concept in taxonomy.getParents(parameter):
                 if concept not in self.__usedConcepts:
