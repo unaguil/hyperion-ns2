@@ -1,7 +1,7 @@
-from measures.generic.BroadcastedXXXPackets import BroadcastedXXXPackets
+from measures.generic.SentXXXMessages import SentXXXMessages
 
-class SentACKMessages(BroadcastedXXXPackets):
+class SentACKMessages(SentXXXMessages):
 	"""Total number of sent ACK messages"""
 	
 	def __init__(self, period, simulationTime):
-		BroadcastedXXXPackets.__init__(self, 'peer.message.ACKMessage', period, simulationTime)
+		SentXXXMessages.__init__(self, 'peer.message.ACKMessage', period, simulationTime)
