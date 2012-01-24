@@ -53,8 +53,9 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 					if peer not in self.__currentSearches[searchID][parameter]:
 						self.__currentSearches[searchID][parameter].append(peer)
 						
-				if self.__calculateFoundParametersRatio(searchID) >= self.__minRatio: 
-					self.periodicAvgValues.addValue(time - self.__startTime[searchID], time)
+				if self.__calculateFoundParametersRatio(searchID) >= self.__minRatio:
+					startTime = self.__startTime[searchID] 
+					self.periodicAvgValues.addValue(time - startTime, startTime)
 					del self.__startTime[searchID]
 					del self.__currentSearches[searchID]
 			

@@ -34,4 +34,5 @@
 	<measure type="multicast.AvgSearchTime50FoundParameters" period="0.25" />
 	<measure type="multicast.AvgSearchTime75FoundParameters" period="0.25" />
 	<measure type="multicast.AvgSearchTime100FoundParameters" period="0.25" />
+	<measure type="multicast.AvgPeerAvailableTime" period="0.25" />
 </part>
