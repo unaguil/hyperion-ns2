@@ -8,7 +8,7 @@ from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
 class AvgTraversedDistance(GenericAvgMeasure):	
 	def __init__(self, period, simulationTime):		
-		GenericAvgMeasure.__init__(self, period, simulationTime, Units.PARAMETERS)
+		GenericAvgMeasure.__init__(self, period, simulationTime, Units.HOPS)
 		
 		self.__acceptedPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer [0-9]+ accepted multicast.search.message.SearchMessage .*? distance ([0-9]+) ([0-9]+\,[0-9]+).*?')
 		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? found parameters .*? in node [0-9]+ searchID .*? distance ([0-9]+) ([0-9]+\,[0-9]+).*?')			
