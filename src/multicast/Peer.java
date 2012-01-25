@@ -3,6 +3,7 @@ package multicast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,6 @@ import multicast.search.ParameterSearchImpl;
 import multicast.search.message.SearchMessage;
 import multicast.search.message.SearchMessage.SearchType;
 import multicast.search.message.SearchResponseMessage;
-import peer.message.MessageString;
 import peer.message.MessageStringPayload;
 import peer.message.PayloadMessage;
 import peer.peerid.PeerID;
@@ -22,9 +22,12 @@ import taxonomy.parameter.Parameter;
 import taxonomy.parameter.ParameterFactory;
 import taxonomy.parameterList.ParameterList;
 import util.logger.Logger;
+import util.timer.Timer;
+import util.timer.TimerTask;
 
 import common.CommonAgentJ;
 
+import config.Configuration;
 import dissemination.DistanceChange;
 import dissemination.TableChangedListener;
 
@@ -35,7 +38,7 @@ import dissemination.TableChangedListener;
  * @author Unai Aguilera (unai.aguilera@gmail.com)
  * 
  */
-public class Peer extends CommonAgentJ implements ParameterSearchListener, TableChangedListener {
+public class Peer extends CommonAgentJ implements ParameterSearchListener, TableChangedListener, TimerTask {
 
 	private static final String REMOVE_PARAMETER = "removeParameter";
 
@@ -53,9 +56,9 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 
 	private final ParameterSearch pSearch;
 
-	private final PeerIDSet foundPeers = new PeerIDSet();
-
 	private final Logger myLogger = Logger.getLogger(Peer.class);
+	
+	private Timer unicastTimer = null;
 
 	public Peer() {
 		pSearch = new ParameterSearchImpl(peer, this, this);
@@ -168,6 +171,26 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 		} catch (final Exception e) {
 			myLogger.error("Peer " + peer.getPeerID() + " error loading data." + e.getMessage());
 		}
+		
+		boolean unicastSearch = false;
+		float unicastSearchFreq = 0.0f;
+		
+		try {
+			// Configure internal properties
+			final String searchFreqStr = Configuration.getInstance().getProperty("unicast.searchFreq");
+			unicastSearchFreq = Float.parseFloat(searchFreqStr);
+			myLogger.info("Peer " + peer.getPeerID() + " set UNICAST_SEARCH_FREQ " + unicastSearchFreq);
+			unicastSearch = true;
+		} catch (final Exception e) {
+			myLogger.error("Peer " + peer.getPeerID() + " had problem loading configuration: " + e.getMessage());
+		}
+		
+		if (unicastSearch) {
+			final int unicastPeriod = Math.round(1.0f / unicastSearchFreq);
+			myLogger.info("Peer " + peer.getPeerID() + " unicast timer started with a period of " + unicastPeriod + " s");
+			unicastTimer = new Timer(unicastPeriod, this);
+			unicastTimer.start();
+		}
 	}
 
 	private String getParametersFilePath(final PeerID peerID) {
@@ -183,6 +206,9 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 		} catch (final IOException ioe) {
 			myLogger.error("Peer " + peer.getPeerID() + " error writting output data." + ioe.getMessage());
 		}
+		
+		if (unicastTimer != null)
+			unicastTimer.stopAndWait();
 	}
 
 	private String getUTableFilePath(final PeerID peerID) {
@@ -195,37 +221,29 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	}
 
 	@Override
-	public void parametersFound(final SearchResponseMessage receivedMessage) {
-		myLogger.info("Peer " + peer.getPeerID() + " found parameters " + receivedMessage.getParameters() + " in node " + receivedMessage.getSource() + " received \"" + receivedMessage.getPayload() + "\"");
-
-		foundPeers.addPeer(receivedMessage.getSource());
-
-		myLogger.info("Peer " + peer.getPeerID() + " enqueing multicast message to all found parameters " + receivedMessage.getParameters() + ": " + foundPeers);
-		pSearch.sendMulticastMessage(foundPeers, new MessageStringPayload(peer.getPeerID(), "Hey, peers"));
-	}
+	public void parametersFound(final SearchResponseMessage receivedMessage) {}
 
 	@Override
 	public PayloadMessage searchMessageReceived(final SearchMessage msg) {
-		if (msg.getPayload() instanceof MessageString) {
-			final MessageString strMsg = (MessageString) msg.getPayload();
-			myLogger.info("Peer " + peer.getPeerID() + " received \"" + strMsg.toString() + "\" on node " + peer.getPeerID() + " from " + msg.getSource());
-		}
-		return new MessageStringPayload(peer.getPeerID(), "Hello, source");
+		return null;
 	}
 
 	@Override
-	public void multicastMessageAccepted(final PeerID source, final PayloadMessage payload, final int distance) {
-		myLogger.info("Peer " + peer.getPeerID() + " received \"" + payload.toString() + "\" on node " + peer.getPeerID() + " from " + source);
-	}
+	public void multicastMessageAccepted(final PeerID source, final PayloadMessage payload, final int distance) {}
 
 	@Override
 	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> addedParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, final List<PayloadMessage> payloadMessages) {
-		return new MessageStringPayload(peer.getPeerID(), "Table changed");
+		return null;
 	}
 	
 	@Override
-	public void lostDestinations(Set<PeerID> lostDestinations) {
-		// TODO Auto-generated method stub
-		
+	public void lostDestinations(Set<PeerID> lostDestinations) {}
+
+	@Override
+	public void perform() throws InterruptedException {
+		//select random destination node
+		final List<PeerID> availableDestinations = new ArrayList<PeerID>(pSearch.getKnownDestinations());
+		if (!availableDestinations.isEmpty())
+			pSearch.sendMulticastMessage(new PeerIDSet(availableDestinations), new MessageStringPayload(peer.getPeerID(), "Hello, peers"));
 	}
 }
