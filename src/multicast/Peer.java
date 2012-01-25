@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import multicast.search.ParameterSearchImpl;
 import multicast.search.message.SearchMessage;
@@ -59,6 +60,9 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	private final Logger myLogger = Logger.getLogger(Peer.class);
 	
 	private Timer unicastTimer = null;
+	
+	private boolean searchesPerformed = false;
+	private float startTime, endTime;
 
 	public Peer() {
 		pSearch = new ParameterSearchImpl(peer, this, this);
@@ -71,6 +75,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 				try {
 					final Set<Parameter> searchedParameters = parseParameters(args);
 					pSearch.sendSearchMessageDefaultTTL(searchedParameters, new MessageStringPayload(peer.getPeerID(), "Hello, parameter"), SearchType.Exact);
+					searchesPerformed = true;
 					return true;
 				} catch (final InvalidParameterIDException ipe) {
 					myLogger.error("Peer " + peer.getPeerID() + " processed invalid parameter. " + ipe.getMessage());
@@ -82,6 +87,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 				try {
 					final Set<Parameter> searchedParameters = parseParameters(args);
 					pSearch.sendSearchMessageDefaultTTL(searchedParameters, new MessageStringPayload(peer.getPeerID(), "Hello, parameter"), SearchType.Generic);
+					searchesPerformed = true;
 					return true;
 				} catch (final InvalidParameterIDException ipe) {
 					myLogger.error("Peer " + peer.getPeerID() + " processed invalid parameter. " + ipe.getMessage());
@@ -185,8 +191,29 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 			myLogger.error("Peer " + peer.getPeerID() + " had problem loading configuration: " + e.getMessage());
 		}
 		
+		try {
+			// Configure internal properties
+			final String timeRange = Configuration.getInstance().getProperty("timeRange");			
+			final String discardTime = Configuration.getInstance().getProperty("discardTime");
+			final String trimmed = timeRange.substring(1, timeRange.length() - 1);
+			StringTokenizer tokenizer = new StringTokenizer(trimmed, ", ");
+			
+			final String startStr = tokenizer.nextToken();
+			if (startStr.equals("'START'"))
+				startTime = Float.parseFloat(discardTime);
+			else
+				startTime = Float.parseFloat(startStr);
+			
+			endTime = Float.parseFloat(tokenizer.nextToken());
+			
+			myLogger.info("Peer " + peer.getPeerID() + " set TIME_RANGE (" + startTime + ", " + endTime + ")");
+			unicastSearch = true;
+		} catch (final Exception e) {
+			myLogger.error("Peer " + peer.getPeerID() + " had problem loading configuration: " + e.getMessage());
+		}
+		
 		if (unicastSearch) {
-			final int unicastPeriod = Math.round(1.0f / unicastSearchFreq);
+			final int unicastPeriod = Math.round(1.0f / unicastSearchFreq) * 1000;
 			myLogger.info("Peer " + peer.getPeerID() + " unicast timer started with a period of " + unicastPeriod + " s");
 			unicastTimer = new Timer(unicastPeriod, this);
 			unicastTimer.start();
@@ -241,9 +268,10 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 
 	@Override
 	public void perform() throws InterruptedException {
-		//select random destination node
-		final List<PeerID> availableDestinations = new ArrayList<PeerID>(pSearch.getKnownDestinations());
-		if (!availableDestinations.isEmpty())
-			pSearch.sendMulticastMessage(new PeerIDSet(availableDestinations), new MessageStringPayload(peer.getPeerID(), "Hello, peers"));
+		if (searchesPerformed && myLogger.getCurrentTimeSeconds() >= startTime && myLogger.getCurrentTimeSeconds() <= endTime) { 
+			final List<PeerID> availableDestinations = new ArrayList<PeerID>(pSearch.getKnownDestinations());
+			if (!availableDestinations.isEmpty())
+				pSearch.sendMulticastMessage(new PeerIDSet(availableDestinations), new MessageStringPayload(peer.getPeerID(), "Hello, peers"));
+		}
 	}
 }

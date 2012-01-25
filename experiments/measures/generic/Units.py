@@ -7,6 +7,7 @@ MILLIS = 'milliseconds'
 SECONDS = 'seconds'
 COMPOSITIONS = 'compositions'
 SEARCHES = 'searches'
+HOPS = 'hops'
 
 def str_formatter(units, value):
     if units == MILLIS:
