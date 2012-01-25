@@ -11,7 +11,7 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 		GenericAvgMeasure.__init__(self, period, simulationTime, Units.SECONDS)
 		
 		self.__searchPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? started search for parameters (\[.*?\]) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
-		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? found parameters (\[.*?\]) in node ([0-9]+) searchID (\(.*?\)) ([0-9]+\,[0-9]+).*?')
+		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? found parameters (\[.*?\]) in node ([0-9]+) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
 		
 		self.__currentSearches = {}
 		self.__startTime = {}
