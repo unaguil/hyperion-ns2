@@ -183,7 +183,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 		
 		try {
 			// Configure internal properties
-			final String searchFreqStr = Configuration.getInstance().getProperty("unicast.searchFreq");
+			final String searchFreqStr = Configuration.getInstance().getProperty("multicast.searchFreq");
 			unicastSearchFreq = Float.parseFloat(searchFreqStr);
 			myLogger.info("Peer " + peer.getPeerID() + " set UNICAST_SEARCH_FREQ " + unicastSearchFreq);
 			unicastSearch = true;
