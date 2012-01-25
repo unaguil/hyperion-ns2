@@ -8,7 +8,7 @@ from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
 class AvgPeerAvailableTime(GenericAvgMeasure):	
 	def __init__(self, period, simulationTime):		
-		GenericAvgMeasure.__init__(self, period, simulationTime, Units.PARAMETERS)
+		GenericAvgMeasure.__init__(self, period, simulationTime, Units.SECONDS)
 		
 		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) found parameters .*? in node ([0-9]+) .*? ([0-9]+\,[0-9]+).*?')
 		self.__lostPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) lost route to destinations (\[.*?\]) ([0-9]+\,[0-9]+).*?')		
