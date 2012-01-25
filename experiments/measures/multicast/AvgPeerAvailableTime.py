@@ -35,7 +35,7 @@ class AvgPeerAvailableTime(GenericAvgMeasure):
 		m = self.__lostPattern.match(line)
 		if m is not None:
 			searchingPeer = m.group(1)
-			lostDestinations = eval(self.__getLostDestinations(m.group(2)))
+			lostDestinations = eval(m.group(2))
 			time = float(m.group(3).replace(',','.')) 
 			
 			if searchingPeer in self.__foundPeers:
