@@ -27,6 +27,8 @@
 	<entry key="simultaneous">0.25</entry>
 	<entry key="timeRange">('START', 10.0)</entry>
 	
+	<entry key="unicast.searchFreq">0.5</entry>
+	
 	<!-- Peer configuration variables -->
 	<entry key="beaconDetector.beaconTime">1000</entry>
 	<entry key="dissemination.maxDistance">5</entry>
