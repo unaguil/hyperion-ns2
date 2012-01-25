@@ -207,7 +207,6 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 			endTime = Float.parseFloat(tokenizer.nextToken());
 			
 			myLogger.info("Peer " + peer.getPeerID() + " set TIME_RANGE (" + startTime + ", " + endTime + ")");
-			unicastSearch = true;
 		} catch (final Exception e) {
 			myLogger.error("Peer " + peer.getPeerID() + " had problem loading configuration: " + e.getMessage());
 		}
