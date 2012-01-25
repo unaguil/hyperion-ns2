@@ -8,7 +8,7 @@ from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
 class AvgFoundParameters(GenericAvgMeasure):	
 	def __init__(self, period, simulationTime):		
-		GenericAvgMeasure.__init__(self, period, simulationTime, Units.PARAMETERS)
+		GenericAvgMeasure.__init__(self, period, simulationTime, Units.RATIO)
 		
 		self.__searchPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? started search for parameters (\[.*?\]) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
 		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? found parameters (\[.*?\]) in node ([0-9]+) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
