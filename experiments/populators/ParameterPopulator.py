@@ -6,11 +6,18 @@ from Taxonomy import Taxonomy
 
 import random
 
-from collections import Counter
-
 class IncorrectSolution(Exception):
     def __init__(self):
         pass
+
+def count(l):
+	counter = {}
+	for e in l:
+		if not e in counter:
+			counter[e] = 1
+		else:
+			counter[e] += 1
+	return counter
 
 class ParameterPopulator:
     """Provides functions to populate a the list of parameters for a set of nodes
@@ -134,7 +141,7 @@ class ParameterPopulator:
         for parameters in nodeTable.values():
             distributedParameters += parameters
         
-        countedParameters = Counter(distributedParameters)    
+        countedParameters = count(distributedParameters)    
                     
         for parameter in distributedParameters:
             for concept in taxonomy.getParents(parameter):
