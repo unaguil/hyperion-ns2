@@ -37,13 +37,13 @@ class ParameterPopulator:
             if key == "nNodes":
                 self.__nNodes = int(value)
             if key == "nDistribution":
-                self.__nDistribution = float(eval(value))
+                self.__nDistribution = float(value)
             if key == "parametersPerNode":
-                self.__parametersPerNode = int(eval(value))
+                self.__parametersPerNode = int(value)
             if key == 'equalityDistribution':
                 self.__equalityDistribution = eval(value)
             if key == 'repeatParameters':
-                self.__repeatParameters = float(eval(value))
+                self.__repeatParameters = float(value)
     
     def generate(self, workingDir, strBuffer):            
         strBuffer.writeln('')
