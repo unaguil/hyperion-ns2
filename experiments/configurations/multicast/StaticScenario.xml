@@ -20,6 +20,7 @@
 	<entry key="populator">ParameterPopulator</entry>
 	<entry key="nDistribution">0.25</entry>
 	<entry key="parametersPerNode">6</entry>
+	<entry key="repeatParameters">0.5</entry>
 	<entry key="equalityDistribution">{'G': 0.25, 'M': 0.25}</entry>
 	
 	<entry key="nodeBehavior">SearchBehavior</entry>

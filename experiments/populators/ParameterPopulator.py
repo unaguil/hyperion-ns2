@@ -28,6 +28,8 @@ class ParameterPopulator:
         
         self.__usedConcepts = {}
         
+        self.__repeatParameters = 0.0
+        
         for entry in entries:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
@@ -40,11 +42,13 @@ class ParameterPopulator:
                 self.__parametersPerNode = int(eval(value))
             if key == 'equalityDistribution':
                 self.__equalityDistribution = eval(value)
+            if key == 'repeatParameters':
+                self.__repeatParameters = float(eval(value))
     
     def generate(self, workingDir, strBuffer):            
         strBuffer.writeln('')
         strBuffer.writeln('************* Parameter populator ****************')
-        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__parametersPerNode, self.__equalityDistribution, strBuffer)
+        parametersTable, taxonomy = self.__generate(self.__nNodes, self.__nDistribution, self.__parametersPerNode, self.__equalityDistribution, self.__repeatParameters, strBuffer)
         
         dir = os.path.join(workingDir, 'parameters')
         
@@ -62,15 +66,22 @@ class ParameterPopulator:
     def getUsedConcepts(self):
         return self.__usedConcepts.keys()
     
-    def __generate(self, nNodes, nDistribution, parametersPerNode, equalityDistribution, strBuffer):
+    def __normalizeEqualityDistribution(self, equalityDistribution, repeatParameters):
+        for key in equalityDistribution.keys():
+            equalityDistribution[key] = equalityDistribution[key] * repeatParameters;
+    
+    def __generate(self, nNodes, nDistribution, parametersPerNode, equalityDistribution, repeatParameters, strBuffer):
         nodesWithParameters = int(nNodes * nDistribution)
                     
         strBuffer.writeln('* Node distribution: %.2f' % nDistribution)
         strBuffer.writeln('* Nodes with parameters: %d' % nodesWithParameters)
         strBuffer.writeln('* Parameters per node: %d' % parametersPerNode)
         
-        if len(equalityDistribution) > 0:
+        if repeatParameters > 0.0 and len(equalityDistribution) > 0:
+            strBuffer.writeln('* Repeated parameters: %.2f' % repeatParameters)
             strBuffer.writeln('* Using an equality distribution of %s' % str(equalityDistribution))
+            self.__normalizeEqualityDistribution(equalityDistribution, repeatParameters) 
+            strBuffer.writeln('* Normalized equality distribution %s' % str(equalityDistribution))
         
         nodeTable, taxonomy = self.__distributeParameters(nNodes, equalityDistribution, nodesWithParameters, parametersPerNode)
         
