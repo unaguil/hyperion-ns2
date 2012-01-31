@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<part>
+	<!-- General configuration -->
+	<entry key="nNodes">158</entry>
+	<entry key="gridW">800</entry>
+	<entry key="gridH">800</entry>
+		
+	<entry key="finishTime">600.0</entry>
+	<entry key="discardTime">0.0</entry>
+	<entry key="javaAgent">detection.Peer</entry>
+	
+	<!-- Random waypoint configuration -->
+	<entry key="mobilityModel">RandomWaypoint</entry>
+	<entry key="minSpeed">0.00000000000000000001</entry>
+	<entry key="maxSpeed">0.00000000000000000001</entry>
+	<entry key="pauseTime">1000.0</entry>
+	<entry key="rotate">False</entry>
+	
+	<entry key="nodeBehavior">None</entry>	
+	
+	<!-- Peer configuration variables -->
+	<entry key="beaconDetector.beaconTime">1000</entry>
+</part>
