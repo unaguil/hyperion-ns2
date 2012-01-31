@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<part>
+	<!-- General configuration -->
+	<entry key="nNodes">20</entry>
+	<entry key="gridW">290</entry>
+	<entry key="gridH">290</entry>
+		
+	<entry key="finishTime">100.0</entry>
+	<entry key="discardTime">0.0</entry>
+	<entry key="javaAgent">dissemination.Peer</entry>
+	
+	<!-- Random waypoint configuration -->
+	<entry key="mobilityModel">LoadMobilityModel</entry>
+	<entry key="minSpeed">0.00000000000000000001</entry>
+	<entry key="maxSpeed">0.00000000000000000001</entry>
+	<entry key="pauseTime">500.0</entry>
+	<entry key="rotate">False</entry>
+	
+	<!-- Parameter populator -->
+	<entry key="populator">ParameterPopulator</entry>
+	<entry key="nDistribution">1.0</entry>
+	<entry key="parametersPerNode">30</entry>
+	
+	<entry key="nodeBehavior">None</entry>
+	
+	<!-- Peer configuration variables -->
+	<entry key="beaconDetector.beaconTime">1000</entry>
+	<entry key="dissemination.maxDistance">2</entry>
+</part>
