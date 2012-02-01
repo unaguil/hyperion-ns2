@@ -22,7 +22,7 @@ def main():
 		print 'ANP (Average Network Partitioning is a percentage ratio [0-1]'
 		sys.exit()
 	
-	asp_hops = int(raw_input('Average Shortest Path Hops: '))
+	asp_hops = float(raw_input('Average Shortest Path Hops: '))
 	if asp_hops < 0:
 		print 'Average Shortest Path Hops must be positive'
 		sys.exit()
