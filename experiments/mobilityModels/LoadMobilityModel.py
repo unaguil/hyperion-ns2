@@ -1,7 +1,7 @@
 import os
 import sys
 
-MAX_SCENARIOS = 4
+MAX_SCENARIOS = 20
 
 DELTA_TIME = 0.5
 
@@ -16,7 +16,7 @@ class LoadMobilityModel:
             if key == "nNodes":
                 self.__nNodes = int(value)
             if key == "finishTime":
-                self.__finishTime = float(value) + DELTA_TIME 
+                self.__finishTime = float(value) 
             if key == "gridW":
                 self.__maxX = int(value)
             if key == "gridH":
@@ -26,7 +26,7 @@ class LoadMobilityModel:
             if key == "maxSpeed":
                 self.__maxSpeed = float(value)
             if key == "pauseTime":
-                self.__pauseTime = float(value)
+                self.__pauseTime = int(value)
             if key == "rotate":
                 self.__rotate = eval(value)
         
@@ -36,7 +36,7 @@ class LoadMobilityModel:
         else:
             numScenario = 0
             
-        mobilityFile = 'mobility-%d-%.1f-%d-%d-%.2f-%.2f-%.1f-%d.txt' % (self.__nNodes, self.__finishTime, self.__maxX, self.__maxY, self.__minSpeed, self.__maxSpeed, self.__pauseTime, numScenario)
+        mobilityFile = 'mobility-%d-%.1f-%d-%d-%.1f-%.1f-%d-%d.txt' % (self.__nNodes, self.__finishTime, self.__maxX, self.__maxY, self.__minSpeed, self.__maxSpeed, self.__pauseTime, numScenario)
         relativePath = 'mobilityScenarios/' + mobilityFile
         strBuffer.writeln('Using mobility scenario %s' % relativePath)
         absolutePath = os.path.abspath(relativePath)
