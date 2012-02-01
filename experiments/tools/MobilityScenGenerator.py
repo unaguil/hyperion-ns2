@@ -59,8 +59,8 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
 def main():    
     nodes = 100
     finishTime = 1000.0
-    gridW = 1500
-    gridH = 1300
+    gridW = 700
+    gridH = 700
 
     minSpeed = 0.0
     maxSpeed = 10.0
