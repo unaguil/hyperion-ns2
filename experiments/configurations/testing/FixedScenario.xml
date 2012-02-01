@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<experiment tag="0.5" type="% nodes with parameters">
+	<staticConfig>	
+		<import file="StaticScenario.xml" />
+	</staticConfig>
+	<repeat number="1" />
+	<measures>
+		<import file="AllMeasures.xml" />
+	</measures>
+</experiment>
