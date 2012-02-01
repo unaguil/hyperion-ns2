@@ -10,7 +10,7 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
     print '\tFinishTime:', finishTime
     print '\tWidth', gridW
     print '\tHeight', gridH
-    print '\tMinSpeed', 0.0
+    print '\tMinSpeed', minSpeed
     print '\tMaxSpeed', maxSpeed
     print '\tPauseTime', pauseTime
     
@@ -62,9 +62,9 @@ def main():
     gridW = 1500
     gridH = 1300
 
-    minSpeed = 0.001
+    minSpeed = 0.0
     maxSpeed = 10.0
-    pauseTime = 800.0
+    pauseTime = 1000.0
     
     numScenarios = 20
     
