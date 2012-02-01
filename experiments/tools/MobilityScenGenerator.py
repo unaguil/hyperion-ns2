@@ -5,7 +5,7 @@ import sys
 
 def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, numScenarios):
     
-    print 'Generating %d ', numScenarios
+    print 'Generating %d scenarios' % numScenarios
     print '\tNodes:', nodes
     print '\tFinishTime:', finishTime
     print '\tWidth', gridW
@@ -64,11 +64,11 @@ def main():
 
     minSpeed = 0.0
     maxSpeed = 10.0
-    pauseTime = 1000.0
     
     numScenarios = 20
-    
-    generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, numScenarios)
+   
+    for pauseTime in range(0, 1200, 200): 
+        generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, numScenarios)
 
 if __name__ == '__main__':
     main()
