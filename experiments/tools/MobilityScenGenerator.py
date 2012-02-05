@@ -15,11 +15,9 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
     print '\tPauseTime', pauseTime
     
     command = './setdest'
-    parameters = '-v 1 -n %s -M %f -t %.1f -p %s -x %s -y %s' % (nodes, maxSpeed, finishTime, pauseTime, gridW, gridH)
+    parameters = '-v 2 -n %s -s 1 -m %f -M %f -t %.1f -P 1 -p %s -x %s -y %s' % (nodes, 0.00001, maxSpeed, finishTime, pauseTime, gridW, gridH)
     
     cmd = command + ' ' + parameters
-    
-    print 'Generated using external command: %s' % cmd
     
     paramList = [command]
                     
@@ -31,6 +29,7 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
     files = []
         
     for i in xrange(numScenarios):
+        print 'Generated using external command: %s' % cmd
         file = 'mobility-%s-%s-%s-%s-%s-%s-%s-%d.txt' % (str(nodes), str(finishTime), str(gridW), str(gridH), str(minSpeed), str(maxSpeed), str(pauseTime), i)
         files.append(file)        
         outputFile = open(file, 'w') 
