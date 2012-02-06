@@ -186,13 +186,14 @@ def runRepeat(args):
 		r.terminate()
 
 class Experiment:
-	def __init__(self, configDir, inputFile, outputDir, debug, workingDir, processing):
+	def __init__(self, configDir, inputFile, outputDir, debug, workingDir, processing, processes):
 		self.__configDir = configDir
 		self.__outputDir = outputDir
 		self.__inputFile = os.path.join(self.__configDir, inputFile)
 		self.__inputFileName = inputFile
 		self.__debug = debug
 		self.__workingDir = workingDir
+		self.__processes = processes
 		
 		if not processing and os.path.isdir(self.__workingDir):
 			shutil.rmtree(self.__workingDir)
@@ -273,7 +274,7 @@ class Experiment:
 				repeatDir = os.path.join(configurationDir, 'repeat-' + str(counter))
 				data.append((repeatDir, config, self.__configDir, resolvedFileBuffer, configGenerator, counter, repeatNumber))
 				
-			pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+			pool = multiprocessing.Pool(processes=self.__processes)
 			results = pool.map(runRepeat, data) 
 
 			print '* Finalizing configuration. Parsing output log files'
@@ -405,8 +406,8 @@ class Experiment:
 		else:
 			self.__processOutput()
 		
-def __runExperiment(outputDir, configDir, inputFile, debug, workingDir, processing): 
-	e = Experiment(configDir, inputFile, outputDir, debug, workingDir, processing)
+def __runExperiment(outputDir, configDir, inputFile, debug, workingDir, processing, processes): 
+	e = Experiment(configDir, inputFile, outputDir, debug, workingDir, processing, processes)
 	e.perform(processing)
 		
 def main():
@@ -423,6 +424,7 @@ def main():
 	parser.add_option("-w", "--workingDir", dest="workingDir", help="directory to store simulation results")
 	parser.add_option("-d", "--debug", dest="debug", help="preserve working directory output", action="store_true", default=False)
 	parser.add_option("-p", "--processDir", dest="processDir", help="process output directory")
+	parser.add_option("-P", "--processes", dest="processes", help="max number of parallel processes", default=multiprocessing.cpu_count())
 	
 	(options, args) = parser.parse_args()
 	
@@ -436,7 +438,7 @@ def main():
 			print 'ERROR: Experiment config file not found in output directory'
 			sys.exit()
 			
-		__runExperiment(options.outputDir, options.processDir, inputFile, True, options.processDir, True)
+		__runExperiment(options.outputDir, options.processDir, inputFile, True, options.processDir, True, int(options.processes))
 	else:
 		if options.configDir is None or options.inputFile and None:
 			parser.print_usage()
@@ -446,7 +448,7 @@ def main():
 			else:
 				workingDir = options.workingDir
 			
-			__runExperiment(options.outputDir, options.configDir, options.inputFile, options.debug, workingDir, False)
+			__runExperiment(options.outputDir, options.configDir, options.inputFile, options.debug, workingDir, False, int(options.processes))
 
 if __name__ == '__main__':
     main()
