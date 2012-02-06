@@ -234,8 +234,6 @@ class Experiment:
 		
 		configGenerator = ConfigGenerator(resolvedFileBuffer)
 		
-		measures = Measures(resolvedFileBuffer)
-		
 		initTime = time.time()
 		
 		error = False
@@ -259,6 +257,9 @@ class Experiment:
 			sys.stdout.flush() 
 			#Get current execution configuration
 			config, generatedExpConfig = configGenerator.next()
+			
+			measures = Measures(config, resolvedFileBuffer)
+			
 			measures.startConfiguration(configurationCounter, configGenerator.getTag(), configGenerator.getType(), configGenerator.getSimulationTime(), configGenerator.getDiscardTime())
 			
 			#save current configuration
@@ -341,12 +342,10 @@ class Experiment:
 	def __processOutput(self):
 		configGenerator = ConfigGenerator(self.__inputFile)
 		
-		measures = Measures(self.__inputFile)
-		
 		initTime = time.time()
 
 		configurationCounter = 0		
-		while configGenerator.hasNext():
+		while configGenerator.hasNext():			
 			configurationDir = os.path.join(self.__workingDir, 'configuration-' + str(configurationCounter))
 			
 			startTime = time.time()
@@ -359,6 +358,9 @@ class Experiment:
 			sys.stdout.flush() 
 			#Get current execution configuration
 			config = configGenerator.next()
+			
+			measures = Measures(config)
+			
 			measures.startConfiguration(configurationCounter, configGenerator.getType())
 			
 			scriptGenerator = ScriptGenerator(config, self.__inputFile)

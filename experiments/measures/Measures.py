@@ -29,12 +29,14 @@ class PeriodicEntry:
 		self.size = size
 
 class Measures:
-	def __init__(self, buffer):
-		expConfig = minidom.parseString(buffer.getvalue())
-				
-		measureNodes = expConfig.getElementsByTagName('measure')
+	def __init__(self, str, mainConfigBuffer):
+		config = minidom.parseString(str)
 		
-		self.__entries = expConfig.getElementsByTagName('entry')
+		self.__entries = config.getElementsByTagName('entry')
+		
+		mainConfig = minidom.parseString(mainConfigBuffer.getvalue())
+		
+		measureNodes = mainConfig.getElementsByTagName('measure')
 		
 		for entry in self.__entries:
 			value = entry.firstChild.data
