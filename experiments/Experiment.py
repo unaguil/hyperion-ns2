@@ -421,7 +421,7 @@ def main():
 	parser.add_option("-c", "--configDir", dest="configDir", help="experiment configuration directory")
 	parser.add_option("-i", "--inputFile", dest="inputFile", help="experiment configuration file")
 	parser.add_option("-o", "--outputDir", dest="outputDir", help="experiment results output directory", default='/tmp')
-	parser.add_option("-w", "--workingDir", dest="workingDir", help="directory to store simulation results")
+	parser.add_option("-w", "--workingDir", dest="workingDir", help="directory to store simulation results", default='/tmp')
 	parser.add_option("-d", "--debug", dest="debug", help="preserve working directory output", action="store_true", default=False)
 	parser.add_option("-p", "--processDir", dest="processDir", help="process output directory")
 	parser.add_option("-P", "--processes", dest="processes", help="max number of parallel processes", default=multiprocessing.cpu_count())
@@ -443,12 +443,8 @@ def main():
 		if options.configDir is None or options.inputFile and None:
 			parser.print_usage()
 		else:				
-			if options.workingDir is None:
-				workingDir = '/tmp/experiment-' + options.inputFile
-			else:
-				workingDir = options.workingDir
-			
-			__runExperiment(options.outputDir, options.configDir, options.inputFile, options.debug, workingDir, False, int(options.processes))
+			tmpDir = os.path.join(options.workingDir, 'experiment-' + options.inputFile + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
+			__runExperiment(options.outputDir, options.configDir, options.inputFile, options.debug, tmpDir, False, int(options.processes))
 
 if __name__ == '__main__':
     main()
