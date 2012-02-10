@@ -9,7 +9,7 @@ class AvgNeighbors(GenericAvgMeasure):
 	def __init__(self, period, simulationTime):
 		GenericAvgMeasure.__init__(self, period, simulationTime, Units.NEIGHBORS, maintainLastValue=True)
 		
-		self.__initializePattern = re.compile('INFO  peer.BasicPeer  - Peer ([0-9]+) initializing.*?')
+		self.__initializePattern = re.compile('INFO  peer.BasicPeer  - Peer ([0-9]+) initializing ([0-9]+\,[0-9]+).*?')
 		self.__appearPattern = re.compile('DEBUG detection.beaconDetector.BeaconDetector  - Peer ([0-9]+) has new neighbors: (\[.*?\]) ([0-9]+\,[0-9]+).*?')
 		self.__disappearPattern = re.compile('DEBUG detection.beaconDetector.BeaconDetector  - Peer ([0-9]+) has lost neighbors: (\[.*?\]) ([0-9]+\,[0-9]+).*?')
 		
@@ -19,7 +19,11 @@ class AvgNeighbors(GenericAvgMeasure):
 		m = self.__initializePattern.match(line)
 		if m is not None:
 			peer = m.group(1)
+			time = float(m.group(2).replace(',','.'))
+			
 			self.__currentNeighbors[peer] = []
+
+			self.periodicAvgValues.addValue(0, time)
 
 			return
 					
