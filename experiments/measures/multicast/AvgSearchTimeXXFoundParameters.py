@@ -20,9 +20,12 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 		
 	def start(self, tempDir):
 		conceptsFile = os.path.join(tempDir, 'parameters', 'usedConcepts.txt')
-		file = open(conceptsFile, 'r')
-		self.__availableParameters = eval(file.readline())
-		file.close()
+		try:
+			file = open(conceptsFile, 'r')
+			self.__availableParameters = eval(file.readline())
+			file.close()
+		except IOError:
+			print 'Could not open file %s' % conceptsFile
 	
 	def __getParameters(self, str):
 		return [str.strip() for str in str[1:-1].split(',')]
