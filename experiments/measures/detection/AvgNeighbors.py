@@ -1,4 +1,5 @@
 import re
+import numpy
 
 import measures.generic.Units as Units
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
@@ -23,7 +24,7 @@ class AvgNeighbors(GenericAvgMeasure):
 			
 			self.__currentNeighbors[peer] = []
 
-			self.periodicAvgValues.addValue(0, time)
+			self.periodicAvgValues.addValue(self.__avgNeighbors(), time)
 
 			return
 					
@@ -35,8 +36,8 @@ class AvgNeighbors(GenericAvgMeasure):
 			
 			self.__currentNeighbors[peer] += neighbors
 			
-			self.periodicAvgValues.addValue(len(self.__currentNeighbors[peer]), time)
-						
+			self.periodicAvgValues.addValue(self.__avgNeighbors(), time)
+			
 			return 
 		
 		m = self.__disappearPattern.match(line) 
@@ -48,7 +49,11 @@ class AvgNeighbors(GenericAvgMeasure):
 			for neighbor in neighbors:
 				self.__currentNeighbors[peer].remove(neighbor)
 				
-			self.periodicAvgValues.addValue(len(self.__currentNeighbors[peer]), time)
+			self.periodicAvgValues.addValue(self.__avgNeighbors(), time)
+			
+	def __avgNeighbors(self):
+		lenghts = [len(neighbors) for neighbors in self.__currentNeighbors.values()]
+		return numpy.mean(lenghts)			
 			
 	def isDiscardable(self):
 		return False
