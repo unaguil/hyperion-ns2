@@ -8,6 +8,7 @@ SECONDS = 'seconds'
 COMPOSITIONS = 'compositions'
 SEARCHES = 'searches'
 HOPS = 'hops'
+MESSAGE_OVERHEAD = 'messages/s node'
 
 def str_formatter(units, value):
     if units == MILLIS:
