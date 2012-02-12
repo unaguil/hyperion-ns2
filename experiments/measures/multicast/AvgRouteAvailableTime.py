@@ -36,7 +36,7 @@ class AvgRouteAvailableTime(GenericAvgMeasure):
 			if (peer, dest) in self.__addedRoutes:
 				addedTime = self.__addedRoutes[peer, dest]
 				
-				self.periodicAvgValues.addValue(time - addedTime, foundTime)
+				self.periodicAvgValues.addValue(time - addedTime, addedTime)
 				del self.__addedRoutes[peer, dest]
 								
 			return      
