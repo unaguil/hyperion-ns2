@@ -10,10 +10,10 @@
 	<entry key="javaAgent">multicast.Peer</entry>
 	
 	<!-- Random waypoint configuration -->
-	<entry key="mobilityModel">LoadMobilityModel</entry>
+	<entry key="mobilityModel">RandomWaypoint</entry>
 	<entry key="minSpeed">0.00000000000000000001</entry>
 	<entry key="maxSpeed">0.00000000000000000001</entry>
-	<entry key="pauseTime">500.0</entry>
+	<entry key="pauseTime">500</entry>
 	<entry key="rotate">False</entry>
 	
 	<!-- Parameter populator -->
@@ -32,6 +32,5 @@
 	
 	<!-- Peer configuration variables -->
 	<entry key="beaconDetector.beaconTime">1000</entry>
-	<entry key="dissemination.maxDistance">5</entry>
-	<entry key="parameterSearch.searchMessageTTL">5</entry>
+	<entry key="parameterSearch.sameTTL">5</entry>
 </part>
