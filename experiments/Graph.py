@@ -71,10 +71,11 @@ class PeriodicResult:
 		return self.__stdTotal
 
 class Graph:
-	def __init__(self, files, lang):
+	def __init__(self, files, lang, errorBar):
 		self.__measures = {}
-		
 		self.__measureNames = {}
+		self.__errorBar = errorBar
+
 		try:
 			file = open('measureNames.' + lang)
 			for line in file:
@@ -208,8 +209,11 @@ class Graph:
 			label, measure = self.__getMeasureInfo(measureType)
 		
 			self.__printTotalInfo(y, stdValues, relStdValues, label, '')
-		
-			line = plt.errorbar(x, y, yerrors, label=label, fmt='o--')
+	
+			if self.__errorBar:	
+				line = plt.errorbar(x, y, yerrors, label=label, fmt='kx--')
+			else:
+				line = plt.plot(x, y, 'kx--', label=label)
 	
 			lines.append(line)
 			labels.append(label)
@@ -407,6 +411,7 @@ def main():
 	parser.add_option("--xmax", dest="xmax", help="sets the max value for X axis")
 	parser.add_option("--ymin", dest="ymin", help="sets the min value for Y axis")
 	parser.add_option("--ymax", dest="ymax", help="sets the max value for Y axis")
+	parser.add_option("--errors", dest="errorBar", help="shows error bars", action="store_true", default=False)
 	
 	(options, args) = parser.parse_args()
 	
@@ -421,7 +426,7 @@ def main():
 		else:
 			files.append(options.inputFile)
 			
-		graph = Graph(files, 'en')
+		graph = Graph(files, 'en', options.errorBar)
 		
 		if options.all: 
 			graph.plotAll(options.format, options.onePDF, outputFile, options.periodic)
