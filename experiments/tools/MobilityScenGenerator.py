@@ -2,17 +2,28 @@
 
 import subprocess
 import sys
+from StringIO import StringIO
 
-def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, numScenarios):
-    
+import ScenarioInfo
+
+def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, transmissionRange, numScenarios):
+
+    print '' 
     print 'Generating %d scenarios' % numScenarios
-    print '\tNodes:', nodes
-    print '\tFinishTime:', finishTime
-    print '\tWidth', gridW
-    print '\tHeight', gridH
-    print '\tMinSpeed', minSpeed
-    print '\tMaxSpeed', maxSpeed
-    print '\tPauseTime', pauseTime
+    print '* Nodes:', nodes
+    print '* FinishTime:', finishTime
+    print '* Width', gridW
+    print '* Height', gridH
+    print '* MinSpeed', minSpeed
+    print '* MaxSpeed', maxSpeed
+    print '* PauseTime', pauseTime
+
+    print ''
+
+    strBuffer = StringIO()
+    ScenarioInfo.printScenarioInfo(nodes, transmissionRange, gridW, gridH, finishTime, 0.0, strBuffer)
+    print strBuffer.getvalue()
+    strBuffer.close()
     
     command = './setdest'
     parameters = '-v 2 -n %s -s 1 -m %f -M %f -t %.1f -P 1 -p %s -x %s -y %s' % (nodes, 0.00001, maxSpeed, finishTime, pauseTime, gridW, gridH)
@@ -65,9 +76,11 @@ def main():
     maxSpeed = 10.0
     
     numScenarios = 20
+
+    transmissionRange = 100.0
    
     for pauseTime in range(0, 1200, 200): 
-        generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, numScenarios)
+        generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, transmissionRange, numScenarios)
 
 if __name__ == '__main__':
     main()

@@ -5,6 +5,7 @@ import os
 from mobilityModels.MobilityModelGenerator import MobilityModelGenerator
 from populators.PopulatorGenerator import PopulatorGenerator
 from nodeBehavior.NodeBehaviorGenerator import NodeBehaviorGenerator
+from tools import ScenarioInfo
 
 DELTA_TIME = 0.5
 
@@ -34,41 +35,9 @@ class ScriptGenerator:
 				self.__transmissionRange = float(value)
 			if key == "discardTime":
 				self.__discardTime = float(value)
-	
-		#Print scenario parameters
-		simulationArea = self.getGridW() * self.getGridH()
-		nDensity = self.getNNodes() / simulationArea
-		nCoverage = math.pi * self.getTransmissionRange()**2
-		
-		footprint = (nCoverage / simulationArea) * 100.0
-		if footprint > 100.0:
-			footprint = 100.0
 
-		coveredRatio = footprint * self.getNNodes()
-		if coveredRatio > 100.0:
-			coveredRatio = 100.0
-		 
-		maximumPath = math.sqrt(self.getGridW()**2 + self.getGridH()**2)
-		networkDiameter = maximumPath / self.getTransmissionRange()
-		neighborCount = nCoverage * nDensity
-		if neighborCount > self.getNNodes() - 1:
-			neighborCount = self.getNNodes() - 1;
-		
-		strBuffer.writeln('**************** Scenario parameters **********************')
-		strBuffer.writeln('* Simulation time: %.2f s' % self.__simulationTime)
-		strBuffer.writeln('* Initial discarded time: %.2f s' % self.__discardTime)
-		strBuffer.writeln('* Simulation area: %.2f m x %.2f m = %.2f m^2' % (self.getGridW(), self.getGridH(), simulationArea))
-		strBuffer.writeln('* Number of nodes: %d' % self.getNNodes())
-		strBuffer.writeln('* Node density: %.5f nodes/m^2' % nDensity)
-		strBuffer.writeln('* Transmission range: %.2f m' % self.getTransmissionRange()) 
-		strBuffer.writeln('* Node coverage: %.2f m^2' % nCoverage)
-		strBuffer.writeln('* Footprint: %.2f %%' % footprint)
-		strBuffer.writeln('* Covered ratio: %.2f %%' % coveredRatio)
-		strBuffer.writeln('* Maximum path: %.2f m' % maximumPath)
-		strBuffer.writeln('* Network diameter: %.2f hops' % networkDiameter)
-		strBuffer.writeln('* Neighbor count: %.2f neighbors/node' % neighborCount)
-		strBuffer.writeln('***********************************************************')
-		
+		ScenarioInfo.printScenarioInfo(self.getNNodes(), self.__transmissionRange, self.getGridW(), self.getGridH(), self.__simulationTime, self.__discardTime, strBuffer)
+	
 		codeTag = scriptConfig.getElementsByTagName("code")
 		if len(codeTag) > 0:
 			self.__codeFile = codeTag[0].getAttribute("codeFile")
