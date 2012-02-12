@@ -49,7 +49,6 @@ class MulticastTrafficOverhead(GenericMeasure):
 		return PeriodicValues(0, self.getPeriod(), self.getSimulationTime())
 
 	def getTotalValue(self):
-		print self.__totalSize
 		return self.__totalSize / float(self.__neighbors) / self.getSimulationTime() / 1024.0
 		
 		
