@@ -17,6 +17,7 @@ class CommonSearchBehavior:
         
         self.__simultaneous = 0
         self.__different = False
+        self.__searchDuration = 0
                 
         for entry in entries:
             value = entry.firstChild.data
@@ -42,6 +43,9 @@ class CommonSearchBehavior:
                 
             if key == 'simultaneous':
                 self.__simultaneous = float(value)
+                
+            if key == 'searchDuration':
+                self.__searchDuration = int(value)
                     
         self.__nodePopulator = nodePopulator
         
@@ -77,6 +81,7 @@ class CommonSearchBehavior:
         strBuffer.writeln('* Generated: %d searches' % searches)
         strBuffer.writeln('* Time range: [%s, %s] s' % (init, end))
         strBuffer.writeln("* Simultaneous searches: %.2f" % (self.getSimultaneous()))
+        strBuffer.writeln("* Total searches: %d" % int(self.getSimultaneous() * searches))
         self.printInfo(strBuffer)
 
         startTime = time()
@@ -91,10 +96,16 @@ class CommonSearchBehavior:
                 #Increment time
                 currentTime += self.__searchPeriod
                 
+        if self.__searchDuration > 0:
+            self.finishSearches(self.__searchDuration, oFile)
+                
         strBuffer.writeln('* Behavior generation time: %s ' % TimeFormatter.formatTime(time() - startTime)) 
         strBuffer.writeln('**********************************************************')
                 
     def perform(self, time, oFile):
+        pass
+    
+    def finishSearches(self, searchDuration, oFile):
         pass 
     
     def printInfo(self, strBuffer):
