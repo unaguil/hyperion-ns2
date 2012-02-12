@@ -11,8 +11,8 @@
 	
 	<!-- Random waypoint configuration -->
 	<entry key="mobilityModel">RandomWaypoint</entry>
-	<entry key="minSpeed">0.00000000000000000001</entry>
-	<entry key="maxSpeed">0.00000000000000000001</entry>
+	<entry key="minSpeed">0.001</entry>
+	<entry key="maxSpeed">10.0</entry>
 	<entry key="pauseTime">500</entry>
 	<entry key="rotate">False</entry>
 	
