@@ -96,6 +96,7 @@ class Measures:
 					measure.parseLine(line)
 
 			line = outputFile.readline()
+		outputFile.close()
 			
 	def __getLogLineTime(self, line):
 		m = self.__compiledTimePattern.match(line)
