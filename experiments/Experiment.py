@@ -295,6 +295,7 @@ class Experiment:
 				print '* Writing configuration result to file %s ' % outputFilePath			
 				outputFile = open(outputFilePath, 'w')
 				outputFile.write(result)
+				outputFile.close()
 			
 				measures.savePartialResults(os.path.join(configurationDir, 'partialResults.txt'))
 				
