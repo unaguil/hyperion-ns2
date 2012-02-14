@@ -36,7 +36,7 @@ class LoadMobilityModel:
         else:
             numScenario = 0
             
-        mobilityFile = 'mobility-%d-%.1f-%d-%d-%.1f-%.1f-%d-%d.txt' % (self.__nNodes, self.__finishTime, self.__maxX, self.__maxY, self.__minSpeed, self.__maxSpeed, self.__pauseTime, numScenario)
+        mobilityFile = 'mobility-%d-%d-%d-%d-%.2f-%.2f-%d-%d.txt' % (self.__nNodes, self.__finishTime, self.__maxX, self.__maxY, self.__minSpeed, self.__maxSpeed, self.__pauseTime, numScenario)
         relativePath = 'mobilityScenarios/' + mobilityFile
         strBuffer.writeln('Using mobility scenario %s' % relativePath)
         absolutePath = os.path.abspath(relativePath)
