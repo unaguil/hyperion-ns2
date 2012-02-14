@@ -283,7 +283,7 @@ class Experiment:
 			
 			configurationError = all([success for success, outputLog, tempDir in results])
 			
-			output = [(outputLog, tempDir) for success, outputLog, tempDirs in results]
+			output = [(outputLog, tempDir) for success, outputLog, tempDir in results]
 			
 			if not configurationError:
 				self.__processRepeat(measures, output)
