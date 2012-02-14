@@ -26,7 +26,7 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
     strBuffer.close()
     
     command = './setdest'
-    parameters = '-v 2 -n %s -s 1 -m %f -M %f -t %.1f -P 1 -p %s -x %s -y %s' % (nodes, 0.00001, maxSpeed, finishTime, pauseTime, gridW, gridH)
+    parameters = '-v 2 -n %d -s 1 -m %f -M %f -t %.1f -P 2 -p %s -x %d -y %d' % (nodes, minSpeed, maxSpeed, finishTime, pauseTime, gridW, gridH)
     
     cmd = command + ' ' + parameters
     
@@ -41,7 +41,7 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
         
     for i in xrange(numScenarios):
         print 'Generated using external command: %s' % cmd
-        file = 'mobility-%s-%s-%s-%s-%s-%s-%s-%d.txt' % (str(nodes), str(finishTime), str(gridW), str(gridH), str(minSpeed), str(maxSpeed), str(pauseTime), i)
+        file = 'mobility-%d-%d-%d-%d-%.2f-%.2f-%d-%d.txt' % (nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, i)
         files.append(file)        
         outputFile = open(file, 'w') 
         print 'Output file %s' % file
@@ -67,19 +67,19 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
     return files
         
 def main():    
-    nodes = 100
-    finishTime = 1000.0
-    gridW = 700
-    gridH = 700
+    nodes = 20
+    finishTime = 300
+    gridW = 275
+    gridH = 275
 
-    minSpeed = 0.0
-    maxSpeed = 10.0
+    minSpeed = 0.00001
+    maxSpeed = 0.00001
     
     numScenarios = 20
 
     transmissionRange = 100.0
    
-    for pauseTime in range(0, 1200, 200): 
+    for pauseTime in range(1000, 1200, 1000): 
         generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, transmissionRange, numScenarios)
 
 if __name__ == '__main__':
