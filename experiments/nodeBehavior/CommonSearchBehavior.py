@@ -63,8 +63,6 @@ class CommonSearchBehavior:
             
         self.__searchTypes = [False] * self.getInvalidSearches()
         self.__searchTypes += [True] * self.getValidSearches()
-        
-        print self.__searchTypes
             
     def getNNodes(self):
         return self.__nNodes
@@ -132,8 +130,6 @@ class CommonSearchBehavior:
         return self.__searchTypes.pop()
         
     def getInvalidSearches(self):
-        print self.getTotalSearches()
-        print self.__invalidSearches 
         return int(self.__invalidSearches * self.getTotalSearches())
     
     def getValidSearches(self):
