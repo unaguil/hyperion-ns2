@@ -206,14 +206,14 @@ class Graph:
 			else:
 				plt.xlabel(name)
 				
-			label, measure = self.__getMeasureInfo(measureType)
+			label, measure, units = self.__getMeasureInfo(measureType)
 		
 			self.__printTotalInfo(y, stdValues, relStdValues, label, '')
 	
 			if self.__errorBar:	
 				line = plt.errorbar(x, y, yerrors, label=label, fmt='kx--')
 			else:
-				line = plt.plot(x, y, 'kx--', label=label)
+				line = plt.plot(x, y, 'kx--')
 	
 			lines.append(line)
 			labels.append(label)
@@ -221,13 +221,14 @@ class Graph:
 		if not yLabel is None:
 			plt.ylabel(yLabel)
 		else:
-			plt.ylabel(units)
+			yLabel = "%s [%s]" % (label, units)
+			plt.ylabel(yLabel)
 
 		plt.xticks(x)
 
 		self.__setAxis(plt, xAxis, yAxis) 
 
-		plt.figlegend(lines, labels, 'upper right')
+		#plt.figlegend(lines, labels, 'upper right')
 		
 	def finishPlotting(self, plt, fName, format='DISPLAY'):
 		if format == 'DISPLAY':
@@ -239,9 +240,9 @@ class Graph:
 		measureClass = 'measures.' + measureType
 		measure = createMeasure(measureClass, 5.0)
 		if measureClass in self.__measureNames:
-			return self.__measureNames[measureClass], measure 
+			return self.__measureNames[measureClass], measure, measure.getUnits() 
 		else:
-			return measure.getName(), measure
+			return measure.getName(), measure, measure.getUnits()
 			
 	def __setAxis(self, plt, xAxis, yAxis, defaultXAxis = None):
 		axis = list(plt.axis())
@@ -251,7 +252,7 @@ class Graph:
 			axis[1] = defaultXAxis[1]
 			
 		axis[2] = 0
-		axis[3] = axis[3] * 1.10
+		#axis[3] = axis[3] * 1.10
 
 		if xAxis is not None:
 			axis[0] = float(xAxis[0])
@@ -261,7 +262,7 @@ class Graph:
 			axis[2] = float(yAxis[0])
 			axis[3] = float(yAxis[1])
 
-		plt.grid(True)
+		#plt.grid(True)
 			
 		plt.axis(axis)
 		
@@ -288,7 +289,7 @@ class Graph:
 					#print "X: ", x
 					#print "Y: ", y
 			
-					measureName, measure = self.__getMeasureInfo(measureType)
+					measureName, measure, units = self.__getMeasureInfo(measureType)
 			
 					label = '%s (%s %s)' % (measureName, result.getTag(), name)
 					
