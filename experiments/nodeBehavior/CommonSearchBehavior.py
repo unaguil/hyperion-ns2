@@ -1,4 +1,5 @@
 import math
+import random
 
 from time import time
 
@@ -18,6 +19,7 @@ class CommonSearchBehavior:
         self.__simultaneous = 0
         self.__different = False
         self.__searchDuration = 0
+        self.__invalidSearches = 0
                 
         for entry in entries:
             value = entry.firstChild.data
@@ -46,6 +48,9 @@ class CommonSearchBehavior:
                 
             if key == 'searchDuration':
                 self.__searchDuration = int(value)
+                
+            if key == 'invalidSearches':
+                self.__invalidSearches = float(value)
                     
         self.__nodePopulator = nodePopulator
         
@@ -55,6 +60,11 @@ class CommonSearchBehavior:
             self.__searchPeriod = 0.0
         else:
             self.__searchPeriod = 1 / self.__searchFreq            
+            
+        self.__searchTypes = [False] * self.getInvalidSearches()
+        self.__searchTypes += [True] * self.getValidSearches()
+        
+        print self.__searchTypes
             
     def getNNodes(self):
         return self.__nNodes
@@ -70,18 +80,16 @@ class CommonSearchBehavior:
     
     def generate(self, workingDir, oFile, strBuffer):              
         init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime, self.__discardTime)
-        searches = int(math.ceil(self.__searchFreq * (end - init)))
-        
-        if self.__different and searches > len(self.getElements()):
-            raise Exception('Cannot generated %d searches using %d elements' % (searches, len(self.getElements())))
         
         strBuffer.writeln('')
         strBuffer.writeln('************* %s ****************' % self.__behaviorName)
         strBuffer.writeln('* Frequency: %.1f searches/s' % self.__searchFreq)
-        strBuffer.writeln('* Generated: %d searches' % searches)
+        strBuffer.writeln('* Generated: %d sets of searches' % self.getSearches())
         strBuffer.writeln('* Time range: [%s, %s] s' % (init, end))
         strBuffer.writeln("* Simultaneous searches: %.2f" % (self.getSimultaneous()))
-        strBuffer.writeln("* Total searches: %d" % int(self.getSimultaneous() * searches))
+        strBuffer.writeln("* Total searches: %d" % int(self.getSimultaneous() * self.getSearches()))
+        strBuffer.writeln("* Invalid searches ratio: %.2f" % self.__invalidSearches)
+        strBuffer.writeln("* Generating %d invalid searches" % int(self.getInvalidSearches()))
         self.printInfo(strBuffer)
 
         startTime = time()
@@ -90,7 +98,6 @@ class CommonSearchBehavior:
             #Create search events each specified period of time during specified time range        
             currentTime = init + DELTA_TIME
             while (currentTime < end + DELTA_TIME):
-                #perform action
                 self.perform(currentTime, oFile)
                 
                 #Increment time
@@ -119,3 +126,22 @@ class CommonSearchBehavior:
             return 1
         else:
             return int(self.__simultaneous * self.getNNodes())
+        
+    def selectSearchType(self):
+        random.shuffle(self.__searchTypes)
+        return self.__searchTypes.pop()
+        
+    def getInvalidSearches(self):
+        print self.getTotalSearches()
+        print self.__invalidSearches 
+        return int(self.__invalidSearches * self.getTotalSearches())
+    
+    def getValidSearches(self):
+        return self.getTotalSearches() - self.getInvalidSearches()
+    
+    def getSearches(self):
+        init, end = SimTimeRange.getTimeRange(self.__timeRange, self.__finishTime, self.__discardTime)
+        return int(math.ceil(self.__searchFreq * (end - init)))
+    
+    def getTotalSearches(self):
+        return int(self.getSimultaneous() * self.getSearches())

@@ -13,8 +13,13 @@ class SearchBehavior(CommonSearchBehavior):
         
     def perform(self, time, oFile):
         if len(self.getElements()) > 0:
-            for i in xrange(self.getSimultaneous()):        
-                node, parameter = self.__randomSelect()
+            for i in xrange(self.getSimultaneous()):
+                validSearch = self.selectSearchType()
+                if validSearch:         
+                    node, parameter = self.__randomSelect()
+                else:
+                    node, parameter = self.__createInvalidSearch()
+                    
                 self.__activeSearches.append((node, parameter, time))
                 oFile.write('$ns_ at %f \"$agents(%d) agentj searchParameterGeneric I-%s\"\n' % (time, node, parameter))
                 
@@ -25,10 +30,14 @@ class SearchBehavior(CommonSearchBehavior):
             
     def __randomSelect(self):
         node = random.randrange(self.getNNodes())
-        availableElements = self.getElements()
+        availableElements = self.getElements()        
         index = random.randrange(len(availableElements))
         parameter = availableElements[index]
         return node, parameter
+    
+    def __createInvalidSearch(self):
+        node = random.randrange(self.getNNodes())
+        return node, '#'
     
     def getElements(self):
         return list(self.getNodePopulator().getUsedConcepts())
