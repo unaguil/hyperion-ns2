@@ -1,10 +1,10 @@
 
 MESSAGES = 'messages'
-RATIO = '[0.0 - 0.1] ratio'
+RATIO = '%'
 NEIGHBORS = 'neighbors'
 PARAMETERS = 'parameters'
-MILLIS = 'milliseconds'
-SECONDS = 'seconds'
+MILLIS = 'ms'
+SECONDS = 's'
 COMPOSITIONS = 'compositions'
 SEARCHES = 'searches'
 HOPS = 'hops'
@@ -16,5 +16,7 @@ def str_formatter(units, value):
         return '%.0f' % value
     if units == SECONDS:
         return '%.3f' % value
+    if units == RATIO:
+        return '%.2f' % (value * 100.0)
     
     return '%.2f' % value
