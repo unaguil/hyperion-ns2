@@ -1,5 +1,6 @@
 from ParameterPopulator import ParameterPopulator
 from CompositionsPopulator import CompositionsPopulator
+from ServicePopulator import ServicePopulator
 
 class PopulatorGenerator:
     
@@ -18,5 +19,7 @@ class PopulatorGenerator:
             return ParameterPopulator(entries)
         if self.__populator == 'CompositionsPopulator':
             return CompositionsPopulator(entries)
+        if self.__populator == 'ServicePopulator':
+            return ServicePopulator(entries)
         
         return None
