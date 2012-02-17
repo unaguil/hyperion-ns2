@@ -73,22 +73,9 @@ class PeriodicResult:
 class Graph:
 	def __init__(self, files, lang, errorBar):
 		self.__measures = {}
-		self.__measureNames = {}
 		self.__errorBar = errorBar
-
-		try:
-			file = open('measureNames.' + lang)
-			for line in file:
-				entry = line.split('=')
-				if len(entry) == 2:
-					key = entry[0].strip()
-					value = entry[1].strip()
-					if not value == '':
-						self.__measureNames[key] = value
-				
-		except IOError:
-			print 'Error: Could not load measure names file.'
-			sys.exit()
+		
+		self.__measureNames = self.__loadMeasureNames(lang)
 		
 		for file in files:
 			print 'Parsing file %s' % file
@@ -146,6 +133,25 @@ class Graph:
 	
 	def getMeasures(self):
 		return self.__measures.keys()
+	
+	def __loadMeasureNames(self, lang):
+		measureNames = {}
+		
+		try:
+			file = open('measureNames.' + lang)
+			for line in file:
+				entry = line.split('=')
+				if len(entry) == 2:
+					key = entry[0].strip()
+					value = entry[1].strip()
+					if not value == '':
+						measureNames[key] = value
+				
+		except IOError:
+			print 'Error: Could not load measure names file.'
+			sys.exit()
+			
+		return measureNames
 	
 	def __checkUnits(self, measures, measureTypes):
 		values = []
