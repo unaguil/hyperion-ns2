@@ -72,10 +72,13 @@ class PeriodicResult:
 
 class Graph:
 	def __init__(self, files, lang, errorBar):
-		self.__measures = {}
 		self.__errorBar = errorBar
-		
 		self.__measureNames = self.__loadMeasureNames(lang)
+		
+		self.__measures = self.__loadFiles(files)
+		
+	def __loadFiles(self, files):
+		loadedMeasures = {}
 		
 		for file in files:
 			print 'Parsing file %s' % file
@@ -102,8 +105,8 @@ class Graph:
 
 					print 'Parsing measure %s' % mType
 					
-					if not mType in self.__measures:
-						self.__measures[mType] = (type, units, [])
+					if not mType in loadedMeasures:
+						loadedMeasures[mType] = (type, units, [])
 					
 					for resultNode in resultNodes:
 						sampleSize = int(resultNode.getAttribute('sampleSize'))
@@ -121,15 +124,17 @@ class Graph:
 
 						result = PeriodicResult(tag, float(period), values, meanTotal, stdTotal, sampleSize)
 						
-						expectedType = self.__measures[mType][0]
+						expectedType = loadedMeasures[mType][0]
 						if not type == expectedType:
 							print 'ERROR: Trying to merge incompatible types'
 							sys.exit()
 						
-						self.__measures[mType][2].append(result)
+						loadedMeasures[mType][2].append(result)
 			except Exception as e:
 				print 'ERROR: Parser error processing file %s. Cause: %s' % (file, e.message)
 				sys.exit()
+				
+			return loadedMeasures
 	
 	def getMeasures(self):
 		return self.__measures.keys()
