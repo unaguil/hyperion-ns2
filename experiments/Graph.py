@@ -177,57 +177,50 @@ class Graph:
 				print 'Unknown measure %s' % measureType
 				sys.exit()
 	
-	def plotTotal(self, measureTypes, xLabel=None, yLabel=None, xAxis=None, yAxis=None):
-		self.__checkMeasureTypes(self.__measures, measureTypes)			
-		self.__checkUnits(self.__measures, measureTypes)
-		
-		lines = []
-		labels = []						
-
-		for measureType in measureTypes:			
-			x = []
-			y = []
-		
-			stdValues = []
-			relStdValues = []
-		
-			name, units, results = self.__measures[measureType] 
-			for result in results:
-				x.append(result.getTag())
-				y.append(result.getMeanTotal())
-				stdValues.append(result.getStdTotal())
-				
-				if result.getMeanTotal() == 0:
-					relStdValues.append(0)
-				else:
-					relStdValues.append(100 * result.getStdTotal() / result.getMeanTotal())
+	def plotTotal(self, measures, units, label, xLabel=None, yLabel=None, xAxis=None, yAxis=None):
+		#lines = []
+		#labels = []						
 			
-			data = dict(zip(x,zip(y, stdValues)))
-			x = sorted(x)
-			y = [data[i][0] for i in x]
-			yerrors = [data[i][1] for i in x]
-
-			print 'Plotting %s measure type' % measureType
-			print "X: ", x
-			print "Y: ", y
-			print "YErrors: ", yerrors
+		x = []
+		y = []
+	
+		stdValues = []
+		relStdValues = []
+	
+		name, units, results = measures
+		for result in results:
+			x.append(result.getTag())
+			y.append(result.getMeanTotal())
+			stdValues.append(result.getStdTotal())
 			
-			if not xLabel is None:
-				plt.xlabel(xLabel)
+			if result.getMeanTotal() == 0:
+				relStdValues.append(0)
 			else:
-				plt.xlabel(name)
-				
-			label, measure, units = self.__getMeasureInfo(measureType)
+				relStdValues.append(100 * result.getStdTotal() / result.getMeanTotal())
 		
-			self.__printTotalInfo(y, stdValues, relStdValues, label, '')
-	
-			if self.__errorBar:	
-				line = plt.errorbar(x, y, yerrors, label=label, fmt='kx--')
-			else:
-				line = plt.plot(x, y, 'kx--')
-	
-			lines.append(line)
-			labels.append(label)
+		data = dict(zip(x,zip(y, stdValues)))
+		x = sorted(x)
+		y = [data[i][0] for i in x]
+		yerrors = [data[i][1] for i in x]
+
+		print "X: ", x
+		print "Y: ", y
+		print "YErrors: ", yerrors
+		
+		if not xLabel is None:
+			plt.xlabel(xLabel)
+		else:
+			plt.xlabel(name)
+			
+		#self.__printTotalInfo(y, stdValues, relStdValues, label, '')
+
+		if self.__errorBar:	
+			line = plt.errorbar(x, y, yerrors, fmt='kx--')
+		else:
+			line = plt.plot(x, y, 'kx--')
+
+		#lines.append(line)
+		#labels.append(label)
 		
 		if not yLabel is None:
 			plt.ylabel(yLabel)
@@ -349,16 +342,19 @@ class Graph:
 			plotsPerPage = rowsPerPage * columnsPerPage
 			pp = PdfPages(outputFile)
 			
-			for index, measure in enumerate(sorted(self.__measures)):
-				
+			for index, measureType in enumerate(sorted(self.__measures)):
 				plotNumber = index % plotsPerPage
 				if plotNumber == 0:
 					plt.clf() 
 					plt.figure(index / plotsPerPage + 1)
 					 
 				plt.subplot(rowsPerPage, columnsPerPage, plotNumber + 1)
+				
+				print 'Plotting %s measure type' % measureType
+				label, _, units = self.__getMeasureInfo(measureType)
+				
 				if not periodic:
-					self.plotTotal([measure])
+					self.plotTotal(self.__measures[measureType], units, label)
 				else:
 					self.plotPeriodic([measure])
 				
