@@ -71,11 +71,14 @@ class PeriodicResult:
 		return self.__stdTotal
 
 class Graph:
-	def __init__(self, files, lang, errorBar):
+	def __init__(self, directories, lang, errorBar):
 		self.__errorBar = errorBar
 		self.__measureNames = self.__loadMeasureNames(lang)
 		
-		self.__measures = self.__loadFiles(files)
+		self.__multipleMeasures = {}
+		
+		for name, files in directories.iteritems():
+			self.__multipleMeasures[name] = self.__loadFiles(files)
 		
 	def __loadFiles(self, files):
 		loadedMeasures = {}
@@ -136,8 +139,8 @@ class Graph:
 				
 		return loadedMeasures
 	
-	def getMeasures(self):
-		return self.__measures.keys()
+	def getMeasureTypes(self):
+		return self.__multipleMeasures.values()[0].keys()
 	
 	def __loadMeasureNames(self, lang):
 		measureNames = {}
@@ -271,8 +274,8 @@ class Graph:
 		plt.axis(axis)
 		
 	def plotPeriodic(self, measureTypes, yLabel=None, xAxis=None, yAxis=None):
-		self.__checkMeasureTypes(self.__measures, measureTypes)			
-		self.__checkUnits(self.__measures, measureTypes)
+		self.__checkMeasureTypes(self.__multipleMeasures, measureTypes)			
+		self.__checkUnits(self.__multipleMeasures, measureTypes)
 
 		plt.xlabel('time [s]')
 		
@@ -281,11 +284,11 @@ class Graph:
 			
 		plt.grid(True)
 		for measureType in measureTypes:			
-			if not measureType in self.__measures:
+			if not measureType in self.__multipleMeasures:
 				print 'ERROR: Unknown measure %s' % measureType
 				sys.exit()
 			else:			
-				name, units, results = self.__measures[measureType]
+				name, units, results = self.__multipleMeasures[measureType]
 				for result in results: 
 					means, stds, times = result.getValues()
 					relStdValues = result.getRelStdValues() 
@@ -324,8 +327,8 @@ class Graph:
 		plt.figlegend(lines, labels, 'upper right')  
 		
 	def printSummary(self):
-		for measureType in sorted(self.__measures):
-			name, units, results = self.__measures[measureType]
+		for measureType in sorted(self.__multipleMeasures):
+			name, units, results = self.__multipleMeasures[measureType]
 			print 'Measure: %s [%s]' % (measureType, units)
 			tagValues = {}
 			for result in results:
@@ -342,7 +345,7 @@ class Graph:
 			plotsPerPage = rowsPerPage * columnsPerPage
 			pp = PdfPages(outputFile)
 			
-			for index, measureType in enumerate(sorted(self.__measures)):
+			for index, measureType in enumerate(sorted(self.getMeasureTypes())):
 				plotNumber = index % plotsPerPage
 				if plotNumber == 0:
 					plt.clf() 
@@ -354,7 +357,8 @@ class Graph:
 				label, _, units = self.__getMeasureInfo(measureType)
 				
 				if not periodic:
-					self.plotTotal(self.__measures[measureType], units, label)
+					for measures in self.__multipleMeasures.values():
+						self.plotTotal(measures[measureType], units, label)
 				else:
 					self.plotPeriodic([measure])
 				
@@ -363,7 +367,7 @@ class Graph:
 				
 			pp.close()
 		else: 
-			for measure in sorted(self.__measures):
+			for measure in sorted(self.__multipleMeasures):
 				fName = measure + '.' + format
 				plt.clf()
 				if not periodic:
@@ -412,6 +416,7 @@ def main():
 	parser.add_option("-f", "--format", dest="format", help='output format for plotted image', default='DISPLAY')
 	parser.add_option("-o", "--onePDF", dest="onePDF", help='write plots to a multiple pages PDF', action="store_true", default=False)
 	parser.add_option("-w", "--writeFile", dest="writeFile", help="plotting output file name", default=None)
+	parser.add_option("-m", "--mergedDirectories", dest="mergedDirectories", help="directory containing the result files to merge")
 	
 	parser.add_option("--xLabel", dest="xLabel", help="sets the label for X axis")
 	parser.add_option("--yLabel", dest="yLabel", help="sets the label for Y axis")
@@ -423,18 +428,29 @@ def main():
 	
 	(options, args) = parser.parse_args()
 	
-	if options.inputFile is None and options.directory is None:
+	if options.inputFile is None and options.directory and options.mergedDirectories is None:
 		parser.print_usage()
 	else:
-		files = []
 		outputFile = 'allPlots.pdf'
-		if not options.directory is None:
-			files = getXMLFiles(options.directory)
-			outputFile = os.path.join(options.directory, outputFile)
+		
+		directories = {}
+		
+		if options.mergedDirectories is not None:
+			print options.mergedDirectories
+			dirTable = eval(options.mergedDirectories)
+			for name, directory in dirTable.iteritems():
+				files = getXMLFiles(directory)
+				directories[name] = files 
 		else:
-			files.append(options.inputFile)
+			if not options.directory is None:
+				files = getXMLFiles(options.directory)
+			else:
+				files = []
+				files.append(options.inputFile)
 			
-		graph = Graph(files, 'en', options.errorBar)
+		directories[''] = files
+			
+		graph = Graph(directories, 'en', options.errorBar)
 		
 		if options.all: 
 			graph.plotAll(options.format, options.onePDF, outputFile, options.periodic)
@@ -446,7 +462,7 @@ def main():
 		
 		if len(args) == 0:
 			if not options.summary:
-				print 'Supported measures: %s' % graph.getMeasures()
+				print 'Supported measures: %s' % graph.getMeasureTypes()
 			else:
 				graph.printSummary()
 		else:  					
