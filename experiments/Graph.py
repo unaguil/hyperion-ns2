@@ -134,7 +134,7 @@ class Graph:
 				print 'ERROR: Parser error processing file %s. Cause: %s' % (file, e.message)
 				sys.exit()
 				
-			return loadedMeasures
+		return loadedMeasures
 	
 	def getMeasures(self):
 		return self.__measures.keys()
