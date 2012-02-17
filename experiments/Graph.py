@@ -12,6 +12,11 @@ import xml.dom.minidom as minidom
 from matplotlib.backends.backend_pdf import PdfPages
 
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
+ 
+def lineFormat():
+	formats = ('kx--', 'k*--', 'k1--', 'k2--')
+	for format in formats: 
+		yield format
 
 def __relStd(mean, std):
 	return 100 * std / mean
@@ -180,10 +185,7 @@ class Graph:
 				print 'Unknown measure %s' % measureType
 				sys.exit()
 	
-	def plotTotal(self, measures, units, label, xLabel=None, yLabel=None, xAxis=None, yAxis=None):
-		#lines = []
-		#labels = []						
-			
+	def plotTotal(self, measures, units, label, format):		
 		x = []
 		y = []
 	
@@ -209,33 +211,17 @@ class Graph:
 		print "X: ", x
 		print "Y: ", y
 		print "YErrors: ", yerrors
-		
-		if not xLabel is None:
-			plt.xlabel(xLabel)
-		else:
-			plt.xlabel(name)
 			
-		#self.__printTotalInfo(y, stdValues, relStdValues, label, '')
+		self.__printTotalInfo(y, stdValues, relStdValues, label, '')
 
 		if self.__errorBar:	
-			line = plt.errorbar(x, y, yerrors, fmt='kx--')
+			plt.errorbar(x, y, yerrors, fmt=format, label=label)
 		else:
-			line = plt.plot(x, y, 'kx--')
+			plt.plot(x, y, format, label=label)
+			
+		plt.xlabel(name)
 
-		#lines.append(line)
-		#labels.append(label)
-		
-		if not yLabel is None:
-			plt.ylabel(yLabel)
-		else:
-			yLabel = "%s [%s]" % (label, units)
-			plt.ylabel(yLabel)
-
-		plt.xticks(x)
-
-		self.__setAxis(plt, xAxis, yAxis) 
-
-		#plt.figlegend(lines, labels, 'upper right')
+		plt.xticks(x) 
 		
 	def finishPlotting(self, plt, fName, format='DISPLAY'):
 		if format == 'DISPLAY':
@@ -259,7 +245,7 @@ class Graph:
 			axis[1] = defaultXAxis[1]
 			
 		axis[2] = 0
-		#axis[3] = axis[3] * 1.10
+		axis[3] = axis[3] * 1.05
 
 		if xAxis is not None:
 			axis[0] = float(xAxis[0])
@@ -354,11 +340,19 @@ class Graph:
 				plt.subplot(rowsPerPage, columnsPerPage, plotNumber + 1)
 				
 				print 'Plotting %s measure type' % measureType
-				label, _, units = self.__getMeasureInfo(measureType)
+				measureName, _, units = self.__getMeasureInfo(measureType)
 				
 				if not periodic:
-					for measures in self.__multipleMeasures.values():
-						self.plotTotal(measures[measureType], units, label)
+					formatGenerator = lineFormat()
+					for name, measures in self.__multipleMeasures.iteritems():
+						self.plotTotal(measures[measureType], units, name, formatGenerator.next())
+					
+					yLabel = "%s [%s]" % (measureName, units)
+					plt.ylabel(yLabel)
+					
+					self.__setAxis(plt, None, None)
+					
+					plt.legend(loc='best')
 				else:
 					self.plotPeriodic([measure])
 				
@@ -406,10 +400,17 @@ def getXMLFiles(path):
 	
 	return xmlFiles
 
+def parseDirTable(str):
+	dirTable = {}
+	for entry in str.split(','):
+		key, value = entry.split(':')
+		dirTable[key] = value
+	return dirTable
+
 def main():
 	parser = OptionParser()
 	parser.add_option("-i", "--input", dest="inputFile", help="experiment report used as input")
-	parser.add_option("-d", "--directory", dest="directory", help="directory containing the result files to merge")
+	parser.add_option("-d", "--directory", dest="directory", help="directory containing the result files to merge", default=None)
 	parser.add_option("-p", "--periodic", dest="periodic", help="plots a periodic graph (default is total graph)", action="store_true", default=False)
 	parser.add_option("-s", "--summary", dest="summary", help="prints the summary of the parsed files", action="store_true", default=False)
 	parser.add_option("-a", "--all", dest="all", help="plots all measures each one in a separate image", action="store_true", default=False)
@@ -428,7 +429,7 @@ def main():
 	
 	(options, args) = parser.parse_args()
 	
-	if options.inputFile is None and options.directory and options.mergedDirectories is None:
+	if options.inputFile is None and options.directory is None and options.mergedDirectories is None:
 		parser.print_usage()
 	else:
 		outputFile = 'allPlots.pdf'
@@ -436,8 +437,7 @@ def main():
 		directories = {}
 		
 		if options.mergedDirectories is not None:
-			print options.mergedDirectories
-			dirTable = eval(options.mergedDirectories)
+			dirTable = parseDirTable(options.mergedDirectories)
 			for name, directory in dirTable.iteritems():
 				files = getXMLFiles(directory)
 				directories[name] = files 
@@ -459,20 +459,6 @@ def main():
 		if options.summary:
 			graph.printSummary()
 			sys.exit()
-		
-		if len(args) == 0:
-			if not options.summary:
-				print 'Supported measures: %s' % graph.getMeasureTypes()
-			else:
-				graph.printSummary()
-		else:  					
-			if not options.periodic:
-				#Plot selected measure types				
-				graph.plotTotal(args, options.xLabel, options.yLabel, (options.xmin, options.xmax), (options.ymin, options.ymax))
-				graph.finishPlotting(plt, options.writeFile, options.format)
-			else: 
-				graph.plotPeriodic(args, options.yLabel, (options.xmin, options.xmax), (options.ymin, options.ymax))
-				graph.finishPlotting(plt, options.writeFile, options.format)
 
 if __name__ == '__main__':
 	 main()
