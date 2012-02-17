@@ -398,7 +398,7 @@ def getXMLFiles(path):
 def main():
 	parser = OptionParser()
 	parser.add_option("-i", "--input", dest="inputFile", help="experiment report used as input")
-	parser.add_option("-m", "--merge", dest="directory", help="directory containing the result files to merge")
+	parser.add_option("-d", "--directory", dest="directory", help="directory containing the result files to merge")
 	parser.add_option("-p", "--periodic", dest="periodic", help="plots a periodic graph (default is total graph)", action="store_true", default=False)
 	parser.add_option("-s", "--summary", dest="summary", help="prints the summary of the parsed files", action="store_true", default=False)
 	parser.add_option("-a", "--all", dest="all", help="plots all measures each one in a separate image", action="store_true", default=False)
