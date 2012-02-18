@@ -59,22 +59,19 @@ class ServicePopulator:
 
         strBuffer.writeln('**************************************************')
         
-    def __generate(self, nNodes, numServices, serviceParameters, replicateServices, strBuffer):                            
-        strBuffer.writeln('* Services: %.d' % numServices)
-        strBuffer.writeln('* Service parameters: %d' % serviceParameters)
-        strBuffer.writeln('* Replicate numServices: %d' % replicateServices)
-        
+    def __generate(self, nNodes, numServices, serviceParameters, replicateServices, strBuffer):                                    
         services, taxonomy = self.__generateServices(numServices, serviceParameters)        
         
-        nodeTable = {}
+        nodesWithServices = len(services) * replicateServices
+        selectedNodes = random.sample(range(nNodes), nodesWithServices) 
+                
+        replicatedServices = []
         for service in services:
-            availableNodes = range(nNodes)
-            selectedNodes = random.sample(availableNodes, replicateServices)
+            replicatedServices += [service] * replicateServices
         
-            for node in selectedNodes:
-                if not node in nodeTable:
-                    nodeTable[node] = []
-                nodeTable[node] += service
+        nodeTable = {}
+        for node, service in zip(selectedNodes, replicatedServices):
+            nodeTable[node] = service
                 
         usedConcepts = {}
         for parameter in self.__getParameters(nodeTable):
@@ -83,6 +80,10 @@ class ServicePopulator:
                     usedConcepts[concept] = 0
                 usedConcepts[concept] += 1
                 
+        strBuffer.writeln('* Services: %.d' % numServices)
+        strBuffer.writeln('* Service parameters: %d' % serviceParameters)
+        strBuffer.writeln('* Replicate numServices: %d' % replicateServices)
+        strBuffer.writeln('* Nodes with services: %d' % len(nodeTable))
         strBuffer.writeln('* Total generated parameters: %d' % self.__countParameters(nodeTable))
         
         return nodeTable, taxonomy, usedConcepts
