@@ -361,11 +361,23 @@ class Graph:
 				
 			pp.close()
 		else: 
-			for measure in sorted(self.__multipleMeasures):
-				fName = measure + '.' + format
+			for measureType in sorted(sorted(self.getMeasureTypes())):
+				fName = measureType + '.' + format
 				plt.clf()
+				
+				measureName, _, units = self.__getMeasureInfo(measureType)
+				
 				if not periodic:
-					self.plotTotal([measure])
+					formatGenerator = lineFormat()
+					for name, measures in self.__multipleMeasures.iteritems():
+						self.plotTotal(measures[measureType], units, name, formatGenerator.next())
+					
+					yLabel = "%s [%s]" % (measureName, units)
+					plt.ylabel(yLabel)
+					
+					self.__setAxis(plt, None, None)
+					
+					plt.legend(loc='best')
 				else:
 					self.plotPeriodic([measure])
 				self.finishPlotting(plt, fName, format) 
