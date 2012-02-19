@@ -86,6 +86,7 @@ class CommonSearchBehavior:
         strBuffer.writeln('* Time range: [%s, %s] s' % (init, end))
         strBuffer.writeln("* Simultaneous searches: %.2f" % (self.getSimultaneous()))
         strBuffer.writeln("* Total searches: %d" % int(self.getSimultaneous() * self.getSearches()))
+        strBuffer.writeln("* Search duration: %d s" % self.__searchDuration)
         strBuffer.writeln("* Invalid searches ratio: %.2f" % self.__invalidSearches)
         strBuffer.writeln("* Generating %d invalid searches" % int(self.getInvalidSearches()))
         self.printInfo(strBuffer)
