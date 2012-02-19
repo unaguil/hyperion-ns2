@@ -26,7 +26,7 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
     strBuffer.close()
     
     command = './setdest'
-    parameters = '-v 2 -n %d -s 1 -m %f -M %f -t %.1f -P 2 -p %s -x %d -y %d' % (nodes, minSpeed, maxSpeed, finishTime, pauseTime, gridW, gridH)
+    parameters = '-v 2 -n %d -s 1 -m %f -M %f -t %.1f -P 1 -p %s -x %d -y %d' % (nodes, minSpeed, maxSpeed, finishTime, pauseTime, gridW, gridH)
     
     cmd = command + ' ' + parameters
     
@@ -67,19 +67,19 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
     return files
         
 def main():    
-    nodes = 20
-    finishTime = 100
-    gridW = 275
-    gridH = 275
+    nodes = 100
+    finishTime = 300
+    gridW = 700
+    gridH = 700
 
     minSpeed = 0.00001
-    maxSpeed = 5.0
+    maxSpeed = 10.0
     
     numScenarios = 20
 
     transmissionRange = 100.0
    
-    for pauseTime in range(1000, 1200, 1000): 
+    for pauseTime in range(0, 10, 1000): 
         generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, transmissionRange, numScenarios)
 
 if __name__ == '__main__':
