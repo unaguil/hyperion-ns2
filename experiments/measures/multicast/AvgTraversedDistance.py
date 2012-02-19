@@ -11,7 +11,7 @@ class AvgTraversedDistance(GenericAvgMeasure):
 		GenericAvgMeasure.__init__(self, period, simulationTime, Units.HOPS)
 		
 		self.__acceptedPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer [0-9]+ accepted multicast.search.message.SearchMessage .*? distance ([0-9]+) ([0-9]+\,[0-9]+).*?')
-		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? found parameters .*? in node [0-9]+ searchID .*? distance ([0-9]+) ([0-9]+\,[0-9]+).*?')			
+		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? found parameters .*? in node [0-9]+ searchID .*? distance ([0-9]+) .*? ([0-9]+\,[0-9]+).*?')			
 	
 	def parseLine(self, line):
 		m = self.__acceptedPattern.match(line)
