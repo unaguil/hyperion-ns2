@@ -4,7 +4,7 @@
 		<import file="StaticScenario.xml" />
 	</staticConfig>
 	 <dynamicConfig>
-        <dynamicEntry key="parameterSearch.sameTTL" interpolator="IntegerInterpolator" text="Dissemination and search TTLs" start="1" end="5" step="1"/>
+        <dynamicEntry key="parameterSearch.sameTTL" interpolator="IntegerInterpolator" text="Dissemination and search TTLs" start="5" end="5" step="1"/>
     </dynamicConfig>
 	<repeat number="1" />
 	<measures>
