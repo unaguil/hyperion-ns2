@@ -5,7 +5,7 @@
 	<entry key="gridW">290</entry>
 	<entry key="gridH">290</entry>
 		
-	<entry key="finishTime">20.0</entry>
+	<entry key="finishTime">300.0</entry>
 	<entry key="discardTime">0.0</entry>
 	<entry key="javaAgent">multicast.Peer</entry>
 	
@@ -13,7 +13,7 @@
 	<entry key="mobilityModel">RandomWaypoint</entry>
 	<entry key="minSpeed">0.001</entry>
 	<entry key="maxSpeed">10.0</entry>
-	<entry key="pauseTime">500</entry>
+	<entry key="pauseTime">0</entry>
 	<entry key="rotate">False</entry>
 	
 	<!-- Parameter populator -->
@@ -25,13 +25,13 @@
 	<entry key="populator">ServicePopulator</entry>
 	<entry key="services">2</entry>
 	<entry key="serviceParameters">6</entry>
-	<entry key="replicateServices">2</entry>
+	<entry key="replicateServices">5</entry>
 	
 	<entry key="nodeBehavior">SearchBehavior</entry>
-	<entry key="searchFreq">1.0</entry>
+	<entry key="searchFreq">0.2</entry>
 	<entry key="simultaneous">0.25</entry>
-	<entry key="invalidSearches">0.25</entry>
-	<entry key="timeRange">('START', 10.0)</entry>
+	<entry key="searchDuration">20</entry>
+	<entry key="timeRange">('START', 200.0)</entry>
 	
 	<!-- <entry key="multicast.searchFreq">0.5</entry> -->
 	
