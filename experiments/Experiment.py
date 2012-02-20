@@ -286,7 +286,7 @@ class Experiment:
 			output = [(outputLog, tempDir) for success, outputLog, tempDir in results]
 			
 			if not configurationError:
-				self.__processRepeat(measures, output)
+				self.__processRepeats(measures, output)
 
 			result = measures.endConfiguration()
 
@@ -321,25 +321,19 @@ class Experiment:
 		if not self.__debug:
 			shutil.rmtree(self.__workingDir)	
 		
-	def __processRepeat(self, measures, output):
+	def __processRepeats(self, measures, output):
+		processers = []
 		for outputLog, tempDir in output:
-			print '* Output log %s file size %s' % (outputLog, self.__sizeof_fmt(os.path.getsize(outputLog)))
-			sys.stdout.flush()
-			#Measure results
-			logProcessStartTime = time.time()
-			measures.startRepeat(tempDir)
-			measures.parseLog(outputLog)
-			measures.endRepeat()
-							
-			print '* Output log %s parsing time: %s' % (outputLog, TimeFormatter.formatTime(time.time() - logProcessStartTime))
-			print ''
-			sys.stdout.flush()
-		
-	def __sizeof_fmt(self, num):
-	    for x in ['bytes','KB','MB','GB','TB']:
-	        if num < 1024.0:
-	            return "%3.1f%s" % (num, x)
-	        num /= 1024.0		
+			processer = measures.repeatProcesser(tempDir, outputLog)
+			processer.start();
+			processers.append(processer)
+			
+		results = []
+		for processer in processers:
+			processer.join()
+			results.append(processer.getResults())
+			
+		measures.repeatsProcessed(results)
 	        
 	def __processOutput(self):
 		configGenerator = ConfigGenerator(self.__inputFile)

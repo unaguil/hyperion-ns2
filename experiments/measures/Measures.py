@@ -2,12 +2,18 @@ import xml.dom.minidom as minidom
 import re
 import numpy
 import gzip
+import threading
+import os
+import sys
+import time as timeUtil
 
 import periodicValues.Util as Util
 
 import datetime
 
 import generic.Units as Units
+
+import util.TimeFormatter as TimeFormatter
 
 DEFAULT_PERIOD = 1.0
 
@@ -18,6 +24,13 @@ def get_class(clazz):
 	for comp in parts[1:]:
 		m = getattr(m, comp)
 	return m
+
+def createMeasure(clazz, period, simulationTime):
+	className = clazz.split('.')[-1]
+	measureClass = get_class(clazz + '.' + className)
+	
+	return measureClass(period, simulationTime)
+	return None
 		
 class PeriodicEntry:
 	def __init__(self, meanValues, stdValues, period, meanTotal, stdTotal, size):
@@ -62,53 +75,13 @@ class Measures:
 			
 			self.__measureData[clazz] = (clazz, period, units, discardable)
 		
-		self.__compiledTimePattern = re.compile(r'.*?([0-9]+\,[0-9]+)$')
-		self.__compiledFinishedPattern = re.compile(r'INFO  peer.BasicPeer  - Simulation finished.*?')
-		
 		self.__simulationFinished = False
 		
 		self.finishedSimulations = [] 
-
-	def __createMeasure(self, clazz, period):
-		className = clazz.split('.')[-1]
-		measureClass = get_class(clazz + '.' + className)
-		
-		return measureClass(period, self.__simulationTime)
-		return None
 	
 	def __getMeasureInfo(self, clazz, period):
-		measure = self.__createMeasure(clazz, period)
+		measure = createMeasure(clazz, period, self.__simulationTime)
 		return measure.getUnits(), measure.isDiscardable()
-
-	def parseLog(self, outputLog):
-		outputFile = gzip.open(outputLog, 'r')
-		
-		line = outputFile.readline()
-		while (line != '' ):
-			line.replace( '\n', '' )
-		
-			self.__checkFinished(line)
-
-			time = self.__getLogLineTime(line)					
-			#Parse line using each measure
-			for measure in self.currentMeasures:
-				if time >= self.__discardTime or not measure.isDiscardable():
-					measure.parseLine(line)
-
-			line = outputFile.readline()
-		outputFile.close()
-			
-	def __getLogLineTime(self, line):
-		m = self.__compiledTimePattern.match(line)
-		if m is not None: 
-			return float(m.group(1).replace(',', '.'))
-		else:
-			return 0.0
-		
-	def __checkFinished(self, line):
-		m = self.__compiledFinishedPattern.match(line)
-		if m is not None:
-			self.__repeatFinished = True
 
 	def startConfiguration(self, n, tag, type, simulationTime, discardTime):
 		self.__currentConfiguration = (n, tag, type, simulationTime, discardTime)
@@ -118,22 +91,15 @@ class Measures:
 			
 		self.__repeatStatus = [] 
 			
-	def startRepeat(self, tempDir): 		
-		self.currentMeasures = []
-		for clazz, period, units, discardable in self.__measureData.values():
-			measure = self.__createMeasure(clazz, period)
-			self.currentMeasures.append(measure)
-			measure.start(tempDir)
-			
-		self.__repeatFinished = False
+	def repeatProcesser(self, tempDir, outputLog): 				
+		return Processer(self.__measureData.values(), tempDir, outputLog, self.__simulationTime, self.__discardTime)
 		
-	def endRepeat(self):
-		#Obtain the value of this repeat and store it
-		for measure in self.currentMeasures:
-			measure.finish()
-			self.__currentResults[measure.getType()].append((measure.getValues(), measure.getTotalValue()))
-			
-		self.__repeatStatus.append(self.__repeatFinished)
+	def repeatsProcessed(self, results):
+		for repeatFinished, measureResults in results:
+			for measureType, measures in measureResults:
+				self.__currentResults[measureType] .append(measures)
+				
+			self.__repeatStatus.append(repeatFinished)
 		
 	def __repeatsFinished(self):
 		return all(self.__repeatStatus)
@@ -243,3 +209,73 @@ class Measures:
 			measureNode.appendChild(resultNode)
 					
 		return doc.toprettyxml()
+
+
+class Processer(threading.Thread):
+	def __init__(self, measures, tempDir, outputLog, simulationTime, discardTime):
+		threading.Thread.__init__(self)
+		self.__discardTime = discardTime
+		self.__outputLog = outputLog
+		self.__currentMeasures = []
+		for clazz, period, units, discardable in measures:
+			measure = createMeasure(clazz, period, simulationTime)
+			self.__currentMeasures.append(measure)
+			measure.start(tempDir)
+			
+		self.__repeatFinished = False
+		
+		self.__compiledFinishedPattern = re.compile(r'INFO  peer.BasicPeer  - Simulation finished.*?')
+		self.__compiledTimePattern = re.compile(r'.*?([0-9]+\,[0-9]+)$')
+		
+	def getResults(self):
+		results = []
+		for measure in self.__currentMeasures:
+			measure.finish()
+			results.append((measure.getType(), (measure.getValues(), measure.getTotalValue())))
+			
+		return self.__repeatFinished, results
+	
+	def __sizeof_fmt(self, num):
+	    for x in ['bytes','KB','MB','GB','TB']:
+	        if num < 1024.0:
+	            return "%3.1f%s" % (num, x)
+	        num /= 1024.0
+	        
+	def __getLogLineTime(self, line):
+		m = self.__compiledTimePattern.match(line)
+		if m is not None: 
+			return float(m.group(1).replace(',', '.'))
+		else:
+			return 0.0
+		
+	def __checkFinished(self, line):
+		m = self.__compiledFinishedPattern.match(line)
+		if m is not None:
+			self.__repeatFinished = True
+	
+	def run(self):
+		print '* Output log %s file size %s' % (self.__outputLog, self.__sizeof_fmt(os.path.getsize(self.__outputLog)))
+		sys.stdout.flush()
+		
+		logProcessStartTime = timeUtil.time()
+		
+		outputFile = gzip.open(self.__outputLog, 'r')
+		
+		line = outputFile.readline()
+		while (line != '' ):
+			line.replace( '\n', '' )
+		
+			self.__checkFinished(line)
+
+			time = self.__getLogLineTime(line)					
+			#Parse line using each measure
+			for measure in self.__currentMeasures:
+				if time >= self.__discardTime or not measure.isDiscardable():
+					measure.parseLine(line)
+
+			line = outputFile.readline()
+		outputFile.close()
+		
+		print '* Output log %s parsing time: %s' % (self.__outputLog, TimeFormatter.formatTime(timeUtil.time() - logProcessStartTime))
+		print ''
+		sys.stdout.flush()
