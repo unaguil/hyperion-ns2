@@ -14,7 +14,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
  
 def lineFormat():
-	formats = ('kx--', 'k*--', 'k1--', 'k2--')
+	formats = ('ko--', 'ks--', 'k^--', 'k*--', 'kD--', 'kp--')
 	for format in formats: 
 		yield format
 
@@ -76,15 +76,16 @@ class PeriodicResult:
 		return self.__stdTotal
 
 class Graph:
-	def __init__(self, directories, lang, errorBar):
+	def __init__(self, directories, lang, errorBar, order):
 		self.__errorBar = errorBar
 		self.__measureNames = self.__loadMeasureNames(lang)
 		
 		self.__multipleMeasures = {}
+		self.__order = order
 		
 		for name, files in directories.iteritems():
 			self.__multipleMeasures[name] = self.__loadFiles(files)
-		
+
 	def __loadFiles(self, files):
 		loadedMeasures = {}
 		
@@ -344,7 +345,8 @@ class Graph:
 				
 				if not periodic:
 					formatGenerator = lineFormat()
-					for name, measures in self.__multipleMeasures.iteritems():
+					for name in self.__order:
+						measures = self.__multipleMeasures[name]
 						self.plotTotal(measures[measureType], units, name, formatGenerator.next())
 					
 					yLabel = "%s [%s]" % (measureName, units)
@@ -369,7 +371,8 @@ class Graph:
 				
 				if not periodic:
 					formatGenerator = lineFormat()
-					for name, measures in self.__multipleMeasures.iteritems():
+					for name in self.order():
+						measures = self.__multipleMeasures[name]
 						self.plotTotal(measures[measureType], units, name, formatGenerator.next())
 					
 					yLabel = "%s [%s]" % (measureName, units)
@@ -414,10 +417,12 @@ def getXMLFiles(path):
 
 def parseDirTable(str):
 	dirTable = {}
+	order = []
 	for entry in str.split(','):
 		key, value = entry.split(':')
 		dirTable[key] = value
-	return dirTable
+		order.append(key)
+	return dirTable, order
 
 def main():
 	parser = OptionParser()
@@ -449,11 +454,12 @@ def main():
 		directories = {}
 		
 		if options.mergedDirectories is not None:
-			dirTable = parseDirTable(options.mergedDirectories)
+			dirTable, order = parseDirTable(options.mergedDirectories)
 			for name, directory in dirTable.iteritems():
 				files = getXMLFiles(directory)
 				directories[name] = files 
 		else:
+			order = ''
 			if not options.directory is None:
 				files = getXMLFiles(options.directory)
 			else:
@@ -462,7 +468,7 @@ def main():
 			
 		directories[''] = files
 			
-		graph = Graph(directories, 'en', options.errorBar)
+		graph = Graph(directories, 'en', options.errorBar, order)
 		
 		if options.all: 
 			graph.plotAll(options.format, options.onePDF, outputFile, options.periodic)
