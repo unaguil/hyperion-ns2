@@ -371,7 +371,7 @@ class Graph:
 				
 				if not periodic:
 					formatGenerator = lineFormat()
-					for name in self.order():
+					for name in self.__order:
 						measures = self.__multipleMeasures[name]
 						self.plotTotal(measures[measureType], units, name, formatGenerator.next())
 					
