@@ -14,7 +14,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
  
 def lineFormat():
-	formats = ('ko--', 'ks--', 'k^--', 'k*--', 'kD--', 'kp--')
+	formats = ('ko--', 'k^--', 'k*--', 'kx--', 'ks--', 'kp--')
 	for format in formats: 
 		yield format
 
