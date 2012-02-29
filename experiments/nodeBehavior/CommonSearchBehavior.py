@@ -81,7 +81,7 @@ class CommonSearchBehavior:
         
         strBuffer.writeln('')
         strBuffer.writeln('************* %s ****************' % self.__behaviorName)
-        strBuffer.writeln('* Frequency: %.1f searches/s' % self.__searchFreq)
+        strBuffer.writeln('* Frequency: %.2f searches/s' % self.__searchFreq)
         strBuffer.writeln('* Generated: %d sets of searches' % self.getSearches())
         strBuffer.writeln('* Time range: [%s, %s] s' % (init, end))
         strBuffer.writeln("* Simultaneous searches: %.2f" % (self.getSimultaneous()))
