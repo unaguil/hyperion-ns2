@@ -92,7 +92,7 @@
 
 	<target name="BroadcastTest" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BroadcastTest" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -101,7 +101,7 @@
 
 	<target name="DetectionTest" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.DetectionTest" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -110,7 +110,7 @@
 
 	<target name="DetectionTest50" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.DetectionTest50" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -119,7 +119,7 @@
 
 	<target name="DisseminationTest" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.DisseminationTest" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -128,7 +128,7 @@
 
 	<target name="DisseminationTest50" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.DisseminationTest50" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -137,7 +137,7 @@
 
 	<target name="MulticastTest" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.MulticastTest" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -146,7 +146,7 @@
 
 	<target name="MulticastTest50" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.MulticastTest50" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -155,7 +155,7 @@
 
 	<target name="GraphCreationTest" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.GraphCreationTest" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -164,7 +164,7 @@
 
 	<target name="GraphCreationTest50" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.GraphCreationTest50" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -173,7 +173,7 @@
 
 	<target name="FSearchTest" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.FSearchTest" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -182,7 +182,7 @@
 
 	<target name="FSearchTest50" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.FSearchTest50" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -191,7 +191,7 @@
 
 	<target name="BSearchTest" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BSearchTest" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -200,7 +200,7 @@
 
 	<target name="BSearchTest50" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BSearchTest50" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -209,7 +209,7 @@
 
 	<target name="BidirectionalSearchTest" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BidirectionalSearchTest" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
@@ -218,7 +218,7 @@
 
 	<target name="BidirectionalSearchTest50" depends="build">
 		<mkdir dir="${junit.output.dir}" />
-		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="true" showoutput="true">
+		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BidirectionalSearchTest50" todir="${junit.output.dir}" />
 			<classpath refid="Hyperion-NS2.classpath" />
