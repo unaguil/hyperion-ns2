@@ -42,7 +42,7 @@ class CompositionsPopulator:
             if key == "nDistribution":
                 self.__nDistribution = float(value)    
             #all compositions are valid
-            if key == "lengthDistribution":
+            if key == "lDistribution":
                 self.__dDistribution = eval(value)
             if key == "compositionLength":
                 self.__compositionLength = int(value)
