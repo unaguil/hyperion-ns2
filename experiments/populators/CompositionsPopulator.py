@@ -18,6 +18,13 @@ class CompositionsPopulator:
     def __init__(self, entries):
         self.__nCompositions = None
         
+        self.__sDistribution = 1.0
+        
+        self.__dDistribution = ()
+        self.__wDistribution = ()
+        self.__compositionLength = 1
+        self.__compositionWidth = 1
+        
         for entry in entries:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
@@ -33,13 +40,16 @@ class CompositionsPopulator:
             if key == "compositionIO":
                 self.__compositionIO = eval(value)
             if key == "nDistribution":
-                self.__nDistribution = float(value)
+                self.__nDistribution = float(value)    
             #all compositions are valid
-            self.__sDistribution = 1.0
-            if key == "dDistribution":
+            if key == "lengthDistribution":
                 self.__dDistribution = eval(value)
-            if key == "width":
-                self.__width = eval(value)
+            if key == "compositionLength":
+                self.__compositionLength = int(value)
+            if key == "compositionWidth":
+                self.__compositionWidth = int(value)
+            if key == "wDistribution":
+                self.__wDistribution = eval(value)
             if key == 'nNodes':
                 self.__nNodes = int(value)
                 
@@ -68,26 +78,40 @@ class CompositionsPopulator:
 
         strBuffer.writeln('****************************************************')
     
-    def __generate(self, strBuffer):        
-        self.__checkRange(self.__compositionIO, 'compositionIO')
-        self.__checkRange(self.__width, 'width')
-        
+    def __generate(self, strBuffer):                
         compositionsWithSolutions = int(self.__nCompositions * self.__sDistribution)
         compositionsWithoutSolutions = self.__nCompositions - compositionsWithSolutions
          
         strBuffer.writeln('* Nodes: %d' % self.__nNodes)   
         strBuffer.writeln('* Total compositions: %d' % self.__nCompositions)
-        strBuffer.writeln('* Solution distribution: %s -> (%d, %d)' % (self.__sDistribution, compositionsWithSolutions, compositionsWithoutSolutions))
+        #strBuffer.writeln('* Solution distribution: %s -> (%d, %d)' % (self.__sDistribution, compositionsWithSolutions, compositionsWithoutSolutions))
         strBuffer.writeln('* CompositionIO: %s' % str(self.__compositionIO))
-        strBuffer.writeln('* Depth distribution: %s' % str(self.__dDistribution))
-        strBuffer.writeln('* Solution width: %s' % str(self.__width))
+        
+        if self.__dDistribution:
+            strBuffer.writeln('* Length distribution: %s' % str(self.__dDistribution))
+        else:
+            strBuffer.writeln('* Composition length: %d' % self.__compositionLength)
+            
+        if self.__wDistribution:
+            strBuffer.writeln('* Width distribution: %s' % str(self.__wDistribution))
+        else:
+            strBuffer.writeln('* Composition width: %d' % self.__compositionWidth)
         
         self.__createServiceDirectory(strBuffer)
-    
-        dDistributionTable = self.__getDistributionTable(compositionsWithSolutions, self.__dDistribution, 'dDistribution')
+     
+        if self.__dDistribution:
+            dDistributionTable = self.__getDistributionTable(compositionsWithSolutions, self.__dDistribution, 'dDistribution')
+        else:
+            dDistributionTable = [(self.__nCompositions, self.__compositionLength)]
+            
+        if not self.__wDistribution:
+            self.__wDistribution = (self.__compositionWidth, self.__compositionWidth)
         
         self.__compositions = []
         services = []
+        
+        self.__checkRange(self.__compositionIO, 'compositionIO')
+        self.__checkRange(self.__wDistribution, 'width')
         
         for numCompositions, maxDepth in dDistributionTable:
             for i in xrange(numCompositions):
@@ -155,7 +179,7 @@ class CompositionsPopulator:
     def __createGraph(self, currentOutputs, services, currentDepth, maxDepth, invalid):
         #create next services
         nextServices = []
-        for i in xrange(random.randrange(self.__width[0], self.__width[1] +  1)):
+        for i in xrange(random.randrange(self.__wDistribution[0], self.__wDistribution[1] +  1)):
             nextService = Service('Service-' + self.__serviceNameGenerator.next())
             selectedInputs = self.__selectInputs(currentOutputs)
             for input in selectedInputs:
