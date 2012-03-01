@@ -182,7 +182,7 @@ class CompositionsPopulator:
         serviceName = "Composition-" + self.__serviceNameGenerator.next()
         composition = Service(serviceName)
         
-        for i in xrange(random.randrange(self.__ioDistribution[0], self.__ioDistribution[1] + 1)):
+        for i in xrange(self.__getRandomParameterNumber()):
             composition.addInput(self.__parameterNameGenerator.next())
             
         currentOutputs = self.__getInitOutputs(composition)
@@ -194,16 +194,19 @@ class CompositionsPopulator:
     
         return composition, services
     
+    def __getRandomParameterNumber(self):
+        return random.randrange(self.__ioDistribution[0], self.__ioDistribution[1] + 1)
+    
     def __createGraph(self, currentOutputs, services, currentDepth, maxDepth, invalid):
         #create next services
         nextServices = []
         for i in xrange(random.randrange(self.__wDistribution[0], self.__wDistribution[1] +  1)):
             nextService = Service('Service-' + self.__serviceNameGenerator.next())
-            selectedInputs = self.__selectInputs(currentOutputs)
+            selectedInputs = self.__convertToInputs(random.sample(currentOutputs, self.__getRandomParameterNumber()))
             for input in selectedInputs:
                 nextService.addInput(self.__getParamID(input))
                 
-            for i in xrange(random.randrange(self.__ioDistribution[0], self.__ioDistribution[1] + 1)):
+            for i in xrange(self.__getRandomParameterNumber()):
                 nextService.addOutput(self.__parameterNameGenerator.next())
             
             nextServices.append(nextService)
@@ -212,7 +215,7 @@ class CompositionsPopulator:
             
         if invalid and self.__stopGeneration(currentDepth, maxDepth):
             randomOutputs = []
-            for i in xrange(random.randrange(self.__ioDistribution[0], self.__ioDistribution[1] + 1)):
+            for i in xrange(self.__getRandomParameterNumber()):
                 randomOutputs.append(self.__parameterNameGenerator.next())
             return randomOutputs
             
@@ -248,7 +251,7 @@ class CompositionsPopulator:
             
         selectedOutputs = set(selectedOutputs)
         
-        return self.__convertToInputs(selectedOutputs)
+        return 
     
     def __getInitOutputs(self, composition):
         return self.__convertToOutputs(composition.getInputs())
