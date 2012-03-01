@@ -22,8 +22,10 @@ class CompositionsPopulator:
         
         self.__dDistribution = ()
         self.__wDistribution = ()
+        self.__ioDistribution = ()
         self.__compositionLength = 1
         self.__compositionWidth = 1
+        self.__ioNumber = 1
         
         for entry in entries:
             value = entry.firstChild.data
@@ -39,6 +41,8 @@ class CompositionsPopulator:
                 self.__searchFreq = float(value)
             if key == "ioDistribution":
                 self.__ioDistribution = eval(value)
+            if key == "ioNumber":
+                self.__ioNumber = int(value)
             if key == "nDistribution":
                 self.__nDistribution = float(value)    
             #all compositions are valid
@@ -110,6 +114,9 @@ class CompositionsPopulator:
             
         if not self.__wDistribution:
             self.__wDistribution = (self.__compositionWidth, self.__compositionWidth)
+            
+        if not self.__ioDistribution:
+            self.__ioDistribution = (self.__ioNumber, self.__ioNumber)
         
         self.__compositions = []
         services = []
@@ -133,6 +140,7 @@ class CompositionsPopulator:
             services += compositionServices
 
         strBuffer.writeln('* Generated services: %d' % len(services))
+        strBuffer.writeln('* Generated parameters: %d' % self.getParameters(services))
         
         subsetSize = 0
         nodes = {}  
@@ -163,6 +171,12 @@ class CompositionsPopulator:
         
     def getCompositions(self):
         return self.__compositions
+    
+    def getParameters(self, services):
+        totalParameters = 0
+        for service in services:
+            totalParameters += len(service.getInputs()) + len(service.getOutputs())
+        return totalParameters
         
     def __createComposition(self, maxDepth, invalid):
         serviceName = "Composition-" + self.__serviceNameGenerator.next()
