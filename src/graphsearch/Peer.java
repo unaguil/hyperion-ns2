@@ -66,6 +66,11 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 	public void disableGraphCreationLayer() {
 		((CommonCompositionSearch)compositionSearch).disableGraphCreationLayer();
 	}
+	
+	private void searchStarted(final SearchID searchID) {
+		if (!receivedCompositions.containsKey(searchID))
+			receivedCompositions.put(searchID, new ArrayList<ExtendedServiceGraph>());
+	}
 
 	@Override
 	protected boolean peerCommands(final String command, final String[] args) {
@@ -74,7 +79,7 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 				final int index = Integer.parseInt(args[0]);
 				final Service searchedService = findServices.getService(index);
 				final SearchID searchID = compositionSearch.startComposition(searchedService);
-				receivedCompositions.put(searchID, new ArrayList<ExtendedServiceGraph>());
+				searchStarted(searchID);
 				return true;
 			}
 			myLogger.error("Peer " + peer.getPeerID() + " " + COMPOSE_SERVICE + " must have one argument");
@@ -164,10 +169,16 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 			finalComposition.merge(composition);
 		return finalComposition;
 	}
+	
+	private void compositionReceived(final ExtendedServiceGraph composition, final SearchID searchID) {
+		if (!receivedCompositions.containsKey(searchID))
+			receivedCompositions.put(searchID, new ArrayList<ExtendedServiceGraph>());
+		receivedCompositions.get(searchID).add(composition);
+	}
 
 	@Override
 	public void compositionFound(final ExtendedServiceGraph composition, final SearchID searchID, int hops) {
-		receivedCompositions.get(searchID).add(composition);
+		compositionReceived(composition, searchID);
 		
 		final String fileName = "solution-Peer" + peer.getPeerID() + "-" + System.currentTimeMillis() + "-" + hops + ".dot";
 		
