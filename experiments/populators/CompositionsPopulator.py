@@ -114,8 +114,8 @@ class CompositionsPopulator:
         self.__compositions = []
         services = []
         
-        self.__checkRange(self.__ioDistribution, 'compositionIO')
-        self.__checkRange(self.__wDistribution, 'width')
+        self.__checkRange(self.__ioDistribution, 'ioDistribution')
+        self.__checkRange(self.__wDistribution, 'wDistribution')
         
         for numCompositions, maxDepth in dDistributionTable:
             for i in xrange(numCompositions):
