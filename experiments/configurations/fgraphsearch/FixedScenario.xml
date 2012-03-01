@@ -18,7 +18,7 @@
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
 		<entry key="nCompositions">1</entry>
-		<entry key="compositionIO">(1, 1)</entry>
+		<entry key="ioDistribution">(2, 2)</entry>
 		<entry key="compositionLength">3</entry>
 		<!-- <entry key="lDistribution">((0.3, 4), (0.7, 3))</entry> -->
 		<entry key="compositionWidth">5</entry>
