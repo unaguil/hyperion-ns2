@@ -93,7 +93,7 @@ class CompositionsPopulator:
         if self.__ioDistribution:
             strBuffer.writeln('* CompositionIO: %s' % str(self.__ioDistribution))
         else:
-            strBuffer.writeln('* I/0 per service: %d' % self.__ioNumber)
+            strBuffer.writeln('* Outputs per service: %d' % self.__ioNumber)
         
         if self.__dDistribution:
             strBuffer.writeln('* Length distribution: %s' % str(self.__dDistribution))
@@ -186,23 +186,35 @@ class CompositionsPopulator:
             composition.addInput(self.__parameterNameGenerator.next())
             
         currentOutputs = self.__getInitOutputs(composition)
-    
+        
         services = {}
         compositionOutputs = self.__createGraph(currentOutputs, services, 0, maxDepth, invalid)
-        for output in compositionOutputs:
+        for output in self.__getOutputList(compositionOutputs):
             composition.addOutput(self.__getParamID(output))
     
         return composition, services
     
+    def __getOutputList(self, outputs):
+        outputList = []
+        for parameters in outputs:
+            outputList += parameters
+        return outputList
+    
     def __getRandomParameterNumber(self):
         return random.randrange(self.__ioDistribution[0], self.__ioDistribution[1] + 1)
+    
+    def __selectOutputs(self, outputs):
+        selectedOutputs = []
+        for parameters in outputs:
+            selectedOutputs += parameters
+        return selectedOutputs
     
     def __createGraph(self, currentOutputs, services, currentDepth, maxDepth, invalid):
         #create next services
         nextServices = []
         for i in xrange(random.randrange(self.__wDistribution[0], self.__wDistribution[1] +  1)):
             nextService = Service('Service-' + self.__serviceNameGenerator.next())
-            selectedInputs = self.__convertToInputs(random.sample(currentOutputs, self.__getRandomParameterNumber()))
+            selectedInputs = self.__convertToInputs(self.__selectOutputs(currentOutputs))
             for input in selectedInputs:
                 nextService.addInput(self.__getParamID(input))
                 
@@ -221,11 +233,11 @@ class CompositionsPopulator:
             
         services[currentDepth] = []
         services[currentDepth] += nextServices
+        currentOutputs = self.__getOutputs(nextServices)
         if currentDepth < maxDepth:
-            currentOutputs = self.__getOutputs(nextServices)
             return self.__createGraph(currentOutputs, services, currentDepth, maxDepth, invalid)
         else:
-            return self.__getOutputs(nextServices)    
+            return currentOutputs    
         
     def __stopGeneration(self, currentDepth, maxDepth):
         #stop probability increases with depth        
@@ -238,23 +250,11 @@ class CompositionsPopulator:
     def __getOutputs(self, services):
         outputs = []
         for service in services:
-            outputs += service.getOutputs()
+            outputs.append(service.getOutputs())
         return outputs
     
-    def __selectInputs(self, outputs):
-        numInputs = random.randrange(len(outputs)) + 1
-        #select numInputs outputs
-        selectedOutputs = []
-        for i in xrange(numInputs):
-            index = random.randrange(numInputs)
-            selectedOutputs.append(outputs[index])
-            
-        selectedOutputs = set(selectedOutputs)
-        
-        return 
-    
     def __getInitOutputs(self, composition):
-        return self.__convertToOutputs(composition.getInputs())
+        return [self.__convertToOutputs(composition.getInputs())]
     
     def __getGoalInputs(self, composition):
         return self.__convertToInputs(composition.getOutputs())
