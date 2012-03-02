@@ -22,10 +22,10 @@ class CompositionsPopulator:
         
         self.__dDistribution = ()
         self.__wDistribution = ()
-        self.__ioDistribution = ()
+        self.__oDistribution = ()
         self.__compositionLength = 1
         self.__compositionWidth = 1
-        self.__ioNumber = 1
+        self.__oNumber = 1
         
         for entry in entries:
             value = entry.firstChild.data
@@ -39,10 +39,10 @@ class CompositionsPopulator:
                 self.__timeRange = eval(value)
             if key == "searchFreq":
                 self.__searchFreq = float(value)
-            if key == "ioDistribution":
-                self.__ioDistribution = eval(value)
-            if key == "ioNumber":
-                self.__ioNumber = int(value)
+            if key == "oDistribution":
+                self.__oDistribution = eval(value)
+            if key == "oNumber":
+                self.__oNumber = int(value)
             if key == "nDistribution":
                 self.__nDistribution = float(value)    
             #all compositions are valid
@@ -90,10 +90,10 @@ class CompositionsPopulator:
         strBuffer.writeln('* Total compositions: %d' % self.__nCompositions)
         #strBuffer.writeln('* Solution distribution: %s -> (%d, %d)' % (self.__sDistribution, compositionsWithSolutions, compositionsWithoutSolutions))
         
-        if self.__ioDistribution:
-            strBuffer.writeln('* CompositionIO: %s' % str(self.__ioDistribution))
+        if self.__oDistribution:
+            strBuffer.writeln('* CompositionIO: %s' % str(self.__oDistribution))
         else:
-            strBuffer.writeln('* Outputs per service: %d' % self.__ioNumber)
+            strBuffer.writeln('* Outputs per service: %d' % self.__oNumber)
         
         if self.__dDistribution:
             strBuffer.writeln('* Length distribution: %s' % str(self.__dDistribution))
@@ -115,13 +115,13 @@ class CompositionsPopulator:
         if not self.__wDistribution:
             self.__wDistribution = (self.__compositionWidth, self.__compositionWidth)
             
-        if not self.__ioDistribution:
-            self.__ioDistribution = (self.__ioNumber, self.__ioNumber)
+        if not self.__oDistribution:
+            self.__oDistribution = (self.__oNumber, self.__oNumber)
         
         self.__compositions = []
         services = []
         
-        self.__checkRange(self.__ioDistribution, 'ioDistribution')
+        self.__checkRange(self.__oDistribution, 'ioDistribution')
         self.__checkRange(self.__wDistribution, 'wDistribution')
         
         for numCompositions, maxDepth in dDistributionTable:
@@ -201,7 +201,7 @@ class CompositionsPopulator:
         return outputList
     
     def __getRandomParameterNumber(self):
-        return random.randrange(self.__ioDistribution[0], self.__ioDistribution[1] + 1)
+        return random.randrange(self.__oDistribution[0], self.__oDistribution[1] + 1)
     
     def __selectOutputs(self, outputs):
         selectedOutputs = []
