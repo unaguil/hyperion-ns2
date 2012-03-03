@@ -13,10 +13,10 @@ class CompositionSearchBehavior(CommonSearchBehavior):
         
         self.__availableCompositions = None
         
+        self.__compositionTable = {}
+        
     def perform(self, time, oFile):
-        node = random.randrange(self.getNNodes())
         compositions = self.getElements()
-    
         if self.mustBeDifferent():
             if self.__availableCompositions is None:
                 self.__availableCompositions = zip(compositions, range(len(compositions)))
@@ -26,6 +26,15 @@ class CompositionSearchBehavior(CommonSearchBehavior):
             del self.__availableCompositions[index]
         else:
             compositionIndex = random.randrange(len(compositions))
+        
+        if not compositionIndex in self.__compositionTable:
+            node = random.randrange(self.getNNodes())
+            self.__compositionTable[compositionIndex] = [node]
+        else:
+            nodes = range(self.getNNodes())
+            availableNodes = list(set(nodes) - set(self.__compositionTable[compositionIndex]))
+            node = random.choice(availableNodes)
+            self.__compositionTable[compositionIndex].append(node)
                      
         oFile.write('$ns_ at %f "$agents(%d) agentj composeService %d\"\n' % (time, node, compositionIndex))
          
