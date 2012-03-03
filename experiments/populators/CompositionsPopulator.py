@@ -26,6 +26,7 @@ class CompositionsPopulator:
         self.__compositionLength = 1
         self.__compositionWidth = 1
         self.__oNumber = 1
+        self.__replication = 1
         
         for entry in entries:
             value = entry.firstChild.data
@@ -43,9 +44,6 @@ class CompositionsPopulator:
                 self.__oDistribution = eval(value)
             if key == "oNumber":
                 self.__oNumber = int(value)
-            if key == "nDistribution":
-                self.__nDistribution = float(value)    
-            #all compositions are valid
             if key == "lDistribution":
                 self.__dDistribution = eval(value)
             if key == "compositionLength":
@@ -59,6 +57,9 @@ class CompositionsPopulator:
                 
             if key == 'nCompositions':
                 self.__nCompositions = int(value)
+                
+            if key == 'replication':
+                self.__replication = int(value)
                 
         self.__serviceNameGenerator = self.__nameGenerator()
         self.__parameterNameGenerator = self.__nameGenerator()
@@ -143,28 +144,18 @@ class CompositionsPopulator:
         strBuffer.writeln('* Generated parameters: %d' % self.getParameters(services))
         
         subsetSize = 0
-        nodes = {}  
-        if self.__nDistribution > 0.0:
-            subsetSize = int(round(self.__nNodes * self.__nDistribution))
-            if subsetSize < 1:
-                subsetSize = 1
-                
-            shuffledNodes = range(self.__nNodes)
-            random.shuffle(shuffledNodes)
-            shuffledNodes = shuffledNodes[:subsetSize]
-        
-            #distribute services among nodes
-            for service in services:
-                index = random.randrange(subsetSize)
-                node = shuffledNodes[index]
+        nodes = {}          
+        #distribute services among nodes
+        nodeList = range(self.__nNodes)
+        for service in services:
+            selectedNodes = random.sample(nodeList, self.__replication)
+            for node in selectedNodes:
                 if not node in nodes:
                     nodes[node] = []
-                nodes[node].append(service)
+                nodes[node].append(service) 
                 
-            subsetSize = len(shuffledNodes) 
-                
-        strBuffer.writeln('* Service distribution: %s' % self.__nDistribution)
-        strBuffer.writeln('* Nodes with services: %d' % subsetSize)
+        strBuffer.writeln('* Replication: %d' % self.__replication)
+        strBuffer.writeln('* Nodes with services: %d' % len(nodes))
         
         taxonomy = Taxonomy('TaxonomyRootElement')
         self.__generateXMLNodeConfigurations(self.__compositions, nodes, taxonomy)
