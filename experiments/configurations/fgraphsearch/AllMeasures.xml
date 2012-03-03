@@ -30,7 +30,6 @@
  	
 	<measure type="multicast.AvgPeerAvailableTime" period="0.25" />
 	<measure type="multicast.AvgTraversedDistance" period="0.25" />
-	<measure type="multicast.InvalidRoutes" period="0.25" />
 	<measure type="multicast.AvgRouteAvailableTime" period="0.25" />
 	
 	<measure type="graphcreation.SentCollisionResponseMessages" period="0.25" />
