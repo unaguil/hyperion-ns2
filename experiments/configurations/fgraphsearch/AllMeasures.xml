@@ -28,6 +28,8 @@
  	<measure type="multicast.SentRemoveParametersMessages" period="0.25" />
  	<measure type="multicast.SentRemoveRouteMessages" period="0.25" />
  	<measure type="multicast.SentRemoteMulticastMessages" period="0.25" />
+ 	<measure type="multicast.MulticastOverhead" period="0.25" />
+	<measure type="multicast.MulticastTrafficOverhead" period="0.25" />
  	
 	<measure type="multicast.AvgPeerAvailableTime" period="0.25" />
 	<measure type="multicast.AvgTraversedDistance" period="0.25" />

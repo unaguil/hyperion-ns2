@@ -5,7 +5,7 @@ from measures.multicast.SentSearchMessages import SentSearchMessages as SentSear
 from measures.multicast.SentSearchResponseMessages import SentSearchResponseMessages as SentSearchResponseMessages
 from measures.multicast.SentRemoveRouteMessages import SentRemoveRouteMessages as SentRemoveRouteMessages
 from measures.multicast.SentRemoveParametersMessages import SentRemoveParametersMessages as SentRemoveParametersMessages
-from measures.multicast.SentRemoteMulticastMessages import SentRemoteMulticastMessages as SentRemoteMulticastMessages
+from measures.multicast.SentRemoteMulticastYYYMessages import SentRemoteMulticastYYYMessages as SentRemoteMulticastYYYMessages
 
 class GraphcreationOverhead(Overhead):
 	def __init__(self, period, simulationTime):		
@@ -16,7 +16,9 @@ class GraphcreationOverhead(Overhead):
 		self.addMeasure(SentSearchResponseMessages(period, simulationTime))
 		self.addMeasure(SentRemoveRouteMessages(period, simulationTime))
 		self.addMeasure(SentRemoveParametersMessages(period, simulationTime))		
-		self.addMeasure(SentRemoveParametersMessages(period, simulationTime))
-		self.addMeasure(SentRemoteMulticastMessages(period, simulationTime))
+		
+		self.addMeasure(SentRemoteMulticastYYYMessages(period, simulationTime, 'graphcreation.collisionbased.message.ConnectServicesMessage'))
+		self.addMeasure(SentRemoteMulticastYYYMessages(period, simulationTime, 'graphcreation.collisionbased.message.DisconnectServicesMessage'))
+		self.addMeasure(SentRemoteMulticastYYYMessages(period, simulationTime, 'graphcreation.collisionbased.message.RemovedServicesMessage'))
 		
 		

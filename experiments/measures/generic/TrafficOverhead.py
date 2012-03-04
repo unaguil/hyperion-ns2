@@ -19,6 +19,9 @@ class TrafficOverhead(GenericMeasure):
         
         self.__neighbors = 0
         
+    def setPatterns(self, patterns):
+        self.__sizePatterns = patterns
+        
     def parseLine(self, line):
         m = self.__initializePattern.match(line)
         if m is not None:
