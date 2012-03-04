@@ -27,6 +27,7 @@
  	<measure type="multicast.RespondedSearches" period="0.25" />
  	<measure type="multicast.SentRemoveParametersMessages" period="0.25" />
  	<measure type="multicast.SentRemoveRouteMessages" period="0.25" />
+ 	<measure type="multicast.SentRemoteMulticastMessages" period="0.25" />
  	
 	<measure type="multicast.AvgPeerAvailableTime" period="0.25" />
 	<measure type="multicast.AvgTraversedDistance" period="0.25" />
@@ -39,6 +40,8 @@
 	<measure type="graphcreation.SentInhibeCollisionsMessages" period="0.25" />
 	<measure type="graphcreation.SentRemovedServicesMessages" period="0.25" />
 	<measure type="graphcreation.StartedCollisionMessages" period="0.25" />
+	<measure type="graphcreation.GraphcreationOverhead" period="0.25" />
+	<measure type="graphcreation.GraphcreationTrafficOverhead" period="0.25" />
 	
 	<measure type="graphsearch.StartedCompositions" period="0.25" />
 	<measure type="graphsearch.FoundCompositionsRatio" period="0.25" />

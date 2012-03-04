@@ -5,7 +5,7 @@
 	<entry key="gridW">290</entry>
 	<entry key="gridH">290</entry>
 		
-	<entry key="finishTime">300.0</entry>
+	<entry key="finishTime">50.0</entry>
 	<entry key="discardTime">0.0</entry>
 	<entry key="javaAgent">multicast.Peer</entry>
 	
@@ -31,7 +31,7 @@
 	<entry key="searchFreq">0.2</entry>
 	<entry key="simultaneous">0.25</entry>
 	<entry key="searchDuration">20</entry>
-	<entry key="timeRange">('START', 200.0)</entry>
+	<entry key="timeRange">('START', 30.0)</entry>
 	
 	<!-- <entry key="multicast.searchFreq">0.5</entry> -->
 	
