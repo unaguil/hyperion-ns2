@@ -51,4 +51,6 @@
 	<measure type="graphsearch.AvgCompositionHops" period="0.25" />
 	<measure type="graphsearch.AvgCompositionAvailableTime" period="0.25" />
 	<measure type="graphsearch.SentFCompositionMessages" period="0.25" />
+	<measure type="graphsearch.GraphsearchOverhead" period="0.25" />
+	<measure type="graphsearch.GraphsearchTrafficOverhead" period="0.25" />
 </part>
