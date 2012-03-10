@@ -186,7 +186,7 @@ class Graph:
 				print 'Unknown measure %s' % measureType
 				sys.exit()
 	
-	def plotTotal(self, measures, units, label, format):		
+	def plotTotal(self, measures, label, format):		
 		x = []
 		y = []
 	
@@ -347,7 +347,7 @@ class Graph:
 					formatGenerator = lineFormat()
 					for name in self.__order:
 						measures = self.__multipleMeasures[name]
-						self.plotTotal(measures[measureType], units, name, formatGenerator.next())
+						self.plotTotal(measures[measureType], name, formatGenerator.next())
 					
 					yLabel = "%s [%s]" % (measureName, units)
 					plt.ylabel(yLabel)
@@ -373,7 +373,7 @@ class Graph:
 					formatGenerator = lineFormat()
 					for name in self.__order:
 						measures = self.__multipleMeasures[name]
-						self.plotTotal(measures[measureType], units, name, formatGenerator.next())
+						self.plotTotal(measures[measureType], name, formatGenerator.next())
 					
 					yLabel = "%s [%s]" % (measureName, units)
 					plt.ylabel(yLabel)
