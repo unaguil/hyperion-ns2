@@ -459,7 +459,7 @@ def main():
 				files = getXMLFiles(directory)
 				directories[name] = files 
 		else:
-			order = ''
+			order = '', 
 			if not options.directory is None:
 				files = getXMLFiles(options.directory)
 			else:
