@@ -78,7 +78,7 @@ def __getNeighbours(nodes):
                     
     return neighbourTable
 
-def drawScenario(scenarioFilePath, outputFile, width, height):
+def drawScenario(scenarioFilePath, outputFile, width, height, showList=None):
     nodes = __parseScenario(scenarioFilePath) 
     
     WIDTH, HEIGHT = 1000, 1000
@@ -116,7 +116,10 @@ def drawScenario(scenarioFilePath, outputFile, width, height):
         _y = y/height
         
         #print '%s X: %f %f' %(node.getID(), _x, _y)
-        ctx.set_source_rgb(0, 0, 0)
+        if int(node.getID()) in showList:
+            ctx.set_source_rgb(255,0,0)
+        else:
+            ctx.set_source_rgb(0, 0, 0)
         ctx.set_line_width(0.002)   
         ctx.arc(_x, _y, .01, 0, 2*math.pi)
         ctx.fill()
@@ -138,13 +141,18 @@ def main():
     parser.add_option("-o", "--output", dest="outputFile", help="Output file")
     parser.add_option("-W", "--width", dest="width", help="Scenario width")
     parser.add_option("-H", "--height", dest="height", help="Scenario height")
+    parser.add_option("-s", "--show", dest="show", help="list of nodes to show in other color")
     
     (options, args) = parser.parse_args()
-    
+
     if options.inputFile is None or options.outputFile is None or options.width is None or options.height is None:
         parser.print_usage()
     else:
-        drawScenario(options.inputFile, options.outputFile, float(options.width), float(options.height))
+        if options.show is None:
+			showList = ()
+        else:
+            showList = eval(options.show)
+        drawScenario(options.inputFile, options.outputFile, float(options.width), float(options.height), showList)
 
 if __name__ == '__main__':
      main()
