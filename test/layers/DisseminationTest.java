@@ -9,6 +9,7 @@ import taxonomy.BasicTaxonomy;
 import taxonomy.Taxonomy;
 import testing.BasicTest;
 import testing.MultipleTests;
+import dissemination.newProtocol.ptable.DisseminationDistanceInfo;
 import dissemination.newProtocol.ptable.ParameterTable;
 
 class PTableFileFilter implements FileFilter {
@@ -22,6 +23,18 @@ class PTableFileFilter implements FileFilter {
 public class DisseminationTest extends MultipleTests {
 
 	private final Taxonomy emptyTaxonomy = new BasicTaxonomy();
+	
+	static class DisseminationDistance implements DisseminationDistanceInfo {
+		
+		private final int DDISTANCE = 5;
+
+		@Override
+		public int getMaxDistance() {
+			return DDISTANCE;
+		}
+	}
+	
+	private static final DisseminationDistanceInfo disseminationInfo = new DisseminationDistance();
 
 	public DisseminationTest() throws Exception {
 		super("files/Dissemination.xml", new PTableFileFilter());
@@ -29,7 +42,7 @@ public class DisseminationTest extends MultipleTests {
 
 	@Override
 	public Object readObject(final FileInputStream fileInputStream) throws Exception {
-		final ParameterTable pTable = new ParameterTable(0, PeerID.VOID_PEERID, emptyTaxonomy);
+		final ParameterTable pTable = new ParameterTable(disseminationInfo, PeerID.VOID_PEERID, emptyTaxonomy);
 		pTable.readFromXML(fileInputStream);
 		return pTable;
 	}
