@@ -257,7 +257,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	public void multicastMessageAccepted(final PeerID source, final PayloadMessage payload, final int distance) {}
 
 	@Override
-	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> newParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, final List<PayloadMessage> payloadMessages) {
+	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> newParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, Set<Parameter> addedParameters, final List<PayloadMessage> payloadMessages) {
 		return null;
 	}
 	
