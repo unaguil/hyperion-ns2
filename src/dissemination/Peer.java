@@ -131,7 +131,7 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 	}
 
 	@Override
-	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> newParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, final List<PayloadMessage> payloadMessage) {
+	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> newParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, Set<Parameter> addedParameters, final List<PayloadMessage> payloadMessage) {
 		return null;
 	}
 
