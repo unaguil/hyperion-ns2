@@ -28,6 +28,8 @@ class CompositionsPopulator:
         self.__oNumber = 1
         self.__replication = 1
         
+        self.__nDistribution = 1.0
+        
         for entry in entries:
             value = entry.firstChild.data
             key = entry.getAttribute("key")
@@ -54,6 +56,8 @@ class CompositionsPopulator:
                 self.__wDistribution = eval(value)
             if key == 'nNodes':
                 self.__nNodes = int(value)
+            if key == 'nDistribution':
+                self.__nDistribution = float(value)
                 
             if key == 'nCompositions':
                 self.__nCompositions = int(value)
@@ -145,8 +149,9 @@ class CompositionsPopulator:
         
         subsetSize = 0
         nodes = {}          
+        
         #distribute services among nodes
-        nodeList = range(self.__nNodes)
+        nodeList = range((int(self.__nNodes * self.__nDistribution)))
         for service in services:
             selectedNodes = random.sample(nodeList, self.__replication)
             for node in selectedNodes:
