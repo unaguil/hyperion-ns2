@@ -64,7 +64,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	private float startTime, endTime;
 
 	public Peer() {
-		pSearch = new ParameterSearchImpl(peer, this, this);
+		pSearch = new ParameterSearchImpl(peer, this, this, false);
 	}
 
 	@Override
