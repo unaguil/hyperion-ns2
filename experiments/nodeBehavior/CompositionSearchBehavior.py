@@ -17,7 +17,7 @@ class CompositionSearchBehavior(CommonSearchBehavior):
         
     def perform(self, time, oFile):
         compositions = self.getElements()
-        if compositions > 0:
+        if compositions:
             if self.mustBeDifferent():
                 if self.__availableCompositions is None:
                     self.__availableCompositions = zip(compositions, range(len(compositions)))
