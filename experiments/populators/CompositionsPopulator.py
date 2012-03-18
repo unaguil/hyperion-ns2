@@ -153,7 +153,6 @@ class CompositionsPopulator:
         #distribute services among nodes
         numNodes = int(self.__nNodes * self.__nDistribution)
         nodeList = random.sample(range(self.__nNodes), numNodes)
-        print nodeList
         for service in services:
             selectedNodes = random.sample(nodeList, self.__replication)
             for node in selectedNodes:
