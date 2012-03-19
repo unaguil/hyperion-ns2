@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 import multicast.search.ParameterSearchImpl;
 import multicast.search.message.SearchMessage.SearchType;
 import multicast.search.message.SearchResponseMessage;
+import peer.message.MessageID;
 import peer.message.MessageStringPayload;
 import peer.message.PayloadMessage;
 import peer.peerid.PeerID;
@@ -249,8 +250,13 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	public void parametersFound(final SearchResponseMessage receivedMessage) {}
 
 	@Override
-	public PayloadMessage searchReceived(final Set<Parameter> foundParameters, final PeerID source) {
+	public PayloadMessage searchReceived(final Set<Parameter> foundParameters, final MessageID routeID) {
 		return null;
+	}
+
+	@Override
+	public void searchCanceled(Set<MessageID> canceledSearches) {
+				
 	}
 
 	@Override
