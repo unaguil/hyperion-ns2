@@ -335,66 +335,6 @@ class Experiment:
 			
 		measures.repeatsProcessed(results)
 	        
-	def __processOutput(self):
-		configGenerator = ConfigGenerator(self.__inputFile)
-		
-		initTime = time.time()
-
-		configurationCounter = 0		
-		while configGenerator.hasNext():			
-			configurationDir = os.path.join(self.__workingDir, 'configuration-' + str(configurationCounter))
-			
-			startTime = time.time()
-			
-			repeatNumber = configGenerator.getRepeat()
-			
-			print ''
-			print ''
-			print "* Processing experiment configuration %d output with %d repetition(s)" % (configurationCounter + 1, repeatNumber)
-			sys.stdout.flush() 
-			#Get current execution configuration
-			config = configGenerator.next()
-			
-			measures = Measures(config)
-			
-			measures.startConfiguration(configurationCounter, configGenerator.getType())
-			
-			scriptGenerator = ScriptGenerator(config, self.__inputFile)
-
-			print ''
-			print 'Parsing output log files'
-			sys.stdout.flush()
-			
-			outputLogs = []
-			repeatDirs = []
-			for i in range(repeatNumber):
-				repeatDir = os.path.join(configurationDir, 'repeat-' + str(i))
-				outputLog = os.path.join(repeatDir, 'output.log.gz')
-				repeatDirs.append(repeatDir)
-				outputLogs.append(outputLog) 
-			
-			self.__processRepeat(measures, outputLogs, repeatDirs)
-
-			measures.endConfiguration(configurationCounter)
-			
-			configurationCounter = configurationCounter + 1
-			
-			print '* Configuration processing time: %s' % TimeFormatter.formatTime(time.time() - startTime)
-			print ''
-			sys.stdout.flush()
-
-		experimentTime = time.time() - initTime
-
-		print 'Experiment output processing finished. Total time: %s' % TimeFormatter.formatTime(experimentTime)
-		print '' 
-		
-		results =  measures.getXMLResults(scriptGenerator.getDiscardTime(), experimentTime, configGenerator.getTag(), configGenerator.getType())
-		
-		#Save results
-		for item in results.items():
-			
-			self.__outputDir.write(results)
-		
 	def perform(self, processing):
 		if not processing:
 			self.__run()
