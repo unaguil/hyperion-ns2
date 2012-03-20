@@ -322,16 +322,16 @@ class Experiment:
 			shutil.rmtree(self.__workingDir)	
 		
 	def __processRepeats(self, measures, output):
-		processers = []
+		processes = []
 		for outputLog, tempDir in output:
-			processer = measures.repeatProcesser(tempDir, outputLog)
-			processer.start();
-			processers.append(processer)
+			process = measures.repeatProcesser(tempDir, outputLog)
+			process.start();
+			processes.append(process)
 			
 		results = []
-		for processer in processers:
-			processer.join()
-			results.append(processer.getResults())
+		for process in processes:
+			process.join()
+			results.append(process.getResults())
 			
 		measures.repeatsProcessed(results)
 	        
