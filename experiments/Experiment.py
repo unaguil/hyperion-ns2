@@ -16,7 +16,8 @@ import util.StrBuffer as StrBuffer
 from optparse import OptionParser
 
 from ConfigGenerator import ConfigGenerator
-from measures.Measures import Measures
+from measures.Measures import *
+import RepeatProcessor
 from ScriptGenerator import ScriptGenerator
 
 import util.TimeFormatter as TimeFormatter
@@ -195,6 +196,9 @@ class Experiment:
 		self.__workingDir = workingDir
 		self.__processes = processes
 		
+		self.__compiledFinishedPattern = re.compile(r'INFO  peer.BasicPeer  - Simulation finished.*?')
+		self.__compiledTimePattern = re.compile(r'.*?([0-9]+\,[0-9]+)$')
+		
 		if not processing and os.path.isdir(self.__workingDir):
 			shutil.rmtree(self.__workingDir)
 		
@@ -319,19 +323,16 @@ class Experiment:
 			
 		#Removing running directory if not must be maintained
 		if not self.__debug:
-			shutil.rmtree(self.__workingDir)	
-		
-	def __processRepeats(self, measures, output):
-		processes = []
-		for outputLog, tempDir in output:
-			process = measures.repeatProcesser(tempDir, outputLog)
-			process.start();
-			processes.append(process)
+			shutil.rmtree(self.__workingDir)
 			
-		results = []
-		for process in processes:
-			process.join()
-			results.append(process.getResults())
+	def __processRepeats(self, measures, output):
+		args = []
+		pool = multiprocessing.Pool(processes=self.__processes)
+		for outputLog, tempDir in output:
+			data = measures.getData(tempDir, outputLog)
+			args.append(data);
+		
+		results = pool.map(process, args)
 			
 		measures.repeatsProcessed(results)
 	        
