@@ -17,7 +17,6 @@ from optparse import OptionParser
 
 from ConfigGenerator import ConfigGenerator
 from measures.Measures import *
-import RepeatProcessor
 from ScriptGenerator import ScriptGenerator
 
 import util.TimeFormatter as TimeFormatter
