@@ -68,7 +68,6 @@ class RepeatRunner:
 		
 	def __execute(self):
 		strBuffer = StrBuffer.StrBuffer()
-		strBuffer.writeln('')
 		strBuffer.writeln('* Running repeat %d of %d' % (self.__repeat + 1, self.__repeatNumber))
 				
 		#Create temporal directory and prepare configuration files
@@ -93,31 +92,34 @@ class RepeatRunner:
 		out = open(os.path.join(self.__tempDir, 'out'), 'w')
 		err = open(os.path.join(self.__tempDir, 'err'), 'w')
 		
-		strBuffer.writeln('* Launching simulation script on directory %s try %d' % (self.__tempDir, self.__try))
-		print strBuffer.getvalue()
-		sys.stdout.flush()
+		strBuffer.writeln('* Simulation script on directory %s try %d' % (self.__tempDir, self.__try))
 		
 		self.__p = subprocess.Popen(['ns', 'Script.tcl'], stdout=out, stderr=err, cwd=self.__tempDir)
 		
 		self.__timer = JVMCheckingTimer(JVM_DUMP_CHECK_TIME, self.__p, self.__tempDir) 
 		self.__timer.start()
-		result = self.__p.wait()
+		
+		print strBuffer.getvalue()
+		sys.stdout.flush()
+		
+		success = self.__p.wait() == 0
 		self.__timer.cancel()
 		
 		out.close()
-		err.close()
+		err.close() 
 		
-		if result != 0:
-			print '* ERROR: There was a problem during simulation execution on directory %s' % self.__tempDir
-			sys.stdout.flush()
-			return False
+		strBuffer = StrBuffer.StrBuffer()
 		
-		print '* NS-2 simulation on directory %s running time: %s\n\n' % (self.__tempDir, TimeFormatter.formatTime(time.time() - simStartTime))
+		if not success:
+			strBuffer.writeln('* ERROR: There was a problem during simulation execution on directory %s' % self.__tempDir)
+		else:
+			strBuffer.writeln('* Finished NS-2 simulation on directory %s. Running time: %s' % (self.__tempDir, TimeFormatter.formatTime(time.time() - simStartTime)))
+			self.__compressOutputLog(strBuffer)
+			
+		print strBuffer.getvalue()
 		sys.stdout.flush()
-		
-		self.__compressOutputLog()
-		
-		return True
+			
+		return success
 	
 	def terminate(self):
 		self.__p.kill()
@@ -128,27 +130,21 @@ class RepeatRunner:
 		while self.__try <= MAX_TRIES and not success:		
 			success = self.__execute()
 			self.__try += 1
+
+		return success
 			
-		if not success:
-			print '* ERROR: Max tries for simulation execution reached'
-			return False
-		else:
-			return True
-			
-	def __compressOutputLog(self):  
+	def __compressOutputLog(self, strBuffer):  
 		startTime = time.time()
-		print '* Compressing output log file %s' % self.__getPlainLog()
+		strBuffer.writeln('* Compressing output log file %s' % self.__getPlainLog())
 		p = subprocess.Popen(['gzip', self.__getPlainLog()])
-		result = p.wait()
+		success = p.wait() == 0
 		
-		if result != 0:
-			print 'ERROR: There was a problem compressing file %s' % self.__getPlainLog()
-			sys.stdout.flush()
-			return False
+		if not success:
+			strBuffer.writeln('ERROR: There was a problem compressing file %s' % self.__getPlainLog())
+		else:
+			strBuffer.writeln('* Compressed log obtained in %s. Running time: %s' % (self.getOutputLog(), TimeFormatter.formatTime(time.time() - startTime))) 
 		
-		print '* Compressed log obtained in %s time: %s' % (self.getOutputLog(), TimeFormatter.formatTime(time.time() - startTime)) 
-		print ''
-		return True
+		return success
 	
 	def __getPlainLog(self):
 		return os.path.join(self.__tempDir, 'output.log')
@@ -180,7 +176,8 @@ def runRepeat(args):
 		repeatDir, config, configDir, inputFile, configGenerator, counter, repeatNumber = args
 				
 		r = RepeatRunner(repeatDir, config, configDir, configGenerator, counter, repeatNumber)
-		return (not r.run(), r.getOutputLog(), r.getTempDir())
+		success = r.run()
+		return (success, r.getOutputLog(), r.getTempDir())
 	except KeyboardInterrupt:
 		print '* Terminating process'
 		r.terminate()
@@ -239,8 +236,6 @@ class Experiment:
 		configGenerator = ConfigGenerator(resolvedFileBuffer)
 		
 		initTime = time.time()
-		
-		error = False
 
 		configurationCounter = 0		
 		
@@ -280,43 +275,35 @@ class Experiment:
 			pool = multiprocessing.Pool(processes=self.__processes)
 			results = pool.map(runRepeat, data) 
 
-			print '* Finalizing configuration. Parsing output log files'
-			print ''
-			sys.stdout.flush()
-			
-			configurationError = all([success for success, outputLog, tempDir in results])
+			success = all([success for success, outputLog, tempDir in results])
 			
 			output = [(outputLog, tempDir) for success, outputLog, tempDir in results]
 			
-			if not configurationError:
+			if not success:
+				print '* Errors during execution of configuration %d' % configurationCounter
+			else:
 				self.__processRepeats(measures, output)
 
 			result = measures.endConfiguration()
 
-			if not configurationError:
+			if success:
 				outputFilePath = os.path.join(self.__outputDir, self.__inputFileName + '-resultConfig' + str(configurationCounter) + '.xml')
-				print '* Writing configuration result to file %s ' % outputFilePath			
+				print '* Writing configuration result XML to file %s ' % outputFilePath			
 				outputFile = open(outputFilePath, 'w')
 				outputFile.write(result)
 				outputFile.close()
 			
 				measures.savePartialResults(os.path.join(configurationDir, 'partialResults.txt'))
 				
-				print '* Configuration execution time: %s' % TimeFormatter.formatTime(time.time() - startTime)
+				print '* Finished configuration %s. Running time: %s' % (configurationCounter, TimeFormatter.formatTime(time.time() - startTime))
 				print ''
 				sys.stdout.flush()
-			else:
-				print '* Errors during execution of configuration %d' % configurationCounter
+				
 			
 			configurationCounter = configurationCounter + 1
 			
 		experimentTime = time.time() - initTime 
 			
-		if error:
-			print 'Experiment finished with errors. Total time: %s' % TimeFormatter.formatTime(experimentTime)
-		else:
-			print 'Experiment finished. Total time: %s' % TimeFormatter.formatTime(experimentTime)
-						
 		print '' 
 		sys.stdout.flush()
 			
@@ -370,7 +357,7 @@ def main():
 				inputFile = file
 		
 		if inputFile is None:
-			print 'ERROR: Experiment config file not found in output directory'
+			print 'ERROR: Experiment configuration file not found in output directory'
 			sys.exit()
 			
 		__runExperiment(options.outputDir, options.processDir, inputFile, True, options.processDir, True, int(options.processes))

@@ -215,7 +215,7 @@ compiledTimePattern = re.compile(r'.*?([0-9]+\,[0-9]+)$')
 def sizeof_fmt(num):
     for x in ['bytes','KB','MB','GB','TB']:
         if num < 1024.0:
-            return "%3.1f%s" % (num, x)
+            return "%3.1f %s" % (num, x)
         num /= 1024.0
 	        
 def getLogLineTime(line):
@@ -241,7 +241,6 @@ def process(data):
         
     repeatFinished = False
     
-    print '* Output log %s file size %s' % (outputLog, sizeof_fmt(os.path.getsize(outputLog)))
     sys.stdout.flush()
     
     logProcessStartTime = timeUtil.time()
@@ -264,8 +263,7 @@ def process(data):
         
     outputFile.close()
     
-    print '* Output log %s parsing time: %s' % (outputLog, TimeFormatter.formatTime(timeUtil.time() - logProcessStartTime))
-    print ''
+    print '* Parsed output log %s (%s). Running time: %s' % (outputLog, sizeof_fmt(os.path.getsize(outputLog)), TimeFormatter.formatTime(timeUtil.time() - logProcessStartTime))
     sys.stdout.flush()
     
     results = []
