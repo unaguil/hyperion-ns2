@@ -58,7 +58,7 @@ public class MulticastTest extends MultipleTests {
 
 	@Override
 	public Object readObject(final FileInputStream fileInputStream) throws Exception {
-		final UnicastTable uTable = new UnicastTable(PeerID.VOID_PEERID, nDetector, false);
+		final UnicastTable uTable = new UnicastTable(PeerID.VOID_PEERID, nDetector);
 		uTable.readFromXML(fileInputStream);
 		return uTable;
 	}
