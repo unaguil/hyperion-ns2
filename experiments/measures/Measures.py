@@ -227,9 +227,7 @@ def getLogLineTime(line):
     
 def checkFinished(line):
     m = compiledFinishedPattern.match(line)
-    if m is not None:
-        return True
-    return False
+    return m is not None
 
 def process(data):
     measures, tempDir, outputLog, simulationTime, discardTime = data
@@ -248,13 +246,13 @@ def process(data):
     outputFile = gzip.open(outputLog, 'r')
     
     line = outputFile.readline()
-    while (line != '' ):
+    while (line != '' and not repeatFinished):
         line.replace( '\n', '' )
     
         repeatFinished = checkFinished(line)
 
-        time = getLogLineTime(line)                    
-        #Parse line using each measure
+        time = getLogLineTime(line)   
+                         
         for measure in currentMeasures:
             if time >= discardTime or not measure.isDiscardable():
                 measure.parseLine(line)
@@ -263,7 +261,7 @@ def process(data):
         
     outputFile.close()
     
-    print '* Parsed output log %s (%s). Running time: %s' % (outputLog, sizeof_fmt(os.path.getsize(outputLog)), TimeFormatter.formatTime(timeUtil.time() - logProcessStartTime))
+    print '* Parsed output log %s (%s). Simulation finished: %s. Running time: %s.' % (outputLog, sizeof_fmt(os.path.getsize(outputLog)), repeatFinished, TimeFormatter.formatTime(timeUtil.time() - logProcessStartTime))
     sys.stdout.flush()
     
     results = []
