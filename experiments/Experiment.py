@@ -277,11 +277,10 @@ class Experiment:
 
 			success = all([success for success, outputLog, tempDir in results])
 			
-			output = [(outputLog, tempDir) for success, outputLog, tempDir in results]
-			
 			if not success:
 				print '* Errors during execution of configuration %d' % configurationCounter
 			else:
+				output = [(outputLog, tempDir) for success, outputLog, tempDir in results]
 				self.__processRepeats(measures, output)
 
 			result = measures.endConfiguration()
@@ -299,7 +298,6 @@ class Experiment:
 				print ''
 				sys.stdout.flush()
 				
-			
 			configurationCounter = configurationCounter + 1
 			
 		experimentTime = time.time() - initTime 
