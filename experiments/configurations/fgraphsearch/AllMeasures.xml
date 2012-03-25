@@ -12,6 +12,7 @@
 	<measure type="generic.DeliveredRatio" period="0.25" />
 	<measure type="generic.DeliveringTime" period="0.25" />
 	<measure type="generic.TotalTrafficOverhead" period="0.25" />
+	<measure type="generic.TotalMessageOverhead" period="0.25" />
 	
 	<measure type="detection.AvgNeighbors" period="0.25" />
 	

@@ -3,14 +3,14 @@ from measures.periodicValues.PeriodicValues import PeriodicValues
 from measures.generic.GenericMeasure import GenericMeasure as GenericMeasure
 import measures.generic.Units as Units
 
-class MessageOverhead(GenericMeasure):
+class TotalMessageOverhead(GenericMeasure):
     def __init__(self, period, simulationTime):        
-        GenericMeasure.__init__(self, '', period, simulationTime, Units.MESSAGE_TRAFFIC_OVERHEAD)
+        GenericMeasure.__init__(self, '', period, simulationTime, Units.MESSAGE_OVERHEAD)
         
         self.__initializePattern = re.compile('INFO  peer.BasicPeer  - Peer ([0-9]+) initializing ([0-9]+\,[0-9]+).*?')
-        self.__sizePattern = re.compile('DEBUG peer.BasicPeer  - Peer [0-9]+ broadcasting .*? ([0-9]+) bytes.*?')
+        self.__broadcastingPattern = re.compile('DEBUG peer.BasicPeer  - Peer [0-9]+ broadcasting .*?')
         
-        self.__totalSize = 0
+        self.__total = 0
         
         self.__nodes = 0
         
@@ -27,10 +27,9 @@ class MessageOverhead(GenericMeasure):
 
             return
         
-        m = self.__sizePattern.match(line)
-        if m is not None:
-            size = int(m.group(1))                
-            self.__totalSize += size
+        m = self.__broadcastingPattern.match(line)
+        if m is not None:                
+            self.__total += 1
 
             return
             
@@ -38,7 +37,7 @@ class MessageOverhead(GenericMeasure):
         return PeriodicValues(0, self.getPeriod(), self.getSimulationTime())
 
     def getTotalValue(self):
-        return self.__totalSize / float(self.__nodes) / self.getSimulationTime() / 1024.0
+        return self.__total / float(self.__nodes) / self.getSimulationTime()
         
         
         
