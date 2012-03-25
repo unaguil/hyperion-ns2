@@ -11,6 +11,7 @@
 	<measure type="generic.ExpiredMessages" period="0.25" />
 	<measure type="generic.DeliveredRatio" period="0.25" />
 	<measure type="generic.DeliveringTime" period="0.25" />
+	<measure type="generic.MessageOverhead" period="0.25" />
 	
 	<measure type="detection.AvgNeighbors" period="0.25" />
 	

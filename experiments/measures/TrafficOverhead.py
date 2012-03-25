@@ -17,7 +17,7 @@ class TrafficOverhead(GenericMeasure):
         
         self.__totalSize = 0
         
-        self.__nodes = 0
+        self.__neighbors = 0
         
     def setPatterns(self, patterns):
         self.__sizePatterns = patterns
@@ -28,7 +28,7 @@ class TrafficOverhead(GenericMeasure):
             peer = m.group(1)
             time = float(m.group(2).replace(',','.'))
             
-            self.__nodes += 1
+            self.__neighbors += 1
 
             return
         
@@ -46,7 +46,7 @@ class TrafficOverhead(GenericMeasure):
         return PeriodicValues(0, self.getPeriod(), self.getSimulationTime())
 
     def getTotalValue(self):
-        return self.__totalSize / float(self.__nodes) / self.getSimulationTime() / 1024.0
+        return self.__totalSize / float(self.__neighbors) / self.getSimulationTime() / 1024.0
         
         
         

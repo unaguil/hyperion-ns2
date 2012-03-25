@@ -3,17 +3,12 @@ from measures.periodicValues.PeriodicValues import PeriodicValues
 from measures.generic.GenericMeasure import GenericMeasure as GenericMeasure
 import measures.generic.Units as Units
 
-class TrafficOverhead(GenericMeasure):
-    def __init__(self, period, simulationTime, measures):        
+class MessageOverhead(GenericMeasure):
+    def __init__(self, period, simulationTime):        
         GenericMeasure.__init__(self, '', period, simulationTime, Units.MESSAGE_TRAFFIC_OVERHEAD)
         
-        self.__sizePatterns = []
-        
         self.__initializePattern = re.compile('INFO  peer.BasicPeer  - Peer ([0-9]+) initializing ([0-9]+\,[0-9]+).*?')
-        
-        for measure in measures:
-            pattern = "DEBUG .*?  - Peer .*? sending " + measure + " .*? ([0-9]+) bytes ([0-9]+\,[0-9]+).*?"
-            self.__sizePatterns.append(re.compile(pattern))
+        self.__sizePattern = re.compile('DEBUG peer.BasicPeer  - Peer [0-9]+ broadcasting .*? ([0-9]+) bytes.*?')
         
         self.__totalSize = 0
         
@@ -32,15 +27,12 @@ class TrafficOverhead(GenericMeasure):
 
             return
         
-        for sizePattern in self.__sizePatterns:
-            m = sizePattern.match(line)
-            if m is not None:
-                size = int(m.group(1))
-                time = float(m.group(2).replace(',','.'))
-                
-                self.__totalSize += size
-    
-                return
+        m = self.__sizePattern.match(line)
+        if m is not None:
+            size = int(m.group(1))                
+            self.__totalSize += size
+
+            return
             
     def getValues(self): 
         return PeriodicValues(0, self.getPeriod(), self.getSimulationTime())
