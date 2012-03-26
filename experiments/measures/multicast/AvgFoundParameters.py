@@ -32,9 +32,13 @@ class AvgFoundParameters(GenericAvgMeasure):
 		if m is not None:
 			parameters = self.__getParameters(m.group(1))
 			searchID = m.group(2)
-			time = float(m.group(3).replace(',','.'))	
+			time = float(m.group(3).replace(',','.'))
 			
-			self.__currentSearches[searchID] = {}
+			foundParameters = {}
+			for parameter in parameters:
+				foundParameters[parameter] = []
+			
+			self.__currentSearches[searchID] = foundParameters
 			
 			self.periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
 				
@@ -48,27 +52,17 @@ class AvgFoundParameters(GenericAvgMeasure):
 			time = float(m.group(4).replace(',','.'))
 			
 			for parameter in parameters:
-				if not parameter in self.__currentSearches[searchID]:
-					self.__currentSearches[searchID][parameter] = []
 				if peer not in self.__currentSearches[searchID][parameter]:
 					self.__currentSearches[searchID][parameter].append(peer) 
 								
 			self.periodicAvgValues.addValue(self.__calculateAvgFoundParameters(), time)
 			
 			return 
-		
-	def __getLostParameters(self, str):
-		parameters = []
-		strings = str.split(', (')
-		for s in strings:
-			values = s.split('=')[1] 
-			parameters.extend(self.__getParameters(values))
-		return parameters
-				
+						
 	def __calculateAvgFoundParameters(self):			
 		avgRatios = []
 
-		for foundParameters in self.__currentSearches.values():
+		for searchID, foundParameters in self.__currentSearches.iteritems():
 			for foundParameter, peers in foundParameters.iteritems():
 				ratio = len(peers) / float(self.__availableParameters[foundParameter.split('-')[1]])
 				avgRatios.append(ratio)
