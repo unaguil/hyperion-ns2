@@ -26,6 +26,7 @@
 	<entry key="services">2</entry>
 	<entry key="serviceParameters">6</entry>
 	<entry key="replicateServices">5</entry>
+	<entry key="invalidSearches">0.2</entry>
 	
 	<entry key="nodeBehavior">SearchBehavior</entry>
 	<entry key="searchFreq">0.2</entry>
