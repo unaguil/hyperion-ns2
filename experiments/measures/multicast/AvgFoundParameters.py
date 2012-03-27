@@ -64,8 +64,10 @@ class AvgFoundParameters(GenericAvgMeasure):
 
 		for searchID, foundParameters in self.__currentSearches.iteritems():
 			for foundParameter, peers in foundParameters.iteritems():
-				ratio = len(peers) / float(self.__availableParameters[foundParameter.split('-')[1]])
-				avgRatios.append(ratio)
+				parameter = foundParameter.split('-')[1]
+				if parameter in self.__availableParameters:
+					ratio = len(peers) / float(self.__availableParameters[parameter])
+					avgRatios.append(ratio)
 				
 		if len(avgRatios) == 0:
 			return 0.0
