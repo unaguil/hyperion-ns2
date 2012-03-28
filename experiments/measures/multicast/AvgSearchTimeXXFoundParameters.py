@@ -11,7 +11,7 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 		GenericAvgMeasure.__init__(self, period, simulationTime, Units.SECONDS)
 		
 		self.__searchPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? started search for parameters (\[.*?\]) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
-		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) accepted multicast.search.message.SearchMessage (\(.*?\)) distance .*? parameters (\[.*?\]) ([0-9]+\,[0-9]+).*?')
+		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? found parameters (\[.*?\]) in node ([0-9]+) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
 		
 		self.__currentSearches = {}
 		self.__startTime = {}
@@ -44,9 +44,9 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 		
 		m = self.__foundPattern.match(line)
 		if m is not None:
-			peer = m.group(1)
-			searchID = m.group(2)
-			parameters = self.__getParameters(m.group(3))
+			parameters = self.__getParameters(m.group(1))
+			peer = m.group(2)
+			searchID = m.group(3)
 			time = float(m.group(4).replace(',','.'))
 			
 			if searchID in self.__currentSearches:
@@ -74,15 +74,17 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 				
 	def __calculateFoundParametersRatio(self, searchID):
 		foundParameters = self.__currentSearches[searchID]
-		ratios = []
+		avgRatios = []
 		for foundParameter, peers in foundParameters.iteritems():
-			ratio = len(peers) / float(self.__availableParameters[foundParameter.split('-')[1]])
-			ratios.append(ratio)
+			parameter = foundParameter.split('-')[1]
+			if parameter in self.__availableParameters:
+				ratio = len(peers) / float(self.__availableParameters[parameter])
+				avgRatios.append(ratio)
 				
-		if len(ratios) == 0:
+		if len(avgRatios) == 0:
 			return 0.0
 		else:
-			return numpy.mean(ratios) 
+			return numpy.mean(avgRatios) 
 			
 	def __checkParameter(self, parameter, list):
 		if not parameter in list:
