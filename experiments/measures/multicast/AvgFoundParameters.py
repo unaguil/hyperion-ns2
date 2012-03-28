@@ -75,9 +75,5 @@ class AvgFoundParameters(GenericAvgMeasure):
 			return numpy.mean(avgRatios) 
 			
 	def getTotalValue(self):
-		return self.__calculateAvgFoundParameters()
-			
-	def __checkParameter(self, parameter, list):
-		if not parameter in list:
-			list[parameter] = 0 
+		return self.__calculateAvgFoundParameters() 
 	
