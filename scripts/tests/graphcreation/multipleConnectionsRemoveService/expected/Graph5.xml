@@ -2,13 +2,13 @@
 <graphml>
 	<graph>
 		<node id="Service:S1:5"/>
-		<node id="Connection:O-A*I-A"/>
-		<node id="Connection:O-B*I-B"/>
-		<edge id="1" source="Connection:O-A*I-A" target="Service:S1:5"/>
-		<edge id="2" source="Service:S1:5" target="Connection:O-B*I-B"/>
+		<node id="Connection:O-1*I-1"/>
+		<node id="Connection:O-2*I-2"/>
+		<edge id="1" source="Connection:O-1*I-1" target="Service:S1:5"/>
+		<edge id="2" source="Service:S1:5" target="Connection:O-2*I-2"/>
 		<node id="Service:S2:4"/>
-		<edge id="3" source="Connection:O-B*I-B" target="Service:S2:4"/>
+		<edge id="3" source="Connection:O-2*I-2" target="Service:S2:4"/>
 		<node id="Service:S3:7"/>
-		<edge id="4" source="Service:S3:7" target="Connection:O-A*I-A"/>
+		<edge id="4" source="Service:S3:7" target="Connection:O-1*I-1"/>
 	</graph>
 </graphml>

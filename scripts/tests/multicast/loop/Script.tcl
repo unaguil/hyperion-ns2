@@ -13,7 +13,7 @@ proc do_something {agents_ nodes_ god_} {
 
 	source ../../common/loop.tcl
 	
-	$ns_ at 3.0 "$agents(1) agentj searchParameter I-A"		
+	$ns_ at 3.0 "$agents(1) agentj searchParameter I-1"		
 }
 
 wireless_simulation $nNodes $finishTime multicast.Peer

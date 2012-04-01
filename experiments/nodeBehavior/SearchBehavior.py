@@ -37,7 +37,7 @@ class SearchBehavior(CommonSearchBehavior):
     
     def __createInvalidSearch(self):
         node = random.randrange(self.getNNodes())
-        return node, '#'
+        return node, '32767'
     
     def getElements(self):
         return list(self.getNodePopulator().getUsedConcepts())

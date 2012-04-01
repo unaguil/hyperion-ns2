@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <parameterTable>
-	<parameter id="I-A">
+	<parameter id="I-1">
 		<entry neighbor="2" distance="2"/>
 	</parameter>
-	<parameter id="I-B">
+	<parameter id="I-2">
 		<entry neighbor="2" distance="2" optional="true"/>
 		<entry neighbor="2" distance="1" optional="true"/>
 		<entry neighbor="10" distance="3"/>

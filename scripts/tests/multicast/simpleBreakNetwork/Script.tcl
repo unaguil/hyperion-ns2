@@ -13,7 +13,7 @@ proc do_something {agents_ nodes_ god_} {
 
 	source ../../common/simple.tcl	
 	
-	$ns_ at 3.0 "$agents(4) agentj searchParameter I-A"
+	$ns_ at 3.0 "$agents(4) agentj searchParameter I-1"
 	$ns_ at 5.0 "$node_(2) setdest 2.2 5.0 5.0"
 }
 

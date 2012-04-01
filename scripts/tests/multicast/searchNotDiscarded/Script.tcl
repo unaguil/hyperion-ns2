@@ -13,7 +13,7 @@ proc do_something {agents_ nodes_ god_} {
 
 	source ../../common/searchNotDiscard.tcl
 	
-	$ns_ at 5.0 "$agents(4) agentj searchParameter I-A"
+	$ns_ at 5.0 "$agents(4) agentj searchParameter I-1"
 }
 
 

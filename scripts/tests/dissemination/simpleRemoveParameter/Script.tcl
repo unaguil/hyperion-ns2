@@ -13,7 +13,7 @@ proc do_something {agents_ nodes_ god_} {
 
 	source ../../common/simple.tcl
 	
-	$ns_ at 3.0 "$agents(0) agentj removeParameter I-A"
+	$ns_ at 3.0 "$agents(0) agentj removeParameter I-1"
 }
 
 

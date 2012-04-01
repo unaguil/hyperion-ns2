@@ -2,16 +2,16 @@
 <graphml>
 	<graph>
 		<node id="Service:Composition2-INIT:4"/>
-		<node id="Connection:O-B*I-B"/>
-		<node id="Connection:O-C*I-C"/>
-		<edge id="1" source="Service:Composition2-INIT:4" target="Connection:O-B*I-B"/>
-		<edge id="2" source="Service:Composition2-INIT:4" target="Connection:O-C*I-C"/>
+		<node id="Connection:O-2*I-2"/>
+		<node id="Connection:O-3*I-3"/>
+		<edge id="1" source="Service:Composition2-INIT:4" target="Connection:O-2*I-2"/>
+		<edge id="2" source="Service:Composition2-INIT:4" target="Connection:O-3*I-3"/>
 		<node id="Service:S3:3"/>
-		<node id="Connection:O-D*I-D"/>
-		<edge id="3" source="Connection:O-B*I-B" target="Service:S3:3"/>
-		<edge id="4" source="Connection:O-C*I-C" target="Service:S3:3"/>
-		<edge id="5" source="Service:S3:3" target="Connection:O-D*I-D"/>
+		<node id="Connection:O-4*I-4"/>
+		<edge id="3" source="Connection:O-2*I-2" target="Service:S3:3"/>
+		<edge id="4" source="Connection:O-3*I-3" target="Service:S3:3"/>
+		<edge id="5" source="Service:S3:3" target="Connection:O-4*I-4"/>
 		<node id="Service:Composition2-GOAL:4"/>
-		<edge id="6" source="Connection:O-D*I-D" target="Service:Composition2-GOAL:4"/>
+		<edge id="6" source="Connection:O-4*I-4" target="Service:Composition2-GOAL:4"/>
 	</graph>
 </graphml>

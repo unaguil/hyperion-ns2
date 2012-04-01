@@ -2,6 +2,6 @@
 <services>
 	<service id="S4">
 		<parameter id="I-B"/>
-		<parameter id="O-F"/>
+		<parameter id="O-1"/>
 	</service>
 </services>

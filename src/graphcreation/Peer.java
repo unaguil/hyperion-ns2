@@ -73,10 +73,10 @@ public class Peer extends CommonAgentJ implements MulticastMessageListener, Grap
 	@Override
 	public void loadData() {
 		try {
-			findServices = new ServiceList(SERVICES_DIR + File.separator + "Services.xml", peer.getPeerID());
+			findServices = new ServiceList(SERVICES_DIR + File.separator + "Services.xml", peer.getPeerID(), graphCreation.getTaxonomy());
 
 			final String xmlPath = getServicesFilePath(peer.getPeerID());
-			final ServiceList addedServices = new ServiceList(xmlPath, peer.getPeerID());
+			final ServiceList addedServices = new ServiceList(xmlPath, peer.getPeerID(), graphCreation.getTaxonomy());
 			graphCreation.manageLocalServices(addedServices, new ServiceList());
 
 		} catch (final Exception e) {

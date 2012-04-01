@@ -13,12 +13,12 @@ proc do_something {agents_ nodes_ god_} {
 
 	source ../../common/searchParameter.tcl
 	
-	$ns_ at 3.0 "$agents(6) agentj searchParameter I-A I-B"
-	$ns_ at 5.0 "$agents(9) agentj searchParameter I-A"
-	$ns_ at 8.0 "$agents(9) agentj searchParameter I-B"
+	$ns_ at 3.0 "$agents(6) agentj searchParameter I-1 I-2"
+	$ns_ at 5.0 "$agents(9) agentj searchParameter I-1"
+	$ns_ at 8.0 "$agents(9) agentj searchParameter I-2"
 	
-	$ns_ at 12.0 "$agents(6) agentj cancelSearch I-A"
-	$ns_ at 12.0 "$agents(9) agentj cancelSearch I-A"
+	$ns_ at 12.0 "$agents(6) agentj cancelSearch I-1"
+	$ns_ at 12.0 "$agents(9) agentj cancelSearch I-1"
 }
 
 

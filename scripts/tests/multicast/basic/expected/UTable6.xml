@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <unicastTable>
 	<search peer="3">
-		<parameter value="I-B" />
+		<parameter value="I-2" />
 	</search>
 	<search peer="10">
-		<parameter value="I-A" />
+		<parameter value="I-1" />
 	</search>
 	<route dest="3" through="2" />
 	<route dest="10" through="2" />

@@ -4,7 +4,7 @@ import graphcreation.graph.extendedServiceGraph.ExtendedServiceGraph;
 
 import java.io.FileInputStream;
 
-import taxonomy.BasicTaxonomy;
+import taxonomy.Taxonomy;
 import testing.BasicTest;
 import testing.MultipleTests;
 
@@ -15,8 +15,8 @@ public class BidirectionalSearchTest extends MultipleTests {
 	}
 
 	@Override
-	public Object readObject(final FileInputStream fileInputStream) throws Exception {
-		final ExtendedServiceGraph graph = new ExtendedServiceGraph(new BasicTaxonomy());
+	public Object readObject(final FileInputStream fileInputStream, Taxonomy taxonomy) throws Exception {
+		final ExtendedServiceGraph graph = new ExtendedServiceGraph(taxonomy);
 		graph.readFromXML(fileInputStream);
 		return graph;
 	}

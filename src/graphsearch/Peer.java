@@ -120,10 +120,10 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 	@Override
 	public void loadData() {
 		try {
-			findServices = new ServiceList(SERVICES_DIR + File.separator + "Services.xml", peer.getPeerID());
+			findServices = new ServiceList(SERVICES_DIR + File.separator + "Services.xml", peer.getPeerID(), compositionSearch.getTaxonomy());
 
 			final String xmlPath = getServicesFilePath(peer.getPeerID());
-			final ServiceList sList = new ServiceList(xmlPath, peer.getPeerID());
+			final ServiceList sList = new ServiceList(xmlPath, peer.getPeerID(), compositionSearch.getTaxonomy());
 			compositionSearch.manageLocalServices(sList, new ServiceList());
 
 		} catch (final Exception e) {

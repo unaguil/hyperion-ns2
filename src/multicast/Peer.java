@@ -156,7 +156,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	private Set<Parameter> parseParameters(final String[] args) throws InvalidParameterIDException {
 		final Set<Parameter> removedParameters = new HashSet<Parameter>();
 		for (final String arg : args)
-			removedParameters.add(ParameterFactory.createParameter(arg));
+			removedParameters.add(ParameterFactory.createParameter(arg, pSearch.getDisseminationLayer().getTaxonomy()));
 		return removedParameters;
 	}
 
@@ -164,7 +164,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	public void loadData() {
 		try {
 			final String xmlPath = getParametersFilePath(peer.getPeerID());
-			final ParameterList pList = new ParameterList(xmlPath);
+			final ParameterList pList = new ParameterList(xmlPath, pSearch.getDisseminationLayer().getTaxonomy());
 
 			for (final Parameter parameter : pList.getParameterSet()) {
 				myLogger.info("Peer " + peer.getPeerID() + " adding local parameter: " + parameter);

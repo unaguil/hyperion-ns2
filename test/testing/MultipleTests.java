@@ -20,6 +20,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import taxonomy.BasicTaxonomy;
+import taxonomy.Taxonomy;
+
 public abstract class MultipleTests {
 	private static final String TEST_TAG = "test";
 	private static final String WORKING_DIR_ATTRIB = "workingDir";
@@ -168,6 +171,12 @@ public abstract class MultipleTests {
 
 	private void checkOutputFiles(final BasicTest test) throws Exception {
 		final File outputFolder = new File(test.getOutputDir());
+		
+		final Taxonomy taxonomy = new BasicTaxonomy();
+		final File taxonomyFile = new File(test.getWorkingDir() + File.separatorChar + "taxonomy.xml");
+		if (taxonomyFile.exists()) {
+			taxonomy.readFromXML(new FileInputStream(taxonomyFile));
+		}
 
 		final File[] files = outputFolder.listFiles(fileFilter);
 		// Check output files number
@@ -177,9 +186,9 @@ public abstract class MultipleTests {
 
 			Object output = null;
 			try {
-				output = readObject(new FileInputStream(file));
+				output = readObject(new FileInputStream(file), taxonomy);
 			} catch (final Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 				throw new Exception(e.getMessage() + " File: " + fileName);
 			}
 
@@ -188,15 +197,16 @@ public abstract class MultipleTests {
 			Object expected = null;
 			if (expectedFile.exists())
 				try {
-					expected = readObject(new FileInputStream(expectedFile));
+					expected = readObject(new FileInputStream(expectedFile), taxonomy);
 					assertEquals("Script: " + test.getScript() + " on working dir: " + test.getWorkingDir() + " file " + fileName, expected, output);
 				} catch (final Exception e) {
+					e.printStackTrace();
 					throw new Exception(e.getMessage() + " File: " + expectedFileName);
 				}
 		}
 	}
 
-	public abstract Object readObject(FileInputStream fileInputStream) throws Exception;
+	public abstract Object readObject(FileInputStream fileInputStream, Taxonomy taxonomy) throws Exception;
 
 	public abstract void check(BasicTest test) throws Exception;
 }

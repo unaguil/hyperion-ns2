@@ -49,7 +49,7 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 			if (args.length > 0)
 				try {
 					for (final String arg : args) {
-						final Parameter parameter = ParameterFactory.createParameter(arg);
+						final Parameter parameter = ParameterFactory.createParameter(arg, pDisseminator.getTaxonomy());
 						myLogger.info("Peer " + peer.getPeerID() + " adding local parameter: " + parameter);
 						pDisseminator.addLocalParameter(parameter);
 					}
@@ -68,7 +68,7 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 			if (args.length > 0)
 				try {
 					for (final String arg : args) {
-						final Parameter parameter = ParameterFactory.createParameter(arg);
+						final Parameter parameter = ParameterFactory.createParameter(arg, pDisseminator.getTaxonomy());
 						myLogger.info("Peer " + peer.getPeerID() + " removing local parameter: " + parameter);
 						pDisseminator.removeLocalParameter(parameter);
 					}
@@ -89,7 +89,7 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 	public void loadData() {
 		try {
 			final String xmlPath = getParametersFilePath(peer.getPeerID());
-			final ParameterList pList = new ParameterList(xmlPath);
+			final ParameterList pList = new ParameterList(xmlPath, pDisseminator.getTaxonomy());
 
 			myLogger.info("Peer " + peer.getPeerID() + " loading parameters: " + pList + " from file " + xmlPath);
 

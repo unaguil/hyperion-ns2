@@ -9,6 +9,7 @@ import multicast.search.unicastTable.UnicastTable;
 import peer.message.BroadcastMessage;
 import peer.peerid.PeerID;
 import peer.peerid.PeerIDSet;
+import taxonomy.Taxonomy;
 import testing.BasicTest;
 import testing.MultipleTests;
 import detection.NeighborDetector;
@@ -57,8 +58,8 @@ public class MulticastTest extends MultipleTests {
 	}
 
 	@Override
-	public Object readObject(final FileInputStream fileInputStream) throws Exception {
-		final UnicastTable uTable = new UnicastTable(PeerID.VOID_PEERID, nDetector);
+	public Object readObject(final FileInputStream fileInputStream, Taxonomy taxonomy) throws Exception {
+		final UnicastTable uTable = new UnicastTable(PeerID.VOID_PEERID, nDetector, taxonomy);
 		uTable.readFromXML(fileInputStream);
 		return uTable;
 	}

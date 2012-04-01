@@ -5,6 +5,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 
 import peer.peerid.PeerIDSet;
+import taxonomy.Taxonomy;
 import testing.BasicTest;
 import testing.MultipleTests;
 
@@ -23,7 +24,7 @@ public class DetectionTest extends MultipleTests {
 	}
 
 	@Override
-	public Object readObject(final FileInputStream fileInputStream) throws Exception {
+	public Object readObject(final FileInputStream fileInputStream, Taxonomy taxonomy) throws Exception {
 		final PeerIDSet peerIDSet = new PeerIDSet();
 		peerIDSet.readFromXML(fileInputStream);
 		return peerIDSet;

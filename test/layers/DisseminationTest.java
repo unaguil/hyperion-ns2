@@ -5,7 +5,6 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 
 import peer.peerid.PeerID;
-import taxonomy.BasicTaxonomy;
 import taxonomy.Taxonomy;
 import testing.BasicTest;
 import testing.MultipleTests;
@@ -21,8 +20,6 @@ class PTableFileFilter implements FileFilter {
 }
 
 public class DisseminationTest extends MultipleTests {
-
-	private final Taxonomy emptyTaxonomy = new BasicTaxonomy();
 	
 	static class DisseminationDistance implements DisseminationDistanceInfo {
 		
@@ -41,8 +38,8 @@ public class DisseminationTest extends MultipleTests {
 	}
 
 	@Override
-	public Object readObject(final FileInputStream fileInputStream) throws Exception {
-		final ParameterTable pTable = new ParameterTable(disseminationInfo, PeerID.VOID_PEERID, emptyTaxonomy);
+	public Object readObject(final FileInputStream fileInputStream, Taxonomy taxonomy) throws Exception {
+		final ParameterTable pTable = new ParameterTable(disseminationInfo, PeerID.VOID_PEERID, taxonomy);
 		pTable.readFromXML(fileInputStream);
 		return pTable;
 	}

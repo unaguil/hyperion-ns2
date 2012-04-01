@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <unicastTable>
 	<search peer="4">
-		<parameter value="I-A" />
+		<parameter value="I-1" />
 	</search>
 	<route dest="0" through="0" />
 </unicastTable>
