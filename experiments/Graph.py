@@ -325,12 +325,12 @@ class Graph:
 				result = tagValues[tag]
 				print ' *%s: %s mean: %.2f std: %.2f' % (name, tag, result.getMeanTotal(), result.getStdTotal())
 				
-	def plotAll(self, format, onePDF, outputFile, periodic=False):
+	def plotAll(self, format, onePDF, outputDir, periodic=False):
 		if onePDF:
 			rowsPerPage = 1
 			columnsPerPage = 1
 			plotsPerPage = rowsPerPage * columnsPerPage
-			pp = PdfPages(outputFile)
+			pp = PdfPages(onePDF)
 			
 			for index, measureType in enumerate(sorted(self.getMeasureTypes())):
 				plotNumber = index % plotsPerPage
@@ -364,7 +364,7 @@ class Graph:
 			pp.close()
 		else: 
 			for measureType in sorted(sorted(self.getMeasureTypes())):
-				fName = measureType + '.' + format
+				fName = os.path.join(outputDir, measureType + '.' + format)
 				plt.clf()
 				
 				measureName, _, units = self.__getMeasureInfo(measureType)
@@ -432,9 +432,9 @@ def main():
 	parser.add_option("-s", "--summary", dest="summary", help="prints the summary of the parsed files", action="store_true", default=False)
 	parser.add_option("-a", "--all", dest="all", help="plots all measures each one in a separate image", action="store_true", default=False)
 	parser.add_option("-f", "--format", dest="format", help='output format for plotted image', default='DISPLAY')
-	parser.add_option("-o", "--onePDF", dest="onePDF", help='write plots to a multiple pages PDF', action="store_true", default=False)
-	parser.add_option("-w", "--writeFile", dest="writeFile", help="plotting output file name", default=None)
+	parser.add_option("-o", "--onePDF", dest="onePDF", help='write plots to a multiple pages PDF file')
 	parser.add_option("-m", "--mergedDirectories", dest="mergedDirectories", help="directory containing the result files to merge")
+	parser.add_option("-w", "--writeDir", dest="outputDir", help="directory to write the plotting output")
 	
 	parser.add_option("--xLabel", dest="xLabel", help="sets the label for X axis")
 	parser.add_option("--yLabel", dest="yLabel", help="sets the label for Y axis")
@@ -448,9 +448,7 @@ def main():
 	
 	if options.inputFile is None and options.directory is None and options.mergedDirectories is None:
 		parser.print_usage()
-	else:
-		outputFile = 'allPlots.pdf'
-		
+	else:		
 		directories = {}
 		
 		if options.mergedDirectories is not None:
@@ -471,7 +469,7 @@ def main():
 		graph = Graph(directories, 'en', options.errorBar, order)
 		
 		if options.all: 
-			graph.plotAll(options.format, options.onePDF, outputFile, options.periodic)
+			graph.plotAll(options.format, options.onePDF, options.outputDir, options.periodic)
 			sys.exit()
 			
 		if options.summary:
