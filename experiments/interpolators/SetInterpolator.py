@@ -1,4 +1,3 @@
-import numpy
 
 class SetInterpolator:
 	def __init__(self, dynamicEntry):

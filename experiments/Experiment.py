@@ -16,7 +16,8 @@ import util.StrBuffer as StrBuffer
 from optparse import OptionParser
 
 from ConfigGenerator import ConfigGenerator
-from measures.Measures import *
+from measures.Measures import Measures
+from measures.Measures import process
 from ScriptGenerator import ScriptGenerator
 
 import util.TimeFormatter as TimeFormatter
@@ -232,13 +233,8 @@ class Experiment:
 
 	def __run(self):				
 		resolvedFileBuffer = self.__resolveImports(self.__inputFile)
-		
 		configGenerator = ConfigGenerator(resolvedFileBuffer)
-		
-		initTime = time.time()
-
 		configurationCounter = 0		
-		
 		self.__saveTimestamp(self.__workingDir)
 		
 		while configGenerator.hasNext():
@@ -299,8 +295,6 @@ class Experiment:
 				sys.stdout.flush()
 				
 			configurationCounter = configurationCounter + 1
-			
-		experimentTime = time.time() - initTime 
 			
 		print '' 
 		sys.stdout.flush()

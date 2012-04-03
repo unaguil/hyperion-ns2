@@ -20,17 +20,12 @@ class TotalMessageOverhead(GenericMeasure):
     def parseLine(self, line):
         m = self.__initializePattern.match(line)
         if m is not None:
-            peer = m.group(1)
-            time = float(m.group(2).replace(',','.'))
-            
             self.__nodes += 1
-
             return
         
         m = self.__broadcastingPattern.match(line)
         if m is not None:                
             self.__total += 1
-
             return
             
     def getValues(self): 

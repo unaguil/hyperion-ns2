@@ -1,7 +1,4 @@
 import re
-import numpy
-
-import os.path
 
 import measures.generic.Units as Units
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
@@ -21,19 +18,14 @@ class AvgSearchTimeFirstOcurrence(GenericAvgMeasure):
 	def parseLine(self, line):
 		m = self.__searchPattern.match(line)
 		if m is not None:
-			parameters = self.__getParameters(m.group(1))
 			searchID = m.group(2)
 			time = float(m.group(3).replace(',','.'))	
-			
 			self.__currentSearches[searchID] = time
-				
 			return
 		
 		m = self.__foundPattern.match(line)
 		if m is not None:
-			peer = m.group(2)
 			searchID = m.group(3)
-			parameters = self.__getParameters(m.group(1))
 			time = float(m.group(4).replace(',','.')) 
 								
 			if searchID in self.__currentSearches:

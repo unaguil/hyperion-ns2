@@ -356,7 +356,7 @@ class Graph:
 					
 					plt.legend(loc='best')
 				else:
-					self.plotPeriodic([measure])
+					self.plotPeriodic([measureName])
 				
 				if plotNumber + 1 == plotsPerPage:
 					plt.savefig(pp, format='pdf')
@@ -382,7 +382,7 @@ class Graph:
 					
 					plt.legend(loc='best')
 				else:
-					self.plotPeriodic([measure])
+					self.plotPeriodic([measureName])
 				self.finishPlotting(plt, fName, format) 
 				
 	def __printPeriodicInfo(self, data, times, stdValues, relStdValues, label, units):

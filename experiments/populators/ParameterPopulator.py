@@ -152,8 +152,6 @@ class ParameterPopulator:
         for parameters in nodeTable.values():
             distributedParameters += parameters
         
-        countedParameters = count(distributedParameters)    
-                    
         for parameter in distributedParameters:
             for concept in taxonomy.getParents(parameter):
                 if concept not in self.__usedConcepts:

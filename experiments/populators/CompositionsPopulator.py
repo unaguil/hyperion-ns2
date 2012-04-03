@@ -147,7 +147,6 @@ class CompositionsPopulator:
         strBuffer.writeln('* Generated services: %d' % len(services))
         strBuffer.writeln('* Generated parameters: %d' % self.getParameters(services))
         
-        subsetSize = 0
         nodes = {}          
         
         #distribute services among nodes

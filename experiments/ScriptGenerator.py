@@ -1,5 +1,4 @@
 import xml.dom.minidom as minidom
-import math
 import os
 
 from mobilityModels.MobilityModelGenerator import MobilityModelGenerator

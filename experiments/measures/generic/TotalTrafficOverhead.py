@@ -20,18 +20,13 @@ class TotalTrafficOverhead(GenericMeasure):
     def parseLine(self, line):
         m = self.__initializePattern.match(line)
         if m is not None:
-            peer = m.group(1)
-            time = float(m.group(2).replace(',','.'))
-            
             self.__nodes += 1
-
             return
         
         m = self.__sizePattern.match(line)
         if m is not None:
             size = int(m.group(1))                
             self.__totalSize += size
-
             return
             
     def getValues(self): 

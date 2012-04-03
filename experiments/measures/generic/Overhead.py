@@ -1,14 +1,7 @@
 import re
 
 from measures.periodicValues.PeriodicValues import PeriodicValues
-
 from measures.generic.GenericMeasure import GenericMeasure as GenericMeasure
-
-from measures.dissemination.SentTableMessages import SentTableMessages as SentTableMessages
-from measures.multicast.SentSearchMessages import SentSearchMessages as SentSearchMessages
-from measures.multicast.SentSearchResponseMessages import SentSearchResponseMessages as SentSearchResponseMessages
-from measures.multicast.SentRemoveRouteMessages import SentRemoveRouteMessages as SentRemoveRouteMessages
-from measures.multicast.SentRemoveParametersMessages import SentRemoveParametersMessages as SentRemoveParametersMessages
 
 import measures.generic.Units as Units 
 
@@ -27,11 +20,7 @@ class Overhead(GenericMeasure):
     def parseLine(self, line):
         m = self.__initializePattern.match(line)
         if m is not None:
-            peer = m.group(1)
-            time = float(m.group(2).replace(',','.'))
-            
             self.__neighbors += 1
-
             return
         
         for measure in self.__measures:

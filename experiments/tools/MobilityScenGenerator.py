@@ -51,8 +51,6 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
         
         running.append((p, outputFile))
         
-    outputFiles = []
-    
     for index, (p, outputFile) in enumerate(running):
         result = p.wait()
         outputFile.close()
