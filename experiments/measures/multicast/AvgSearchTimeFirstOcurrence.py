@@ -33,15 +33,7 @@ class AvgSearchTimeFirstOcurrence(GenericAvgMeasure):
 				del self.__currentSearches[searchID]
 			
 			return 
-		
-	def __getLostParameters(self, str):
-		parameters = []
-		strings = str.split(', (')
-		for s in strings:
-			values = s.split('=')[1] 
-			parameters.extend(self.__getParameters(values))
-		return parameters
-						
+								
 	def __checkParameter(self, parameter, list):
 		if not parameter in list:
 			list[parameter] = 0 
