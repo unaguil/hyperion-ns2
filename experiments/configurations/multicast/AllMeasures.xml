@@ -35,6 +35,14 @@
 	<measure type="multicast.AvgSearchTime50FoundParameters" period="0.25" />
 	<measure type="multicast.AvgSearchTime75FoundParameters" period="0.25" />
 	<measure type="multicast.AvgSearchTime100FoundParameters" period="0.25" />
+	
+	<measure type="multicast.AvgDiscoveredParameters" period="0.25" />
+	<measure type="multicast.AvgDiscoveryTimeFirstOcurrence" period="0.25" />
+	<measure type="multicast.AvgSearchTime25DiscoveredParameters" period="0.25" />
+	<measure type="multicast.AvgSearchTime50DiscoveredParameters" period="0.25" />
+	<measure type="multicast.AvgSearchTime75DiscoveredParameters" period="0.25" />
+	<measure type="multicast.AvgSearchTime100DiscoveredParameters" period="0.25" />
+	
 	<measure type="multicast.AvgPeerAvailableTime" period="0.25" />
 	<measure type="multicast.AvgTraversedDistance" period="0.25" />
 	<measure type="multicast.InvalidRoutes" period="0.25" />

@@ -6,12 +6,12 @@ import os.path
 import measures.generic.Units as Units
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
-class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):	
+class AvgSearchTimeXXDiscoveredParameters(GenericAvgMeasure):	
 	def __init__(self, period, simulationTime, minRatio):		
 		GenericAvgMeasure.__init__(self, period, simulationTime, Units.SECONDS)
 		
-		self.__searchPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? started search for parameters (\[.*?\]) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
-		self.__foundPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? found parameters (\[.*?\]) in node ([0-9]+) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
+		self.__startPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? started search for parameters (\[.*?\]) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
+		self.__endPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) accepted multicast.search.message.SearchMessage (\(.*?\)) distance .*? parameters (\[.*?\]) ([0-9]+\,[0-9]+).*?')
 		
 		self.__currentSearches = {}
 		self.__startTime = {}
@@ -31,7 +31,7 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 		return [str.strip() for str in str[1:-1].split(',')]
 
 	def parseLine(self, line):
-		m = self.__searchPattern.match(line)
+		m = self.__startPattern.match(line)
 		if m is not None:
 			parameters = self.__getParameters(m.group(1))
 			searchID = m.group(2)
@@ -42,11 +42,11 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 				
 			return
 		
-		m = self.__foundPattern.match(line)
+		m = self.__endPattern.match(line)
 		if m is not None:
-			parameters = self.__getParameters(m.group(1))
-			peer = m.group(2)
-			searchID = m.group(3)
+			peer = m.group(1)
+			searchID = m.group(2)
+			parameters = self.__getParameters(m.group(3))
 			time = float(m.group(4).replace(',','.'))
 			
 			if searchID in self.__currentSearches:
@@ -63,7 +63,7 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 					del self.__currentSearches[searchID]
 			
 			return 
-				
+		
 	def __calculateFoundParametersRatio(self, searchID):
 		foundParameters = self.__currentSearches[searchID]
 		avgRatios = []
@@ -76,5 +76,4 @@ class AvgSearchTimeXXFoundParameters(GenericAvgMeasure):
 		if len(avgRatios) == 0:
 			return 0.0
 		else:
-			return numpy.mean(avgRatios) 
-	
+			return numpy.mean(avgRatios) 	
