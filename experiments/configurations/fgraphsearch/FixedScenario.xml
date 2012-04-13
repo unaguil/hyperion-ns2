@@ -34,8 +34,8 @@
 		<!-- Peer configuration variables -->
 		<entry key="beaconDetector.beaconTime">2000</entry>
 		<entry key="parameterSearch.sameTTL">20</entry>
-		<entry key="graphsearch.maxTTL">10</entry>
-		<entry key="graphsearch.searchExpiration">20000</entry>
+		<entry key="graphsearch.maxTTL">127</entry>
+		<entry key="graphsearch.searchExpiration">32767</entry>
 	</staticConfig>
 	<dynamicConfig />
 	<repeat number="1" />
