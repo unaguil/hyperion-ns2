@@ -1,5 +1,5 @@
-measures.multicast.AvgFoundParameters = Average Found Parameters
-measures.multicast.AvgSearchTimeFirstOcurrence = Average Search Time First Occurrence
-measures.multicast.MulticastTrafficOverhead = Traffic Overhead
+measures.multicast.AvgDiscoveredParameters = Avg. Discovered Parameters
+measures.multicast.AvgDiscoveryTimeFirstOcurrence = Avg. Discovery Time First Occurrence
+measures.multicast.MulticastTrafficOverhead = Multicast Traffic Overhead
 measures.multicast.SentSearchMessages = Sent Search Messages
 measures.dissemination.SentTableMessages = Sent Table Messages
