@@ -18,13 +18,13 @@
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
 		<entry key="oNumber">1</entry> -->
-		<entry key="nCompositions">1</entry>
-		<entry key="compositionLength">2</entry>
+		<entry key="nCompositions">5</entry>
+		<entry key="compositionLength">3</entry>
 		<entry key="compositionWidth">1</entry>
 		<!--<entry key="oDistribution">(2, 2)</entry> -->
 		<!-- <entry key="lDistribution">((0.3, 4), (0.7, 3))</entry> -->
 		<!-- <entry key="wDistribution">(2, 2)</entry> -->
-		<entry key="nDistribution">0.3</entry>
+		<entry key="nDistribution">1.0</entry>
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
