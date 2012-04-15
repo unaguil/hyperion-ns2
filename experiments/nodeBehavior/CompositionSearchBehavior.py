@@ -33,8 +33,7 @@ class CompositionSearchBehavior(CommonSearchBehavior):
                 self.__compositionTable[compositionIndex] = [node]
             else:
                 nodes = range(self.getNNodes())
-                availableNodes = list(set(nodes) - set(self.__compositionTable[compositionIndex]))
-                node = random.choice(availableNodes)
+                node = random.choice(nodes)
                 self.__compositionTable[compositionIndex].append(node)
                          
             oFile.write('$ns_ at %f "$agents(%d) agentj composeService %d\"\n' % (time, node, compositionIndex))
