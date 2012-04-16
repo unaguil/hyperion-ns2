@@ -31,7 +31,7 @@ class RandomWaypoint:
         
     def generate(self, workingDir, file, repeat, strBuffer):
         command = 'tools/setdest'
-        parameters = '-v 2 -n %s -s 1 -m %s -M %s -t %.1f -P 1 -p %s -x %s -y %s' % (self.__nNodes, self.__minSpeed, self.__maxSpeed, self.__finishTime, self.__pauseTime, self.__maxX, self.__maxY)
+        parameters = '-v 2 -n %s -s 1 -m %s -M %s -t %.1f -P 2 -p %s -x %s -y %s' % (self.__nNodes, self.__minSpeed, self.__maxSpeed, self.__finishTime, self.__pauseTime, self.__maxX, self.__maxY)
         
         cmd = command + ' ' + parameters
         
