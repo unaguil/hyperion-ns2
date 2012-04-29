@@ -2,38 +2,38 @@
 <experiment tag="0.5" type="% nodes with parameters">
 	<staticConfig>
 		<!-- Script configuration variables -->
-		<entry key="nNodes">100</entry>
-		<entry key="finishTime">200.0</entry>
-		<entry key="gridW">700</entry>
-		<entry key="gridH">700</entry>
+		<entry key="nNodes">25</entry>
+		<entry key="finishTime">40.0</entry>
+		<entry key="gridW">250</entry>
+		<entry key="gridH">250</entry>
 		<entry key="discardTime">0.0</entry>
 		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
 
 		<!-- Random waypoint configuration -->
 		<entry key="mobilityModel">RandomWaypoint</entry>
 		<entry key="minSpeed">0.001</entry>
-		<entry key="maxSpeed">2.0</entry>
-		<entry key="pauseTime">10.0</entry>
+		<entry key="maxSpeed">0.001</entry>
+		<entry key="pauseTime">100000.0</entry>
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
 		<entry key="oNumber">1</entry> -->
 		<entry key="nCompositions">5</entry>
-		<entry key="compositionLength">3</entry>
+		<entry key="compositionLength">5</entry>
 		<entry key="compositionWidth">1</entry>
 		<entry key="nDistribution">1.0</entry>
-		<entry key="replication">1</entry>
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">1.0</entry>
-		<entry key="timeRange">(50.0, 100.0)</entry>
+		<entry key="searchFreq">0.0</entry>
+		<entry key="timeRange">(25.0, 10.0)</entry>
 
 		<!-- Peer configuration variables -->
-		<entry key="beaconDetector.beaconTime">2000</entry>
-		<entry key="parameterSearch.sameTTL">10</entry>
-		<entry key="graphsearch.maxTTL">127</entry>
-		<entry key="graphsearch.searchExpiration">300000</entry>
+		<entry key="beaconDetector.beaconTime">5000</entry>
+		<entry key="parameterSearch.sameTTL">5</entry>
+		<entry key="graphsearch.searchExpiration">10000</entry>
+		<entry key="graphsearch.msgInterval">100</entry>
+		<entry key="graphsearch.directBroadcast">True</entry>
 	</staticConfig>
 	<dynamicConfig />
 	<repeat number="1" />

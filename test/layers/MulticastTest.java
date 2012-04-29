@@ -3,12 +3,13 @@ package layers;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import multicast.search.unicastTable.UnicastTable;
 import peer.message.BroadcastMessage;
 import peer.peerid.PeerID;
-import peer.peerid.PeerIDSet;
 import taxonomy.Taxonomy;
 import testing.BasicTest;
 import testing.MultipleTests;
@@ -42,8 +43,8 @@ public class MulticastTest extends MultipleTests {
 		public void messageReceived(BroadcastMessage message, long receptionTime) {}
 
 		@Override
-		public PeerIDSet getCurrentNeighbors() {
-			return new PeerIDSet();
+		public Set<PeerID> getCurrentNeighbors() {
+			return Collections.emptySet();
 		}
 
 		@Override

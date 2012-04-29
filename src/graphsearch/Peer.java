@@ -1,5 +1,6 @@
 package graphsearch;
 
+import floodsearch.FloodCompositionSearch;
 import graphcreation.graph.extendedServiceGraph.ExtendedServiceGraph;
 import graphcreation.services.Service;
 import graphcreation.services.ServiceList;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import peer.ReliableBroadcastPeer;
 import peer.peerid.PeerID;
 import util.logger.Logger;
 
@@ -37,6 +39,7 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 	private final Logger myLogger = Logger.getLogger(Peer.class);
 
 	private static final String COMPOSE_SERVICE = "composeService";
+	private static final String PREPARE_COMPOSITION = "prepareComposition";
 
 	private static final String ADD_SERVICE = "addService";
 	private static final String REMOVE_SERVICE = "removeService";
@@ -46,17 +49,23 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 	}
 
 	public Peer(final SearchMode searchMode) {
+		super(true);		
 		switch (searchMode) {
 		case BACKWARD:
-			compositionSearch = new BackwardCompositionSearch(peer, this);
+			compositionSearch = new BackwardCompositionSearch(((ReliableBroadcastPeer)peer), this);
 			break;
 		case BIDIRECTIONAL:
-			compositionSearch = new BidirectionalSearch(peer, this);
+			compositionSearch = new BidirectionalSearch(((ReliableBroadcastPeer)peer), this);
 			break;
 		default:
-			compositionSearch = new ForwardCompositionSearch(peer, this);
+			compositionSearch = new ForwardCompositionSearch(((ReliableBroadcastPeer)peer), this);
 			break;
 		}
+	}
+	
+	public Peer() {
+		super(false);
+		compositionSearch = new FloodCompositionSearch(peer, this);
 	}
 	
 	public void disableMulticastLayer() {
@@ -113,7 +122,17 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 				return true;
 			}
 			myLogger.error("Peer " + peer.getPeerID() + " " + REMOVE_SERVICE + " had no arguments");
+		} else if (command.equals(PREPARE_COMPOSITION)) {
+			if (args.length == 1) {
+				final int index = Integer.parseInt(args[0]);
+				final Service searchedService = findServices.getService(index);
+				final SearchID searchID = compositionSearch.prepareComposition(searchedService);
+				searchStarted(searchID);
+				return true;
+			}
+			myLogger.error("Peer " + peer.getPeerID() + " " + PREPARE_COMPOSITION + " must have one argument");
 		}
+			
 		return false;
 	}
 

@@ -2,31 +2,26 @@
 <experiment tag="0.5" type="% nodes with parameters">
 	<staticConfig>
 		<!-- Script configuration variables -->
-		<entry key="nNodes">20</entry>
-		<entry key="finishTime">100.0</entry>
-		<entry key="gridW">275</entry>
-		<entry key="gridH">275</entry>
+		<entry key="nNodes">50</entry>
+		<entry key="finishTime">200.0</entry>
+		<entry key="gridW">400</entry>
+		<entry key="gridH">400</entry>
 		<entry key="discardTime">0.0</entry>
 		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
 
 		<!-- Random waypoint configuration -->
-		<entry key="mobilityModel">LoadMobilityModel</entry>
-		<entry key="minSpeed">0.00000001</entry>
-		<entry key="maxSpeed">0.00000001</entry>
-		<entry key="pauseTime">1000</entry>
-		<entry key="rotate">False</entry>
+		<entry key="mobilityModel">RandomWaypoint</entry>
+		<entry key="minSpeed">0.001</entry>
+		<entry key="maxSpeed">0.001</entry>
+		<entry key="pauseTime">10000.0</entry>
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
-		<entry key="nCompositions">5</entry>
-		<entry key="oNumber">1</entry> 
-		<entry key="compositionLength">5</entry>
+		<entry key="oNumber">1</entry> -->
+		<entry key="nCompositions">1</entry>
+		<entry key="compositionLength">3</entry>
 		<entry key="compositionWidth">1</entry>
-		<!--<entry key="oDistribution">(2, 2)</entry> -->
-		<!-- <entry key="lDistribution">((0.3, 4), (0.7, 3))</entry> -->
-		<!-- <entry key="wDistribution">(2, 2)</entry> -->
-		<!-- <entry key="replication">1</entry> -->
-		<entry key="nDistribution">0.10</entry>
+		<entry key="nDistribution">0.3</entry>
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
@@ -36,11 +31,10 @@
 		<!-- Peer configuration variables -->
 		<entry key="beaconDetector.beaconTime">2000</entry>
 		<entry key="parameterSearch.sameTTL">5</entry>
-		<entry key="graphsearch.maxTTL">10</entry>
-		<entry key="graphsearch.searchExpiration">20000</entry>
+		<entry key="graphsearch.searchExpiration">10000</entry>
 	</staticConfig>
 	<dynamicConfig />
-	<repeat number="10" />
+	<repeat number="1" />
 	<measures>
 		<import file="AllMeasures.xml" />
 	</measures>

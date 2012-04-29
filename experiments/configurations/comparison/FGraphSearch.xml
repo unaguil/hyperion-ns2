@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<experiment tag="0.5" type="% nodes with parameters">
+	<staticConfig>
+		<import file="Common.xml" />
+		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
+
+		<entry key="beaconDetector.beaconTime">2000</entry>
+		<entry key="parameterSearch.sameTTL">5</entry>
+	</staticConfig>
+	<dynamicConfig />
+	<repeat number="1" />
+	<measures>
+		<import file="AllMeasures.xml" />
+	</measures>
+</experiment>

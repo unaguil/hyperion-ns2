@@ -14,10 +14,10 @@ proc do_something {agents_ nodes_ god_} {
 	source ../../common/replicatedDissemination.tcl
 	
 	$ns_ at 5.0 "$node_(6) setdest 2.0 1.0 5.0"
-	$ns_ at 5.0 "$node_(7) setdest 2.0 2.0 5.0"
+	$ns_ at 8.0 "$node_(7) setdest 2.0 2.0 5.0"
 	
 	$ns_ at 10.0 "$node_(6) setdest 2.0 2.0 5.0"
-	$ns_ at 10.0 "$node_(7) setdest 2.0 3.0 5.0"
+	$ns_ at 13.0 "$node_(7) setdest 2.0 3.0 5.0"
 }
 
 

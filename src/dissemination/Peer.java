@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import peer.message.PayloadMessage;
+import peer.ReliableBroadcastPeer;
+import peer.message.BroadcastMessage;
 import peer.peerid.PeerID;
 import taxonomy.parameter.InvalidParameterIDException;
 import taxonomy.parameter.Parameter;
@@ -40,7 +41,8 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 	private final Logger myLogger = Logger.getLogger(Peer.class);
 
 	public Peer() {
-		pDisseminator = new ParameterTableUpdater(peer, this, this);
+		super(true);
+		pDisseminator = new ParameterTableUpdater(((ReliableBroadcastPeer)peer), this, this);
 	}
 
 	@Override
@@ -131,12 +133,12 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 	}
 
 	@Override
-	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> newParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, Set<Parameter> addedParameters, final List<PayloadMessage> payloadMessage) {
-		return null;
+	public void neighborsChanged(Set<PeerID> newNeighbors, Set<PeerID> lostNeighbors) {
 	}
 
 	@Override
-	public void neighborsChanged(Set<PeerID> newNeighbors, Set<PeerID> lostNeighbors) {
-		// TODO Auto-generated method stub
+	public BroadcastMessage parametersChanged(PeerID neighbor, Set<Parameter> newParameters, Set<Parameter> removedParameters, Set<Parameter> removedLocalParameters, Map<Parameter, DistanceChange> changedParameters, Set<Parameter> addedParameters,
+			List<BroadcastMessage> payloadMessages) {
+		return null;
 	}
 }

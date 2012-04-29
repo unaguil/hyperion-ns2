@@ -9,9 +9,11 @@ import java.util.Set;
 
 import peer.CommunicationLayer;
 import peer.RegisterCommunicationLayerException;
+import peer.ReliableBroadcastPeer;
 import peer.message.BroadcastMessage;
 import peer.message.MessageString;
 import peer.peerid.PeerID;
+import peer.peerid.PeerIDSet;
 import util.logger.Logger;
 
 import common.CommonAgentJ;
@@ -54,6 +56,7 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 	 * Constructs the detection layer peer.
 	 */
 	public Peer() {
+		super(true);
 		final Set<Class<? extends BroadcastMessage>> messageClasses = new HashSet<Class<? extends BroadcastMessage>>();
 		messageClasses.add(MessageString.class);
 		try {
@@ -67,14 +70,14 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 	public void initComm() throws IOException {
 		super.initComm();
 		
-		peer.getDetector().addNeighborListener(this);
+		((ReliableBroadcastPeer)peer).getDetector().addNeighborListener(this);
 	}
 
 	@Override
 	protected boolean peerCommands(final String command, final String[] args) {
 		if (command.equals("broadcast")) {
-			final MessageString msgStr = new MessageString(peer.getPeerID(), peer.getDetector().getCurrentNeighbors().getPeerSet(), new String(new byte[1]));
-			peer.enqueueBroadcast(msgStr, communicationLayer);
+			final MessageString msgStr = new MessageString(peer.getPeerID(), ((ReliableBroadcastPeer)peer).getDetector().getCurrentNeighbors(), new String(new byte[1]));
+			((ReliableBroadcastPeer)peer).enqueueBroadcast(msgStr, communicationLayer);
 			return true;
 		}
 		return false;
@@ -92,7 +95,8 @@ public class Peer extends CommonAgentJ implements NeighborEventsListener {
 		final String xmlPath = getNeighbourListPath(peer.getPeerID());
 		try {
 			final FileOutputStream f = new FileOutputStream(xmlPath);
-			peer.getDetector().getCurrentNeighbors().saveToXML(f);
+			final PeerIDSet peerIDSet = new PeerIDSet(((ReliableBroadcastPeer)peer).getDetector().getCurrentNeighbors());
+			peerIDSet.saveToXML(f);
 			f.close();
 		} catch (final IOException e) {
 			myLogger.error("Peer " + peer.getPeerID() + " had problem printing neighbor list: " + e.getMessage());

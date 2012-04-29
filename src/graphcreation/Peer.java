@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 import multicast.MulticastMessageListener;
-import peer.message.PayloadMessage;
+import peer.ReliableBroadcastPeer;
+import peer.message.BroadcastMessage;
 import peer.peerid.PeerID;
 import util.logger.Logger;
 
@@ -32,7 +33,8 @@ public class Peer extends CommonAgentJ implements MulticastMessageListener, Grap
 	private final Logger myLogger = Logger.getLogger(Peer.class);
 
 	public Peer() {
-		graphCreation = new CollisionGraphCreator(peer, this, this, GraphType.BIDIRECTIONAL);
+		super(true);
+		graphCreation = new CollisionGraphCreator(((ReliableBroadcastPeer)peer), this, this, GraphType.BIDIRECTIONAL);
 	}
 
 	@Override
@@ -109,7 +111,7 @@ public class Peer extends CommonAgentJ implements MulticastMessageListener, Grap
 	}
 
 	@Override
-	public void multicastMessageAccepted(final PeerID source, final PayloadMessage payload, final int distance) {
+	public void multicastMessageAccepted(final PeerID source, final BroadcastMessage payload, final int distance, final boolean directBroadcast) {
 	}
 
 	@Override

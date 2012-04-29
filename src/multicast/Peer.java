@@ -3,7 +3,6 @@ package multicast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +12,11 @@ import java.util.StringTokenizer;
 import multicast.search.ParameterSearchImpl;
 import multicast.search.message.SearchMessage.SearchType;
 import multicast.search.message.SearchResponseMessage;
+import peer.ReliableBroadcastPeer;
+import peer.message.BroadcastMessage;
 import peer.message.MessageID;
 import peer.message.MessageStringPayload;
-import peer.message.PayloadMessage;
 import peer.peerid.PeerID;
-import peer.peerid.PeerIDSet;
 import taxonomy.parameter.InvalidParameterIDException;
 import taxonomy.parameter.Parameter;
 import taxonomy.parameter.ParameterFactory;
@@ -65,7 +64,8 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	private float startTime, endTime;
 
 	public Peer() {
-		pSearch = new ParameterSearchImpl(peer, this, this);
+		super(true);
+		pSearch = new ParameterSearchImpl(((ReliableBroadcastPeer)peer), this, this);
 	}
 
 	@Override
@@ -250,7 +250,7 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	public void parametersFound(final SearchResponseMessage receivedMessage) {}
 
 	@Override
-	public PayloadMessage searchReceived(final Set<Parameter> foundParameters, final MessageID routeID) {
+	public BroadcastMessage searchReceived(final Set<Parameter> foundParameters, final MessageID routeID) {
 		return null;
 	}
 
@@ -260,10 +260,10 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	}
 
 	@Override
-	public void multicastMessageAccepted(final PeerID source, final PayloadMessage payload, final int distance) {}
+	public void multicastMessageAccepted(final PeerID source, final BroadcastMessage payload, final int distance, final boolean directBroadcast) {}
 
 	@Override
-	public PayloadMessage parametersChanged(final PeerID neighbor, final Set<Parameter> newParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, Set<Parameter> addedParameters, final List<PayloadMessage> payloadMessages) {
+	public BroadcastMessage parametersChanged(final PeerID neighbor, final Set<Parameter> newParameters, final Set<Parameter> removedParameters, final Set<Parameter> removedLocalParameters, final Map<Parameter, DistanceChange> changedParameters, Set<Parameter> addedParameters, final List<BroadcastMessage> payloadMessages) {
 		return null;
 	}
 	
@@ -273,9 +273,9 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 	@Override
 	public void perform() throws InterruptedException {
 		if (searchesPerformed && myLogger.getCurrentTimeSeconds() >= startTime && myLogger.getCurrentTimeSeconds() <= endTime) { 
-			final List<PeerID> availableDestinations = new ArrayList<PeerID>(pSearch.getKnownDestinations());
+			final Set<PeerID> availableDestinations = new HashSet<PeerID>(pSearch.getKnownDestinations());
 			if (!availableDestinations.isEmpty())
-				pSearch.sendMulticastMessage(new PeerIDSet(availableDestinations), new MessageStringPayload(peer.getPeerID(), "Hello, peers"));
+				pSearch.sendMulticastMessage(availableDestinations, new MessageStringPayload(peer.getPeerID(), "Hello, peers"), false);
 		}
 	}
 }

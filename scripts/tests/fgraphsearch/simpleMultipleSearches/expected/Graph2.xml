@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <graphml>
 	<graph>
-		<node id="Service:Composition2-INIT:2"/>
+		<node id="Service:Composition2-INIT-3:2"/>
 		<node id="Connection:O-2*I-2"/>
 		<node id="Connection:O-3*I-3"/>
-		<edge id="1" source="Service:Composition2-INIT:2" target="Connection:O-2*I-2"/>
-		<edge id="2" source="Service:Composition2-INIT:2" target="Connection:O-3*I-3"/>
+		<edge id="1" source="Service:Composition2-INIT-3:2" target="Connection:O-2*I-2"/>
+		<edge id="2" source="Service:Composition2-INIT-3:2" target="Connection:O-3*I-3"/>
 		<node id="Service:S3:3"/>
 		<node id="Connection:O-4*I-4"/>
 		<edge id="3" source="Connection:O-2*I-2" target="Service:S3:3"/>
 		<edge id="4" source="Connection:O-3*I-3" target="Service:S3:3"/>
 		<edge id="5" source="Service:S3:3" target="Connection:O-4*I-4"/>
-		<node id="Service:Composition2-GOAL:2"/>
-		<edge id="6" source="Connection:O-4*I-4" target="Service:Composition2-GOAL:2"/>
+		<node id="Service:Composition2-GOAL-3:2"/>
+		<edge id="6" source="Connection:O-4*I-4" target="Service:Composition2-GOAL-3:2"/>
 	</graph>
 </graphml>

@@ -10,6 +10,7 @@ import java.util.List;
 import peer.BasicPeer;
 import peer.CommProvider;
 import peer.Peer;
+import peer.ReliableBroadcastPeer;
 import peer.message.BroadcastMessage;
 import peer.peerid.PeerID;
 import proto.logging.api.Logger.LogLevel;
@@ -59,17 +60,20 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 	/**
 	 * Constructor of the PeerAgentJ class. This constructor is intended to be
 	 * used with NS2 simulation.
-	 * 
+	 * @param reliableBroadcast TODO
 	 * @param msgCounter
 	 *            counter object is passed during construction. It allows to
 	 *            extend the basic functionality of message counter.
 	 */
-	public CommonAgentJ() {
+	public CommonAgentJ(boolean reliableBroadcast) {
 		Logger.setDeltaTime(500);
 		this.setNativeDebugLevel(AgentJDebugLevel.error);
 		this.setJavaDebugLevel(LogLevel.ERROR);
 
-		peer = new BasicPeer(this);
+		if (reliableBroadcast)
+			peer = new ReliableBroadcastPeer(this);
+		else
+			peer = new BasicPeer(this);
 	}
 
 	@Override
@@ -101,13 +105,16 @@ public abstract class CommonAgentJ extends AgentJAgent implements CommProvider {
 	}
 
 	@Override
-	public void initComm() throws IOException {		
+	public void initComm() throws IOException {
+		logger.trace("Peer " + peer.getPeerID() + " starting communication");
 		this.socket = new DatagramSocket(DEFAULT_PORT);
 		this.data = new byte[RECV_BUFF];
 
 		// Obtain the NS2 simulator broadcast address using the AgentJ API
 		final String broadcastAddress = AgentJNameService.getIPAddress(Addressing.getNsBroadcastAddress());
 		socketAddress = new java.net.InetSocketAddress(broadcastAddress, DEFAULT_PORT);
+		
+		logger.trace("Peer " + peer.getPeerID() + " communication started");
 		
 		loadData();
 	}

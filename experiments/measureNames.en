@@ -3,3 +3,6 @@ measures.multicast.AvgDiscoveryTimeFirstOcurrence = Avg. Discovery Time First Oc
 measures.multicast.MulticastTrafficOverhead = Multicast Traffic Overhead
 measures.multicast.SentSearchMessages = Sent Search Messages
 measures.dissemination.SentTableMessages = Sent Table Messages
+measures.generic.BroadcastedPackets = Broadcasted Packets
+measures.graphsearch.AvgCompositionSearchTime = Avg. Composition Search Time
+measures.graphsearch.FoundCompositionsRatio = Found Compositions Ratio

@@ -45,8 +45,8 @@ def main():
 	
 	outputFiles = MobilityScenGenerator.generateNS2MobilityScenario(nodes, 100.0, width, width, 0.000001, 0.000001, 200.0, 1)
 	
-	for outputFile in outputFiles:
-		DrawScenario.drawScenario(outputFile, outputFile + '.png', width, width)
+	#for outputFile in outputFiles:
+	#	DrawScenario.drawScenario(outputFile, outputFile + '.png', width, width)
 		
 def generateScenario(anp, asp_hops):
 	node_exps = [-0.164, -0.417, 2.468]

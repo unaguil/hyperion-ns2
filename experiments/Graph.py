@@ -224,12 +224,6 @@ class Graph:
 
 		plt.xticks(x) 
 		
-	def finishPlotting(self, plt, fName, format='DISPLAY'):
-		if format == 'DISPLAY':
-			plt.show()
-		else:
-			plt.savefig(fName, format=format)
-	
 	def __getMeasureInfo(self, measureType):
 		measureClass = 'measures.' + measureType
 		measure = createMeasure(measureClass, 5.0)
@@ -383,7 +377,7 @@ class Graph:
 					plt.legend(loc='best')
 				else:
 					self.plotPeriodic([measureName])
-				self.finishPlotting(plt, fName, format) 
+				plt.savefig(fName, format=format)
 				
 	def __printPeriodicInfo(self, data, times, stdValues, relStdValues, label, units):
 		print ''

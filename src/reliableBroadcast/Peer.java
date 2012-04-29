@@ -11,6 +11,7 @@ import java.util.Set;
 
 import peer.CommunicationLayer;
 import peer.RegisterCommunicationLayerException;
+import peer.ReliableBroadcastPeer;
 import peer.message.BroadcastMessage;
 import peer.message.MessageString;
 import peer.peerid.PeerID;
@@ -102,9 +103,9 @@ public class Peer extends CommonAgentJ {
 		}
 		
 		private void enqueueMessage(final String str) {
-			final MessageString msgStr = new MessageString(peer.getPeerID(), peer.getDetector().getCurrentNeighbors().getPeerSet(), str);
+			final MessageString msgStr = new MessageString(peer.getPeerID(), ((ReliableBroadcastPeer)peer).getDetector().getCurrentNeighbors(), str);
 			myLogger.debug("Peer " + peer.getPeerID() + " enqueing message");
-			peer.enqueueBroadcast(msgStr, communicationLayer);
+			((ReliableBroadcastPeer)peer).enqueueBroadcast(msgStr, communicationLayer);
 		}
 
 		@Override
@@ -118,6 +119,7 @@ public class Peer extends CommonAgentJ {
 	private final Logger myLogger = Logger.getLogger(Peer.class);
 	
 	public Peer() {
+		super(true);
 		final Set<Class<? extends BroadcastMessage>> messageClasses = new HashSet<Class<? extends BroadcastMessage>>();
 		messageClasses.add(MessageString.class);
 		try {

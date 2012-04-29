@@ -15,7 +15,11 @@ class CompositionSearchBehavior(CommonSearchBehavior):
         
         self.__compositionTable = {}
         
-    def perform(self, time, oFile):
+        self.__firstTime = False;
+        
+        self.__compositionTable = {}
+        
+    def perform(self, time, oFile): 
         compositions = self.getElements()
         if compositions:
             if self.mustBeDifferent():
@@ -37,6 +41,11 @@ class CompositionSearchBehavior(CommonSearchBehavior):
                 self.__compositionTable[compositionIndex].append(node)
                          
             oFile.write('$ns_ at %f "$agents(%d) agentj composeService %d\"\n' % (time, node, compositionIndex))
+            if not node in self.__compositionTable:
+                self.__compositionTable[node] = []
+            if not compositionIndex in self.__compositionTable[node]:
+                oFile.write('$ns_ at %f "$agents(%d) agentj prepareComposition %d\"\n' % (1.0, node, compositionIndex))
+                self.__compositionTable[node].append(compositionIndex)
          
     def getElements(self):
         return self.getNodePopulator().getCompositions()

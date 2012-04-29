@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<part>
+	<measure type="generic.BroadcastedPackets" period="0.25" />
+	<measure type="generic.ReceivedPackets" period="0.25" />
+	<measure type="generic.BroadcastTime" period="0.25" />
+	<measure type="generic.ReliableBroadcastedMessages" period="0.25" />
+	<measure type="generic.SentACKMessages" period="0.25" />
+	<measure type="generic.ReceivedACKMessages" period="0.25" />
+	<measure type="generic.RebroadcastedMessages" period="0.25" />
+	<measure type="generic.DeliveredMessages" period="0.25" />
+	<measure type="generic.ExpiredMessages" period="0.25" />
+	<measure type="generic.DeliveredRatio" period="0.25" />
+	<measure type="generic.DeliveringTime" period="0.25" />
+	<measure type="generic.TotalTrafficOverhead" period="0.25" />
+	<measure type="generic.TotalMessageOverhead" period="0.25" />
+	
+	<measure type="detection.AvgNeighbors" period="0.25" />
+	
+	<measure type="dissemination.SentTableMessages" period="0.25" />
+	<measure type="dissemination.TableMessageEndToEndDelay" period="0.25" />
+	
+ 	<measure type="multicast.StartedSearches" period="0.25" />
+ 	
+ 	<measure type="multicast.SentSearchMessages" period="0.25" />
+ 	<measure type="multicast.SentSearchResponseMessages" period="0.25" />
+ 	<measure type="multicast.AcceptedSearches" period="0.25" />
+ 	<measure type="multicast.SentSearchResponseMessages" period="0.25" />
+ 	<measure type="multicast.AcceptedSearchResponses" period="0.25" />
+ 	<measure type="multicast.RespondedSearches" period="0.25" />
+ 	<measure type="multicast.SentRemoveParametersMessages" period="0.25" />
+ 	<measure type="multicast.SentRemoveRouteMessages" period="0.25" />
+ 	<measure type="multicast.SentRemoteMulticastMessages" period="0.25" />
+ 	<measure type="multicast.MulticastOverhead" period="0.25" />
+	<measure type="multicast.MulticastTrafficOverhead" period="0.25" />
+ 	
+	<measure type="multicast.AvgPeerAvailableTime" period="0.25" />
+	<measure type="multicast.AvgTraversedDistance" period="0.25" />
+	<measure type="multicast.AvgRouteAvailableTime" period="0.25" />
+	
+	<measure type="graphcreation.SentCollisionResponseMessages" period="0.25" />
+	<measure type="graphcreation.SentConnectServicesMessages" period="0.25" />
+	<measure type="graphcreation.SentDisconnectServicesMessages" period="0.25" />
+	<measure type="graphcreation.SentForwardMessages" period="0.25" />
+	<measure type="graphcreation.SentInhibeCollisionsMessages" period="0.25" />
+	<measure type="graphcreation.SentRemovedServicesMessages" period="0.25" />
+	<measure type="graphcreation.StartedCollisionMessages" period="0.25" />
+	<measure type="graphcreation.GraphcreationOverhead" period="0.25" />
+	<measure type="graphcreation.GraphcreationTrafficOverhead" period="0.25" />
+	
+	<measure type="graphsearch.StartedCompositions" period="0.25" />
+	<measure type="graphsearch.FoundCompositionsRatio" period="0.25" />
+	<measure type="graphsearch.AvgCompositionSearchTime" period="0.25" />
+	<measure type="graphsearch.AvgCompositionHops" period="0.25" />
+	<measure type="graphsearch.AvgCompositionAvailableTime" period="0.25" />
+	<measure type="graphsearch.SentFCompositionMessages" period="0.25" />
+	<measure type="graphsearch.GraphsearchOverhead" period="0.25" />
+	<measure type="graphsearch.GraphsearchTrafficOverhead" period="0.25" />
+</part>

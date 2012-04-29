@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<experiment tag="0.5" type="% nodes with parameters">
+	<staticConfig>
+		<import file="Common.xml" />		
+		<entry key="javaAgent">floodsearch.Peer</entry>
+	</staticConfig>
+	<dynamicConfig>
+		<dynamicEntry key="floodsearch.msgInterval" interpolator="SetInterpolator" text="Message Interval [mss]" values="(1000, 3000, 5000, 8000, 12000)"/>
+	</dynamicConfig>
+	<repeat number="10" />
+	<measures>
+		<import file="AllMeasures.xml" />
+	</measures>
+</experiment>

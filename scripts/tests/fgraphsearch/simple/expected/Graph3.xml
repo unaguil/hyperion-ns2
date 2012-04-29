@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <graphml>
 	<graph>
-		<node id="Service:Composition1-INIT:3"/>
+		<node id="Service:Composition1-INIT-0:3"/>
 		<node id="Connection:O-1*I-1"/>
-		<edge id="1" source="Service:Composition1-INIT:3" target="Connection:O-1*I-1"/>
+		<edge id="1" source="Service:Composition1-INIT-0:3" target="Connection:O-1*I-1"/>
 		<node id="Service:S1:0"/>
 		<node id="Connection:O-2*I-2"/>
 		<edge id="2" source="Connection:O-1*I-1" target="Service:S1:0"/>
@@ -12,7 +12,7 @@
 		<node id="Connection:O-3*I-3"/>
 		<edge id="4" source="Connection:O-2*I-2" target="Service:S2:5"/>
 		<edge id="5" source="Service:S2:5" target="Connection:O-3*I-3"/>
-		<node id="Service:Composition1-GOAL:3"/>
-		<edge id="6" source="Connection:O-3*I-3" target="Service:Composition1-GOAL:3"/>
+		<node id="Service:Composition1-GOAL-0:3"/>
+		<edge id="6" source="Connection:O-3*I-3" target="Service:Composition1-GOAL-0:3"/>
 	</graph>
 </graphml>

@@ -3,7 +3,4 @@
 	<parameter id="I-A">
 		<entry distance="5" neighbor="6" optional="true"/>
 	</parameter>
-	<parameter id="I-B">
-		<entry distance="5" neighbor="6" optional="true"/>
-	</parameter>
 </parameterTable>

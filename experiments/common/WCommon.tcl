@@ -236,14 +236,12 @@ proc wireless_simulation_extended {nNodes finishTime javaAgent nonDeterministic 
 	stopAgents agents $finishTime
 
 	#wait some seconds for all threads finalization
-	$ns_ at [expr $finishTime + 10] "$agents(0) agentj printStatistics"
+	$ns_ at $finishTime "$agents(0) agentj printStatistics"
 
 	puts "Shutdown agents..."
-	shutdownAgents agents [expr $finishTime + 11]
-	
-	$ns_ at [expr $finishTime + 11] "stop"
-
-	$ns_ at [expr $finishTime + 12] "finish"
+	shutdownAgents agents $finishTime
+	$ns_ at $finishTime "stop"
+	$ns_ at $finishTime "finish"
 	
 	$ns_ run
 } 

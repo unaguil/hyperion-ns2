@@ -175,7 +175,7 @@ class CompositionsPopulator:
         return totalParameters
         
     def __createComposition(self, maxDepth, invalid):
-        serviceName = "Composition-" + self.__serviceNameGenerator.next()
+        serviceName = "Composition_" + self.__serviceNameGenerator.next()
         composition = Service(serviceName)
         
         for i in xrange(self.__getRandomParameterNumber()):
