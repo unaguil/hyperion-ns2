@@ -126,8 +126,7 @@ public abstract class Peer extends CommonAgentJ implements CompositionListener {
 			if (args.length == 1) {
 				final int index = Integer.parseInt(args[0]);
 				final Service searchedService = findServices.getService(index);
-				final SearchID searchID = compositionSearch.prepareComposition(searchedService);
-				searchStarted(searchID);
+				compositionSearch.prepareComposition(searchedService);
 				return true;
 			}
 			myLogger.error("Peer " + peer.getPeerID() + " " + PREPARE_COMPOSITION + " must have one argument");

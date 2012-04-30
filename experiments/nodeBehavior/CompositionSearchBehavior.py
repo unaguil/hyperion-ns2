@@ -9,43 +9,25 @@ class CompositionSearchBehavior(CommonSearchBehavior):
     def __init__(self, entries, nodePopulator):
         CommonSearchBehavior.__init__(self, entries, nodePopulator, 'Composition search behavior')
         
-        self.__searchedParameters = {}
+        self.__firstTime = True
         
-        self.__availableCompositions = None
+        self.__nodeTable = {}
         
-        self.__compositionTable = {}
-        
-        self.__firstTime = False;
-        
-        self.__compositionTable = {}
-        
-    def perform(self, time, oFile): 
-        compositions = self.getElements()
-        if compositions:
-            if self.mustBeDifferent():
-                if self.__availableCompositions is None:
-                    self.__availableCompositions = zip(compositions, range(len(compositions)))
-                
-                index = random.randrange(len(self.__availableCompositions))
-                compositionIndex = self.__availableCompositions[index][1]
-                del self.__availableCompositions[index]
-            else:
-                compositionIndex = random.randrange(len(compositions))
+    def perform(self, time, oFile):
+        if self.__firstTime:
+            selectedNodes = random.sample(range(self.getNNodes()), len(self.getElements()))
             
-            if not compositionIndex in self.__compositionTable:
-                node = random.randrange(self.getNNodes())
-                self.__compositionTable[compositionIndex] = [node]
-            else:
-                nodes = range(self.getNNodes())
-                node = random.choice(nodes)
-                self.__compositionTable[compositionIndex].append(node)
-                         
-            oFile.write('$ns_ at %f "$agents(%d) agentj composeService %d\"\n' % (time, node, compositionIndex))
-            if not node in self.__compositionTable:
-                self.__compositionTable[node] = []
-            if not compositionIndex in self.__compositionTable[node]:
+            for node, compositionIndex in zip(selectedNodes, range(len(self.getElements()))):
                 oFile.write('$ns_ at %f "$agents(%d) agentj prepareComposition %d\"\n' % (1.0, node, compositionIndex))
-                self.__compositionTable[node].append(compositionIndex)
+                if not node in self.__nodeTable:
+                    self.__nodeTable[node] = []
+                self.__nodeTable[node].append(compositionIndex)
+                
+            self.__firstTime = False
+            
+        node = random.choice(self.__nodeTable.keys())
+        compositionIndex = random.choice(self.__nodeTable[node])                        
+        oFile.write('$ns_ at %f "$agents(%d) agentj composeService %d\"\n' % (time, node, compositionIndex))
          
     def getElements(self):
         return self.getNodePopulator().getCompositions()
