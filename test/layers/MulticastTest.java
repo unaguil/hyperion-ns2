@@ -48,7 +48,9 @@ public class MulticastTest extends MultipleTests {
 		}
 
 		@Override
-		public void addNeighborListener(NeighborEventsListener listener) {}
+		public void addNeighborListener(NeighborEventsListener listener) {
+
+		}
 		
 	}
 	

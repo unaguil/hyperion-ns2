@@ -161,12 +161,12 @@ proc wireless_simulation_extended {nNodes finishTime javaAgent nonDeterministic 
 	set val(ifq)            Queue/DropTail/PriQueue    ;# interface queue type
 	set val(ll)             LL                         ;# link layer type
 	set val(ant)            Antenna/OmniAntenna        ;# antenna model
-	set val(ifqlen)         3                          ;# max packet in ifq
+	set val(ifqlen)         5                          ;# max packet in ifq
 	set val(rp)             DumbAgent                  ;# routing protocol
 	
 	Mac/802_11 set dataRate_ 54Mb
-	#Mac/802_11 set PreambleLength_ 72
-	#Agent/UDP set packetSize_ 1500
+	Mac/802_11 set PreambleLength_ 72
+	Agent/UDP set packetSize_ 1500
 	
 	set topo  [new Topography]
 

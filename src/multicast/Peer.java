@@ -278,4 +278,8 @@ public class Peer extends CommonAgentJ implements ParameterSearchListener, Table
 				pSearch.sendMulticastMessage(availableDestinations, new MessageStringPayload(peer.getPeerID(), "Hello, peers"), false);
 		}
 	}
+
+	@Override
+	public void neighborsChanged(Set<PeerID> newNeighbors, Set<PeerID> lostNeighbors) {
+	}
 }

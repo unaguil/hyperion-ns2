@@ -42,7 +42,7 @@ public class Peer extends CommonAgentJ implements TableChangedListener, Neighbor
 
 	public Peer() {
 		super(true);
-		pDisseminator = new ParameterTableUpdater(((ReliableBroadcastPeer)peer), this, this);
+		pDisseminator = new ParameterTableUpdater(((ReliableBroadcastPeer)peer), this);
 	}
 
 	@Override
