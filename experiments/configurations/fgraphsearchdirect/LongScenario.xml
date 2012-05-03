@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<experiment tag="0.5" type="% nodes with parameters">
+	<staticConfig>
+		<!-- Script configuration variables -->
+		<entry key="nNodes">25</entry>
+		<entry key="finishTime">800.0</entry>
+		<entry key="gridW">250</entry>
+		<entry key="gridH">250</entry>
+		<entry key="discardTime">0.0</entry>
+		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
+
+		<!-- Random waypoint configuration -->
+		<entry key="mobilityModel">RandomWaypoint</entry>
+		<entry key="minSpeed">0.00001</entry>
+		<entry key="maxSpeed">3.00</entry>
+		<entry key="pauseTime">20.0</entry>
+
+		<!-- Composition populator -->
+		<entry key="populator">CompositionsPopulator</entry>
+		<entry key="oNumber">1</entry> -->
+		<entry key="nCompositions">5</entry>
+		<entry key="compositionLength">5</entry>
+		<entry key="compositionWidth">1</entry>
+		<entry key="nDistribution">1.0</entry>
+
+		<!-- Search behavior -->
+		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
+		<entry key="searchFreq">1.0</entry>
+		<entry key="timeRange">(600.0, 150.0)</entry>
+
+		<!-- Peer configuration variables -->
+		<entry key="beaconDetector.beaconTime">2000</entry>
+		<entry key="parameterSearch.sameTTL">5</entry>
+		<entry key="graphsearch.searchExpiration">10000</entry>
+		<entry key="graphsearch.msgInterval">20000</entry>
+		<entry key="graphsearch.directBroadcast">True</entry>
+	</staticConfig>
+	<dynamicConfig />
+	<repeat number="10" />
+	<measures>
+		<import file="AllMeasures.xml" />
+	</measures>
+</experiment>

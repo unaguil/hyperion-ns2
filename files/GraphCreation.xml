@@ -9,6 +9,7 @@
 	<test workingDir="scripts/tests/graphcreation/localCollision" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/multipleCollisions" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/simpleMultipleCollisions" script="Script.tcl"/>
+	<test workingDir="scripts/tests/graphcreation/neighborCollision" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/simpleMultipleRemoveService" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/multipleConnectionsRemoveService" script="Script.tcl"/>
 	<test workingDir="scripts/tests/graphcreation/simpleComposition" script="Script.tcl"/>
