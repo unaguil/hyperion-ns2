@@ -12,6 +12,8 @@ import xml.dom.minidom as minidom
 from matplotlib.backends.backend_pdf import PdfPages
 
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
+
+import measures.generic.Units as Units
  
 def lineFormat():
 	formats = ('ko--', 'k^--', 'k*--', 'kx--', 'ks--', 'kp--')
@@ -345,7 +347,7 @@ class Graph:
 					
 					yLabel = "%s [%s]" % (measureName, units)
 					plt.ylabel(yLabel)
-					
+				
 					self.__setAxis(plt, None, None)
 					
 					plt.legend(loc='best')
@@ -372,7 +374,11 @@ class Graph:
 					yLabel = "%s [%s]" % (measureName, units)
 					plt.ylabel(yLabel)
 					
-					self.__setAxis(plt, None, None)
+					yAxis = None
+					if units == Units.RATIO:
+						yAxis = (0, 100)
+
+					self.__setAxis(plt, None, yAxis)
 					
 					plt.legend(loc='best')
 				else:
@@ -414,7 +420,9 @@ def parseDirTable(str):
 	order = []
 	for entry in str.split(','):
 		key, value = entry.split(':')
-		dirTable[key] = value
+		key = key.strip()
+		value = value.strip()
+		dirTable[key] = value.strip()
 		order.append(key)
 	return dirTable, order
 

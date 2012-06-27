@@ -5,10 +5,10 @@
 		<entry key="javaAgent">floodsearch.Peer</entry>
 
 		<!-- Peer configuration variables -->
-		<entry key="floodsearch.msgInterval">1000</entry>
+		<entry key="floodsearch.msgInterval">3000</entry>
 	</staticConfig>
 	<dynamicConfig>
-		<dynamicEntry key="compositionLength" interpolator="SetInterpolator" text="Composition Length [services]" values="(3, 5, 7, 9, 11)"/>
+		<dynamicEntry key="pauseTime" interpolator="SetInterpolator" text="Pause Time [ms]" values="(10000.0, 100.0, 50.0, 20.0, 0.0)"/>
 	</dynamicConfig>
 	<repeat number="10" />
 	<measures>

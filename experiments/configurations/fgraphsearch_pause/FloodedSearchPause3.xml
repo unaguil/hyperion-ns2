@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<experiment tag="0.5" type="% nodes with parameters">
+	<staticConfig>
+		<import file="Common.xml" />		
+		<entry key="javaAgent">floodsearch.Peer</entry>
+
+		<!-- Peer configuration variables -->
+		<entry key="floodsearch.msgInterval">3000</entry>
+		<entry key="compositionLength">5</entry>
+	</staticConfig>
+	<dynamicConfig>
+		<dynamicEntry key="pauseTime" interpolator="SetInterpolator" text="Pause Time [s]" values="(10000.0, 100.0, 50.0, 20.0, 0.0)"/>
+	</dynamicConfig>
+	<repeat number="10" />
+	<measures>
+		<import file="AllMeasures.xml" />
+	</measures>
+</experiment>

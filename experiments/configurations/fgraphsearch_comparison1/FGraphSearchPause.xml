@@ -3,10 +3,14 @@
 	<staticConfig>
 		<import file="Common.xml" />
 		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
-		<entry key="beaconDetector.beaconTime">2000</entry>
+		<entry key="beaconDetector.beaconTime">3000</entry>
 		<entry key="parameterSearch.sameTTL">5</entry>
+		<entry key="graphsearch.msgInterval">3000</entry>
+	        <entry key="graphsearch.directBroadcast">True</entry>
 	</staticConfig>
-	<dynamicConfig />
+	<dynamicConfig>
+                <dynamicEntry key="pauseTime" interpolator="SetInterpolator" text="Pause Time [ms]" values="(10000.0, 100.0, 50.0, 20.0, 0.0)"/>
+        </dynamicConfig>
 	<repeat number="10" />
 	<measures>
 		<import file="AllMeasures.xml" />

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <experiment tag="0.5" type="% nodes with parameters">
 	<staticConfig>
-		<import file="Common.xml" />
-		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
+		<import file="Common.xml" />		
+		<entry key="javaAgent">floodsearch.Peer</entry>
 
-		<entry key="beaconDetector.beaconTime">2000</entry>
-		<entry key="parameterSearch.sameTTL">5</entry>
+		<!-- Peer configuration variables -->
+		<entry key="floodsearch.msgInterval">12000</entry>
 	</staticConfig>
 	<dynamicConfig />
 	<repeat number="1" />

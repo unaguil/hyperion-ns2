@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<experiment tag="0.5" type="% nodes with parameters">
+	<staticConfig>
+		<import file="Common.xml" />		
+		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
+                <entry key="beaconDetector.beaconTime">3000</entry>
+                <entry key="graphsearch.msgInterval">3000</entry>
+                <entry key="graphsearch.directBroadcast">True</entry>
+	</staticConfig>
+	<dynamicConfig>
+		<dynamicEntry key="parameterSearch.sameTTL" interpolator="IntegerInterpolator" text="Dissemination and Search TTL" start="2" end="6" step="1"/>
+	</dynamicConfig>
+	<repeat number="10" />
+	<measures>
+		<import file="AllMeasures.xml" />
+	</measures>
+</experiment>

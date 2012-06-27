@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<experiment tag="0.5" type="% nodes with parameters">
+	<staticConfig>
+		<import file="Common.xml" />		
+		<entry key="javaAgent">graphsearch.ForwardPeer</entry>
+                <entry key="beaconDetector.beaconTime">3000</entry>
+                <entry key="parameterSearch.sameTTL">5</entry>
+                <entry key="graphsearch.msgInterval">3000</entry>
+                <entry key="graphsearch.directBroadcast">True</entry>
+	</staticConfig>
+	<dynamicConfig>
+		<dynamicEntry key="compositionWidth" interpolator="SetInterpolator" text="Composition Width [services]" values="(1, 2, 3)"/>
+	</dynamicConfig>
+	<repeat number="10" />
+	<measures>
+		<import file="AllMeasures.xml" />
+	</measures>
+</experiment>

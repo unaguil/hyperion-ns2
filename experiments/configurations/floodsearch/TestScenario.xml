@@ -2,38 +2,38 @@
 <experiment tag="0.5" type="% nodes with parameters">
 	<staticConfig>
 		<!-- Script configuration variables -->
-		<entry key="nNodes">50</entry>
+		<entry key="nNodes">25</entry>
 		<entry key="finishTime">200.0</entry>
-		<entry key="gridW">400</entry>
-		<entry key="gridH">400</entry>
+		<entry key="gridW">325</entry>
+		<entry key="gridH">325</entry>
 		<entry key="discardTime">0.0</entry>
 		<entry key="javaAgent">floodsearch.Peer</entry>
 
 		<!-- Random waypoint configuration -->
 		<entry key="mobilityModel">RandomWaypoint</entry>
 		<entry key="minSpeed">0.001</entry>
-		<entry key="maxSpeed">0.001</entry>
-		<entry key="pauseTime">100000.0</entry>
+		<entry key="maxSpeed">5.000</entry>
+		<entry key="pauseTime">1000000.0</entry>
 
 		<!-- Composition populator -->
 		<entry key="populator">CompositionsPopulator</entry>
 		<entry key="oNumber">1</entry> -->
-		<entry key="nCompositions">1</entry>
+		<entry key="nCompositions">5</entry>
 		<entry key="compositionLength">5</entry>
-		<entry key="compositionWidth">2</entry>
-		<entry key="nDistribution">0.3</entry>
+		<entry key="compositionWidth">1</entry>
+		<entry key="nDistribution">1.0</entry>
 
 		<!-- Search behavior -->
 		<entry key="nodeBehavior">CompositionSearchBehavior</entry>
-		<entry key="searchFreq">0.25</entry>
-		<entry key="timeRange">(50.0, 100.0)</entry>
+		<entry key="searchFreq">1.0</entry>
+		<entry key="timeRange">(75.0, 50.0)</entry>
 
 		<!-- Peer configuration variables -->
-		<entry key="floodsearch.msgInterval">1000</entry>
-		<entry key="graphsearch.searchExpiration">10000</entry>
+		<entry key="floodsearch.msgInterval">3000</entry>
+		<entry key="graphsearch.searchExpiration">1000</entry>
 	</staticConfig>
 	<dynamicConfig />
-	<repeat number="1" />
+	<repeat number="10" />
 	<measures>
 		<import file="AllMeasures.xml" />
 	</measures>
