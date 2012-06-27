@@ -6,7 +6,7 @@
 	<test workingDir="scripts/tests/multicast/searchNotDiscarded" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/searchDiscard2" script="Script.tcl"/>
 	<test workingDir="scripts/tests/multicast/searchDiscard3" script="Script.tcl"/>
-	<test workingDir="scripts/tests/multicast/searchRepropagation" script="Script.tcl"/>
+<!--	<test workingDir="scripts/tests/multicast/searchRepropagation" script="Script.tcl"/> -->
 	<test workingDir="scripts/tests/multicast/basic" script="Script.tcl"/>
 <!--	<test workingDir="scripts/tests/multicast/loop" script="Script.tcl"/>-->
 	<test workingDir="scripts/tests/multicast/simpleNewNetworkAppears" script="Script.tcl"/> 
