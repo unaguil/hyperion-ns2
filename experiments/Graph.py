@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy
 import os
 import sys
+import codecs
 
 from optparse import OptionParser
 
@@ -16,7 +17,7 @@ from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 import measures.generic.Units as Units
  
 def lineFormat():
-	formats = ('ko--', 'k^--', 'k*--', 'kx--', 'ks--', 'kp--')
+	formats = ('o--', '^--', '*--', 'x--', 's--', 'p--')
 	for format in formats: 
 		yield format
 
@@ -153,8 +154,9 @@ class Graph:
 	def __loadMeasureNames(self, lang):
 		measureNames = {}
 		
+		languageFile = 'measureNames.' + lang
 		try:
-			file = open('measureNames.' + lang)
+			file = codecs.open(languageFile, "r", "utf-8")
 			for line in file:
 				entry = line.split('=')
 				if len(entry) == 2:
@@ -164,7 +166,7 @@ class Graph:
 						measureNames[key] = value
 				
 		except IOError:
-			print 'Error: Could not load measure names file.'
+			print 'Error: Could not load measure names file %s' % languageFile
 			sys.exit()
 			
 		return measureNames
@@ -437,6 +439,7 @@ def main():
 	parser.add_option("-o", "--onePDF", dest="onePDF", help='write plots to a multiple pages PDF file')
 	parser.add_option("-m", "--mergedDirectories", dest="mergedDirectories", help="directory containing the result files to merge")
 	parser.add_option("-w", "--writeDir", dest="outputDir", help="directory to write the plotting output")
+	parser.add_option("-l", "--language", dest="lang", help="output language", default='en')
 	
 	parser.add_option("--xLabel", dest="xLabel", help="sets the label for X axis")
 	parser.add_option("--yLabel", dest="yLabel", help="sets the label for Y axis")
@@ -468,7 +471,7 @@ def main():
 			
 		directories[''] = files
 			
-		graph = Graph(directories, 'en', options.errorBar, order)
+		graph = Graph(directories, options.lang, options.errorBar, order)
 		
 		if options.all: 
 			graph.plotAll(options.format, options.onePDF, options.outputDir, options.periodic)

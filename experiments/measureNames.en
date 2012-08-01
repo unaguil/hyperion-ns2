@@ -6,3 +6,4 @@ measures.dissemination.SentTableMessages = Sent Table Messages
 measures.generic.BroadcastedPackets = Broadcasted Packets
 measures.graphsearch.AvgCompositionSearchTime = Avg. Composition Search Time
 measures.graphsearch.FoundCompositionsRatio = Found Compositions Ratio
+measures.graphsearch.AvgCompositionHops = Avg. Composition Hops

@@ -1,0 +1,9 @@
+measures.multicast.AvgDiscoveredParameters = Parámetros Descubiertos
+measures.multicast.AvgDiscoveryTimeFirstOcurrence = T. Descubrimiento Primera Ocurrencia
+measures.multicast.MulticastTrafficOverhead = Sobrecarga del Protocolo
+measures.multicast.SentSearchMessages = Mensajes de Búsqueda
+measures.dissemination.SentTableMessages = Mensajes de Actualización
+measures.generic.BroadcastedPackets = Paquetes Enviados
+measures.graphsearch.AvgCompositionSearchTime = Avg. Composition Search Time
+measures.graphsearch.FoundCompositionsRatio = Found Compositions Ratio
+measures.graphsearch.AvgCompositionHops = Avg. Composition Hops

@@ -1,7 +1,7 @@
 
-MESSAGES = 'messages'
+MESSAGES = 'mensajes'
 RATIO = '%'
-NEIGHBORS = 'neighbors'
+NEIGHBORS = 'vecinos'
 PARAMETERS = 'parameters'
 MILLIS = 'ms'
 SECONDS = 's'
@@ -9,7 +9,7 @@ COMPOSITIONS = 'compositions'
 SEARCHES = 'searches'
 HOPS = 'hops'
 MESSAGE_OVERHEAD = 'messages/s node'
-MESSAGE_TRAFFIC_OVERHEAD = 'KB/s node'
+MESSAGE_TRAFFIC_OVERHEAD = 'KB/s'
 
 def str_formatter(units, value):
     if units == MILLIS:
