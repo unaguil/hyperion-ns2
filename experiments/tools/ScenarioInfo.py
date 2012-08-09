@@ -1,4 +1,5 @@
 import math
+import StringIO
 
 def printScenarioInfo(nNodes, transmissionRange, gridW, gridH, simulationTime, discardTime, strBuffer): 
         simulationArea = gridW * gridH
@@ -34,3 +35,12 @@ def printScenarioInfo(nNodes, transmissionRange, gridW, gridH, simulationTime, d
         strBuffer.write('* Neighbor count: %.2f neighbors/node\n' % neighborCount)
         strBuffer.write('***********************************************************\n')
 
+
+if __name__ == '__main__':
+	nNodes = raw_input('Number of nodes: ')
+	transmissionRange = raw_input('Transmission range: ')
+	side = raw_input('Scenario side: ')
+
+	strBuffer = StringIO.StringIO()
+	printScenarioInfo(int(nNodes), float(transmissionRange), float(side), float(side), 0.0, 0.0, strBuffer)
+	print strBuffer.getvalue()
