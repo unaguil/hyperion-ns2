@@ -11,7 +11,7 @@ class AvgDiscoveredParameters(GenericAvgMeasure):
 		GenericAvgMeasure.__init__(self, period, simulationTime, Units.RATIO)
 		
 		self.__startPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer .*? started search for parameters (\[.*?\]) searchID (\(.*?\)) .*? ([0-9]+\,[0-9]+).*?')
-		self.__endPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) accepted multicast.search.message.SearchMessage (\(.*?\)) distance .*? parameters (\[.*?\]) ([0-9]+\,[0-9]+).*?')
+		self.__endPattern = re.compile('DEBUG multicast.search.ParameterSearchImpl  - Peer ([0-9]+) accepted multicast.search.message.SearchMessage\(.*?\) (\(.*?\)) distance .*? parameters (\[.*?\]) ([0-9]+\,[0-9]+).*?')
 		
 		self.__currentSearches = {}
 		
