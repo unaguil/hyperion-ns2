@@ -17,6 +17,7 @@ class CommonSearchBehavior:
         self.__different = False
         
         self.__simultaneous = 0
+        self.__absSimultaneous = 1
         self.__different = False
         self.__searchDuration = 0
         self.__invalidSearches = 0
@@ -45,6 +46,9 @@ class CommonSearchBehavior:
                 
             if key == 'simultaneous':
                 self.__simultaneous = float(value)
+                
+            if key == 'absSimultaneous':
+                self.__absSimultaneous = int(value)
                 
             if key == 'searchDuration':
                 self.__searchDuration = int(value)
@@ -122,7 +126,7 @@ class CommonSearchBehavior:
     
     def getSimultaneous(self):
         if self.__simultaneous == 0:
-            return 1
+            return self.__absSimultaneous
         else:
             return int(self.__simultaneous * self.getNNodes())
         
