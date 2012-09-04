@@ -65,10 +65,9 @@ def generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSp
     return files
         
 def main():    
-    nodes = 50
     finishTime = 200
-    gridW = 400
-    gridH = 400
+    gridW = 700
+    gridH = 700
 
     minSpeed = 0.00001
     maxSpeed = 5.0
@@ -76,8 +75,9 @@ def main():
     numScenarios = 10
 
     transmissionRange = 100.0
+    pauseTime = 50
    
-    for pauseTime in range(100, 1200, 1200): 
+    for nodes in range(20, 120, 20): 
         generateNS2MobilityScenario(nodes, finishTime, gridW, gridH, minSpeed, maxSpeed, pauseTime, transmissionRange, numScenarios)
 
 if __name__ == '__main__':

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<part>
-	<measure type="generic.BroadcastedPackets" period="0.25" />
-			
-	<measure type="graphsearch.FoundCompositionsRatio" period="0.25" />
-	<measure type="graphsearch.AvgCompositionSearchTime" period="0.25" />
-	<measure type="graphsearch.AvgCompositionHops" period="0.25" />
-</part>
