@@ -15,9 +15,11 @@ from matplotlib.backends.backend_pdf import PdfPages
 from measures.generic.GenericAvgMeasure import GenericAvgMeasure
 
 import measures.generic.Units as Units
+
+formats = ('o--', '^--', '*--', 'D--', 's--', 'p--')
+colors = ('b', 'g', 'r', 'c', 'm', 'y') 
  
 def lineFormat():
-	formats = ('o--', '^--', '*--', 'x--', 's--', 'p--')
 	for format in formats: 
 		yield format
 
@@ -364,6 +366,7 @@ class Graph:
 			for measureType in sorted(sorted(self.getMeasureTypes())):
 				fName = os.path.join(outputDir, measureType + '.' + format)
 				plt.clf()
+				self.__setColors(plt)
 				
 				measureName, _, units = self.__getMeasureInfo(measureType)
 				
@@ -386,6 +389,11 @@ class Graph:
 				else:
 					self.plotPeriodic([measureName])
 				plt.savefig(fName, format=format)
+
+	def __setColors(self, plt):
+		fig = plt.figure()
+		ax = fig.add_subplot(111)
+		ax.set_color_cycle(colors)
 				
 	def __printPeriodicInfo(self, data, times, stdValues, relStdValues, label, units):
 		print ''
@@ -472,7 +480,7 @@ def main():
 		directories[''] = files
 			
 		graph = Graph(directories, options.lang, options.errorBar, order)
-		
+
 		if options.all: 
 			graph.plotAll(options.format, options.onePDF, options.outputDir, options.periodic)
 			sys.exit()
