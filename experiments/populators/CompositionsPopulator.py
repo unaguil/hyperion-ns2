@@ -29,6 +29,7 @@ class CompositionsPopulator:
         self.__replication = 1
         
         self.__nDistribution = 1.0
+	self.__cDistribution = 1.0
         
         for entry in entries:
             value = entry.firstChild.data
@@ -58,6 +59,9 @@ class CompositionsPopulator:
                 self.__nNodes = int(value)
             if key == 'nDistribution':
                 self.__nDistribution = float(value)
+
+	    if key == 'cDistribution':
+		self.__cDistribution = float(value)
                 
             if key == 'nCompositions':
                 self.__nCompositions = int(value)
@@ -167,6 +171,9 @@ class CompositionsPopulator:
         
     def getCompositions(self):
         return self.__compositions
+
+    def getCDistribution(self):
+	return self.__cDistribution
     
     def getParameters(self, services):
         totalParameters = 0

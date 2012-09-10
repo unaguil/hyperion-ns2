@@ -15,9 +15,11 @@ class CompositionSearchBehavior(CommonSearchBehavior):
         
     def perform(self, time, oFile):
         if self.__firstTime:
-            selectedNodes = random.sample(range(self.getNNodes()), len(self.getElements()))
-            
-            for node, compositionIndex in zip(selectedNodes, range(len(self.getElements()))):
+	    nClients = int(self.getNNodes() * self.getNodePopulator().getCDistribution())
+            selectedNodes = random.sample(range(self.getNNodes()), nClients)
+           
+            for node in selectedNodes:
+                compositionIndex = random.choice(range(len(self.getElements())))
                 oFile.write('$ns_ at %f "$agents(%d) agentj prepareComposition %d\"\n' % (1.0, node, compositionIndex))
                 if not node in self.__nodeTable:
                     self.__nodeTable[node] = []
@@ -33,6 +35,7 @@ class CompositionSearchBehavior(CommonSearchBehavior):
         return self.getNodePopulator().getCompositions()
         
     def printInfo(self, strBuffer):
+        strBuffer.writeln(' * Using a total of %d clients' % int(self.getNNodes() * self.getNodePopulator().getCDistribution()))
         if self.mustBeDifferent():
             strBuffer.writeln('* Using a total of %d *different* compositions' % len(self.getNodePopulator().getCompositions()))
         else:
