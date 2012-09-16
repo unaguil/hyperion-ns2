@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<part>
+	<!-- General configuration -->
+	<entry key="nNodes">100</entry>
+	<entry key="gridW">350</entry>
+	<entry key="gridH">350</entry>
+		
+	<entry key="finishTime">50.0</entry>
+	<entry key="discardTime">0.0</entry>
+	<entry key="javaAgent">multicast.Peer</entry>
+	
+	<!-- Random waypoint configuration -->
+	<entry key="mobilityModel">RandomWaypoint</entry>
+	<entry key="minSpeed">0.001</entry>
+	<entry key="maxSpeed">5.0</entry>
+	<entry key="pauseTime">50</entry>
+	<entry key="rotate">False</entry>
+	
+	<!-- Parameter populator -->
+<!-- 	<entry key="populator">ParameterPopulator</entry> -->
+<!-- 	<entry key="nDistribution">0.25</entry> -->
+<!-- 	<entry key="parametersPerNode">6</entry> -->
+<!-- 	<entry key="repeatParameters">0.5</entry> -->
+<!-- 	<entry key="equalityDistribution">{'G': 0.25, 'M': 0.25}</entry> -->
+	<entry key="populator">ServicePopulator</entry>
+	<entry key="services">3</entry>
+	<entry key="serviceParameters">2</entry>
+	<entry key="replicateServices">5</entry>
+	<!--<entry key="invalidSearches">0.2</entry>-->
+	
+	<entry key="nodeBehavior">SearchBehavior</entry>
+	<entry key="searchFreq">0.2</entry>
+	<entry key="absSimultaneous">5</entry>
+	<entry key="searchDuration">10</entry>
+	<entry key="timeRange">('START', 30.0)</entry>
+	
+	<!-- <entry key="multicast.searchFreq">0.5</entry> -->
+	
+	<!-- Peer configuration variables -->
+	<entry key="beaconDetector.beaconTime">1000</entry>
+	<entry key="parameterSearch.sameTTL">5</entry>
+</part>
