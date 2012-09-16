@@ -7,3 +7,4 @@ measures.generic.BroadcastedPackets = Paquetes Enviados
 measures.graphsearch.AvgCompositionSearchTime = Tiempo de Búsqueda de Composición
 measures.graphsearch.FoundCompositionsRatio = Composiciones Encontradas
 measures.graphsearch.AvgCompositionHops = Saltos de la Composición
+measures.generic.TotalTrafficOverhead = Sobrecarga del Protocolo
