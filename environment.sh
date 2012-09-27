@@ -9,3 +9,4 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$AGENTJ/core/lib/:$JAVA_HOME/jre/lib/amd
 
 export AGENTJ_CLASSPATH=$HYPERION_PATH/dist/hyperion.jar:$HYPERION_PATH/lib/log4j-1.2.16.jar:$HYPERION_PATH/lib/jgrapht-jdk1.6.jar:${PWD}/bin
 
+export HYPERION=/home/kalgan/migration/hyperion/

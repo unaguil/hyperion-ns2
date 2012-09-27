@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="build" name="Hyperion-NS2">
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="build" name="hyperion-ns2">
 	<property environment="env" />
-	<property name="AGENTJ_CORE" value="${env.AGENTJ}/core" />
+	<property name="agentj_core" value="${env.AGENTJ}/core" />
 	<property name="junit.output.dir" value="junit" />
-	<property name="Hyperion.location" value="../Hyperion" />
+	<property name="hyperion.location" value="${env.HYPERION}" />
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
 	<property name="junit.formatter.type" value="brief" />
 
-	<path id="Hyperion-NS2.classpath">
+	<path id="hyperion-ns2.classpath">
 		<pathelement location="bin" />
-		<pathelement location="${AGENTJ_CORE}/target/agentj-core-1.1.jar" />
-		<pathelement location="${AGENTJ_CORE}/lib/proto-logging-0.1.jar" />
-		<pathelement location="${Hyperion.location}/lib/log4j-1.2.16.jar" />
-		<pathelement location="${Hyperion.location}/lib/junit-4.8.2.jar" />
-		<pathelement location="${Hyperion.location}/lib/jgrapht-jdk1.6.jar" />
-		<pathelement location="${Hyperion.location}/dist/hyperion.jar" />
+		<pathelement location="${agentj_core}/target/agentj-core-1.1.jar" />
+		<pathelement location="${agentj_core}/lib/proto-logging-0.1.jar" />
+		<pathelement location="${hyperion.location}/lib/log4j-1.2.16.jar" />
+		<pathelement location="${hyperion.location}/lib/junit-4.8.2.jar" />
+		<pathelement location="${hyperion.location}/lib/jgrapht-jdk1.6.jar" />
+		<pathelement location="${hyperion.location}/dist/hyperion.jar" />
 		<pathelement location="lib/commons-io-2.1.jar" />
 	</path>
 
@@ -64,12 +64,12 @@
 	</target>
 
 	<target depends="clean" name="cleanall">
-		<ant antfile="build.xml" dir="${Hyperion.location}" inheritAll="false" target="clean" />
+		<ant antfile="build.xml" dir="${hyperion.location}" inheritAll="false" target="clean" />
 	</target>
 
 	<target depends="build-subprojects, build-project" name="build" />
 	<target name="build-subprojects">
-		<ant antfile="build.xml" dir="${Hyperion.location}" inheritAll="false" target="build">
+		<ant antfile="build.xml" dir="${hyperion.location}" inheritAll="false" target="build">
 			<propertyset>
 				<propertyref name="build.compiler" />
 			</propertyset>
@@ -80,11 +80,11 @@
 		<echo message="${ant.project.name}: ${ant.file}" />
 		<javac debug="on" destdir="bin" source="${source}" target="${target}" includeAntRuntime="false">
 			<src path="src" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</javac>
 		<javac debug="on" destdir="bin" source="${source}" target="${target}" includeAntRuntime="false">
 			<src path="test" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</javac>
 	</target>
 
@@ -95,7 +95,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BroadcastTest" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -104,7 +104,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.DetectionTest" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -113,7 +113,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.DetectionTest50" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -122,7 +122,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.DisseminationTest" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -131,7 +131,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.DisseminationTest50" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -140,7 +140,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.MulticastTest" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -149,7 +149,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.MulticastTest50" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -158,7 +158,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.GraphCreationTest" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -167,7 +167,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.GraphCreationTest50" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -176,7 +176,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.FSearchTest" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -185,7 +185,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.FSearchTest50" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -194,7 +194,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BSearchTest" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -203,7 +203,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BSearchTest50" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -212,7 +212,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BidirectionalSearchTest" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -221,7 +221,7 @@
 		<junit fork="yes" printSummary="withOutAndErr" haltonfailure="false" showoutput="true">
 			<formatter type="${junit.formatter.type}" />
 			<test name="layers.BidirectionalSearchTest50" todir="${junit.output.dir}" />
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
@@ -239,7 +239,7 @@
 					<exclude name="**/testing/*" />
 				</fileset>
 			</batchtest>
-			<classpath refid="Hyperion-NS2.classpath" />
+			<classpath refid="hyperion-ns2.classpath" />
 		</junit>
 	</target>
 
